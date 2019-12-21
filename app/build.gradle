@@ -1,0 +1,47 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0.1"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+
+            libraryVariants.all { variant ->
+                if (variant.buildType.name.equals("release")) {
+                    variant.outputs.all {
+//                        def mod_name = variant.getPackageLibrary().baseName
+                        def mod_name = "${rootProject.name}"
+                        println("name="+mod_name)
+//                        def newName = "${mod_name}_${verName}_${verCode}.${fileExtension}"
+                        def newName = "${mod_name}-${defaultConfig.versionName}.aar"
+                        println(outputFileName)
+                        println(newName)
+                        outputFileName = "../../../../release/"+newName
+////                        println(newName)
+                    }
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+//    implementation 'com.google.android.material:material:1.0.0-rc01'
+
+    implementation files('libs/ImageViewTouch-1.0.1-Mod.jar')
+    implementation files('libs/juniversalchardet-1.0.3.jar')
+//    implementation files('libs/zip4j-1.3.2-mod-01.jar')
+    implementation files('libs/zip4j_2.2.3_20191102_01.jar')
+    implementation files('libs/WrapperForSlf4j-1.0.2.jar')
+
+}
