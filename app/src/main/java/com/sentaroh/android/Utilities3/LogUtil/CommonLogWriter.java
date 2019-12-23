@@ -1,4 +1,26 @@
 package com.sentaroh.android.Utilities3.LogUtil;
+/*
+The MIT License (MIT)
+Copyright (c) 2011-2019 Sentaroh
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+and to permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or
+substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+*/
 
 import android.content.Context;
 import android.util.Log;
@@ -58,10 +80,10 @@ public class CommonLogWriter {
                         public void run() {
                             if (!mThreadIsActive) {
                                 mThreadIsActive=true;
-                                if (debug_level>=2) writeLogDirect("CommonLogWriter thread was created. TID="+ Thread.currentThread().getId());
+                                if (debug_level>=2 && log_enabled) writeLogDirect("CommonLogWriter thread was created. TID="+ Thread.currentThread().getId());
                                 processMessageQueue();
                             } else {
-                                if (debug_level>=2) writeLogDirect("CommonLogWriter thread was terminated, because already active.");
+                                if (debug_level>=2 && log_enabled) writeLogDirect("CommonLogWriter thread was terminated, because already active.");
                             }
                         }
                     };
@@ -95,7 +117,7 @@ public class CommonLogWriter {
                             if (printWriter!=null) printWriter.flush();
                             if ((System.currentTimeMillis()- mLastWriteTime)>30*1000) {
                                 if (printWriter!=null) printWriter.flush();
-                                if (debug_level>=2) writeLogDirect("CommonLogWriter Thread was ended by idle timer. TID="+ Thread.currentThread().getId()+", HWM="+queueHighWaterMark);
+                                if (debug_level>=2 && log_enabled) writeLogDirect("CommonLogWriter Thread was ended by idle timer. TID="+ Thread.currentThread().getId()+", HWM="+queueHighWaterMark);
                                 queueHighWaterMark=0;
                                 mThreadIsActive=false;
                                 logThread=null;
@@ -131,7 +153,7 @@ public class CommonLogWriter {
         if (log_dir==null) {
             setLogId("LogReceiver");
             initParms(c);
-            if (debug_level>0) {
+            if (debug_level>0 && log_enabled) {
                 String line="initialized dir="+log_dir+", debug="+debug_level+", logEnabled="+log_enabled;
                 Log.v(mCgp.getApplicationTag(),"I "+log_id+line);
                 putLogMsg(c,"M I "+ StringUtil.convDateTimeTo_YearMonthDayHourMinSecMili(System.currentTimeMillis())+" "+log_id+line);
@@ -154,7 +176,7 @@ public class CommonLogWriter {
             closeLogFile();
             if (log_enabled) {
                 openLogFile(c);
-                if (debug_level>0) {
+                if (debug_level>0 && log_enabled) {
                     String line="re-initialized dir="+log_dir+", debug="+debug_level+", log_enabled="+log_enabled;
                     Log.v(mCgp.getApplicationTag(),"I "+log_id+line);
                     putLogMsg(c,"M I "+StringUtil.convDateTimeTo_YearMonthDayHourMinSecMili(System.currentTimeMillis())+" "+log_id+line);
@@ -228,7 +250,7 @@ public class CommonLogWriter {
             logFile.renameTo(lf);
             openLogFile(c);
             logFile=new File(log_dir+mCgp.getLogFileName()+".txt");
-            if (debug_level>0) {
+            if (debug_level>0 && log_enabled) {
                 String line="Logfile was rotated "+log_dir+mCgp.getLogFileName()+"_"+sdf.format(System.currentTimeMillis())+".txt";
                 Log.v(mCgp.getApplicationTag(),"I "+log_id+line);
                 putLogMsg(c,"M I "+StringUtil.convDateTimeTo_YearMonthDayHourMinSecMili(System.currentTimeMillis())+" "+log_id+line);

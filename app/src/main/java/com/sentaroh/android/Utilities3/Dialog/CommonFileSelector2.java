@@ -1,4 +1,26 @@
 package com.sentaroh.android.Utilities3.Dialog;
+/*
+The MIT License (MIT)
+Copyright (c) 2011-2019 Sentaroh
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+and to permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or
+substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+*/
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -24,6 +46,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -447,8 +470,11 @@ public class CommonFileSelector2 extends DialogFragment {
 
     private void setStorageSelectorSpinnerLegacyStorageModel(Spinner spinner, CustomSpinnerAdapter adapter) {
         int sel_no=0;
+        int i=0;
         for(SafStorage3 item: mSafStorageList) {
+            if (item.uuid.equals(mDialogLocalStorageId)) sel_no=i;
             adapter.add(item.description);
+            i++;
         }
         spinner.setSelection(sel_no, false);
     }
@@ -723,6 +749,26 @@ public class CommonFileSelector2 extends DialogFragment {
         et_file_name.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
+                if (mDialogSelectCat==DIALOG_SELECT_CATEGORY_FILE) {
+                    if (s.length()>0) {
+                        for(int i = s.length()-1; i >= 0; i--){
+                            if(s.charAt(i) == '\n'){
+                                s.delete(i, i + 1);
+                                return;
+                            }
+                        }
+                        if (s.charAt(s.length()-1)=='/' || s.charAt(s.length()-1)=='"'
+                                || s.charAt(s.length()-1)==':'
+                                || s.charAt(s.length()-1)=='\\'
+                                || s.charAt(s.length()-1)=='*'
+                                || s.charAt(s.length()-1)=='<'
+                                || s.charAt(s.length()-1)=='>'
+                                || s.charAt(s.length()-1)=='|') {
+                            s.delete(s.length()-1, s.length());
+                            Toast.makeText(mContext, mContext.getString(R.string.msgs_file_select_edit_remove_invalid_character_for_file_name), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
                 if (mDialogSingleSelect) {
                     if (s.length()!=0) {
                         setButtonEnabled(mActivity, btnOk, true);
@@ -772,7 +818,7 @@ public class CommonFileSelector2 extends DialogFragment {
                                     putDlgMsg(dlg_msg, mContext.getString(R.string.msgs_file_select_edit_dlg_filename_not_specified));
                                 } else {
                                     setTopUpButtonEnabled(true);
-                                    et_file_name.setText("");
+//                                    et_file_name.setText("");
                                 }
                                 setButtonEnabled(mActivity, btnUp, true);
                                 setButtonEnabled(mActivity, btnTop, true);
@@ -831,7 +877,7 @@ public class CommonFileSelector2 extends DialogFragment {
                             mTreeFilelistAdapter.setDataList(tfl);
                         }
                         setTopUpButtonEnabled(false);
-                        et_file_name.setText("");
+//                        et_file_name.setText("");
                     }
 
                     @Override
@@ -841,7 +887,7 @@ public class CommonFileSelector2 extends DialogFragment {
 
                         mTreeFileListView.setScrollingCacheEnabled(false);
                         mTreeFileListView.setScrollbarFadingEnabled(false);
-                        et_file_name.setText("");
+//                        et_file_name.setText("");
                     }
                 });
                 String stg_name=mStorageSelectorSpinner.getSelectedItem().toString();
@@ -880,7 +926,7 @@ public class CommonFileSelector2 extends DialogFragment {
                     @Override
                     public void positiveResponse(Context c, Object[] o) {
                         ArrayList<TreeFilelistItem> tfl =(ArrayList<TreeFilelistItem>)o[0];
-                        et_file_name.setText("");
+//                        et_file_name.setText("");
                         if (tfl.size()==0) {
                             tv_empty.setVisibility(TextView.VISIBLE);
                             mTreeFileListView.setVisibility(TextView.GONE);
@@ -898,7 +944,7 @@ public class CommonFileSelector2 extends DialogFragment {
 
                         mTreeFileListView.setScrollingCacheEnabled(false);
                         mTreeFileListView.setScrollbarFadingEnabled(false);
-                        et_file_name.setText("");
+//                        et_file_name.setText("");
                     }
                 });
                 createLocalFilelist(mDialogSelectCat==DIALOG_SELECT_CATEGORY_FILE, mDialogLocalDir, ntfy_file_list, false);
@@ -1022,7 +1068,7 @@ public class CommonFileSelector2 extends DialogFragment {
                         }
                     }
                     if (mDebug) log.debug("TreeFileListView ok button clicked, name="+file_uri.getPath());
-                    if (mNotifyEvent!=null) mNotifyEvent.notifyToListener(true, new Object[]{file_uri, fp, fd, fn});
+                    if (mNotifyEvent!=null) mNotifyEvent.notifyToListener(true, new Object[]{file_uri, fp, fd, fn, ss.saf_file.getPath()});
                 } else {
                     int selected_item_count=0;
                     for(TreeFilelistItem fi:mTreeFilelistAdapter.getDataList()) if (fi.isChecked()) selected_item_count++;
@@ -1070,7 +1116,7 @@ public class CommonFileSelector2 extends DialogFragment {
 
                     String fp_list="";
                     if (mDebug) log.debug("TreeFileListView ok button clicked, name="+fp_list);
-                    if (mNotifyEvent!=null) mNotifyEvent.notifyToListener(true, new Object[]{file_uri, fp, fd, fn});
+                    if (mNotifyEvent!=null) mNotifyEvent.notifyToListener(true, new Object[]{file_uri, fp, fd, fn, ss.saf_file.getPath()});
                 }
                 mFragment.dismiss();
             }

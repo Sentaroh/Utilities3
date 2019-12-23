@@ -2,7 +2,7 @@ package com.sentaroh.android.Utilities3.LogUtil;
 
 /*
 The MIT License (MIT)
-Copyright (c) 2011-2013 Sentaroh
+Copyright (c) 2011-2019 Sentaroh
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of 
 this software and associated documentation files (the "Software"), to deal 
@@ -36,6 +36,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +53,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -527,11 +532,11 @@ public class CommonLogManagementFragment extends DialogFragment {
 		title_view.setBackgroundColor(mThemeColorList.title_background_color);
 		TextView title=(TextView)dialog.findViewById(R.id.confirm_send_log_dlg_title);
 		title.setTextColor(mThemeColorList.title_text_color);
-		TextView msg=(TextView)dialog.findViewById(R.id.confirm_send_log_dlg_msg);
+		final TextView msg=(TextView)dialog.findViewById(R.id.confirm_send_log_dlg_msg);
 //		msg.setTextColor(mThemeColorList.text_color_primary);
 //		msg.setBackgroundColor(mThemeColorList.dialog_msg_background_color);
 		msg.setText(mSendMessage);
-		
+
 		final Button btn_ok=(Button)dialog.findViewById(R.id.confirm_send_log_dlg_ok_btn);
 		final Button btn_cancel=(Button)dialog.findViewById(R.id.confirm_send_log_dlg_cancel_btn);
 		final Button btn_preview=(Button)dialog.findViewById(R.id.confirm_send_log_dlg_preview);
@@ -569,7 +574,8 @@ public class CommonLogManagementFragment extends DialogFragment {
 		btn_ok.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
-				sendLogFileToDeveloper(getTempLogFilePath());
+                getProblemDescription(getTempLogFilePath());
+//				sendLogFileToDeveloper(getTempLogFilePath());
 				dialog.dismiss();
 			}
 		});
@@ -592,6 +598,78 @@ public class CommonLogManagementFragment extends DialogFragment {
 		dialog.show();
 
 	};
+
+    private void getProblemDescription(final String fp) {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.single_item_input_dlg);
+
+        LinearLayout ll_dlg_view = (LinearLayout) dialog.findViewById(R.id.single_item_input_dlg_view);
+//        CommonUtilities.setDialogBoxOutline(mContext, ll_dlg_view);
+//        ll_dlg_view.setBackgroundColor(mGp.themeColorList.dialog_msg_background_color);
+
+        final LinearLayout title_view = (LinearLayout) dialog.findViewById(R.id.single_item_input_title_view);
+        final TextView tv_title = (TextView) dialog.findViewById(R.id.single_item_input_title);
+        title_view.setBackgroundColor(mThemeColorList.title_background_color);
+        tv_title.setTextColor(mThemeColorList.title_text_color);
+        tv_title.setText(mContext.getString(R.string.msgs_log_file_prob_question_desc_title));
+
+        final TextView tv_msg=(TextView)dialog.findViewById(R.id.single_item_input_msg);
+        tv_msg.setVisibility(TextView.GONE);
+        final TextView tv_desc=(TextView)dialog.findViewById(R.id.single_item_input_name);
+        tv_desc.setText(mContext.getString(R.string.msgs_log_file_prob_question_desc_hint));
+        final EditText et_msg=(EditText)dialog.findViewById(R.id.single_item_input_dir);
+        et_msg.setHint(mContext.getString(R.string.msgs_log_file_prob_question_desc_hint));
+        et_msg.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        final Button btn_ok=(Button)dialog.findViewById(R.id.single_item_input_ok_btn);
+        final Button btn_cancel=(Button)dialog.findViewById(R.id.single_item_input_cancel_btn);
+
+//        btn_cancel.setText(mContext.getString(R.string.msgs_common_dialog_close));
+
+        CommonDialog.setDlgBoxSizeLimit(dialog,true);
+
+        btn_ok.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NotifyEvent ntfy_desc=new NotifyEvent(mContext);
+                ntfy_desc.setListener(new NotifyEvent.NotifyEventListener() {
+                    @Override
+                    public void positiveResponse(Context context, Object[] objects) {
+//                        mProbQuestion=et_msg.getText().toString();
+                        sendLogFileToDeveloper(getTempLogFilePath(), et_msg.getText().toString());
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void negativeResponse(Context context, Object[] objects) {
+                    }
+                });
+                if (et_msg.getText().length()<=10) {
+                    MessageDialogFragment mdf =MessageDialogFragment.newInstance(false, "W",
+                            mContext.getString(R.string.msgs_log_file_prob_question_desc_no_desc), "");
+                    mdf.showDialog(mFragment.getFragmentManager(), mdf, null);
+                } else {
+                    ntfy_desc.notifyToListener(true, null);
+                }
+            }
+        });
+
+        btn_cancel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                btn_cancel.performClick();
+            }
+        });
+
+        dialog.show();
+    }
 
     private void deleteTempLogFile() {
         String fp=getTempLogFilePath();
@@ -650,7 +728,7 @@ public class CommonLogManagementFragment extends DialogFragment {
 		}
 	};
 
-	final public void sendLogFileToDeveloper(String log_file_path) {
+	final private void sendLogFileToDeveloper(String log_file_path, String msg_text) {
 		CommonLogUtil.resetLogReceiver(mContext);
 
 		String zip_file_name=getZipLogFilePath();
@@ -675,7 +753,8 @@ public class CommonLogManagementFragment extends DialogFragment {
 //		    intent.putExtra(Intent.EXTRA_CC, new String[]{"cc@example.com"});
 //		    intent.putExtra(Intent.EXTRA_BCC, new String[]{"bcc@example.com"});
 	    intent.putExtra(Intent.EXTRA_SUBJECT, mSendSubject);
-	    intent.putExtra(Intent.EXTRA_TEXT, mContext.getString(R.string.msgs_log_file_list_confirm_send_log_description));
+	    intent.putExtra(Intent.EXTRA_TEXT, msg_text);//mContext.getString(R.string.msgs_log_file_list_confirm_send_log_description));
+//        log.info("msg="+msg_text);
 	    Uri uri= FileProvider.getUriForFile(mContext, mClog.getLogFileProviderAuth(), lf);
 	    intent.putExtra(Intent.EXTRA_STREAM, uri);
 	    mContext.startActivity(intent);
@@ -1046,7 +1125,7 @@ public class CommonLogManagementFragment extends DialogFragment {
     };
 
     public void showDialog(FragmentManager fm, Fragment frag, NotifyEvent ntfy) {
-    	log.info("showDialog");
+    	log.info("showDialog test");
     	mTerminateRequired=false;
 	    FragmentTransaction ft = fm.beginTransaction();
 	    ft.add(frag,null);

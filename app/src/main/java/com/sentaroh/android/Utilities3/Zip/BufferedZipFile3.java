@@ -69,6 +69,7 @@ public class BufferedZipFile3 {
 
     private boolean closed =false;
     private boolean mInpuZipFileItemRemoved =false;
+    private boolean mAddZipFileItemAdded =false;
     //    private ZipFile mInputZipFile =null;
     private ZipFile mAddZipFile =null;
     //    private File mInputOsFile =null;
@@ -109,7 +110,7 @@ public class BufferedZipFile3 {
         mNoCompressExtention=list.split(";");
     }
 
-    public BufferedZipFile3(Context c, String input_path, String output_path, String encoding, String wfp) {
+    public BufferedZipFile3(Context c, String input_path, String output_path, String encoding, String wfp) throws ZipException {
         mContext=c;
         SafFile3 in_uri=input_path!=null?new SafFile3(mContext, input_path):null;
         SafFile3 out_uri=new SafFile3(mContext, output_path);
@@ -123,14 +124,27 @@ public class BufferedZipFile3 {
 //        init(in_uri, out_uri, encoding, wfp);
 //    }
 //
-    public BufferedZipFile3(Context c, SafFile3 input_file, SafFile3 output_file, String encoding, String wfp) {
+    public BufferedZipFile3(Context c, SafFile3 input_file, SafFile3 output_file, String encoding, String wfp) throws ZipException {
         mContext=c;
         init(input_file, output_file, encoding, wfp);
     }
 
+    public SafFile3 getInputZipFile() {
+        return mInputSafFile;
+    }
+
+    public SafFile3 getOutputZipFile() {
+        return mOutputSafFile;
+    }
+
     private boolean mEmptyInputZipFile=true;
-    private void init(SafFile3 in_uri, SafFile3 out_uri, String encoding, String work_file_path) {
+    private void init(SafFile3 in_uri, SafFile3 out_uri, String encoding, String work_file_path) throws ZipException {
         log.debug("<init> Input="+in_uri+", Output="+out_uri+", Encoding="+encoding+", wfp="+work_file_path);
+        if (in_uri!=null && out_uri!=null) {
+            if (in_uri.getPath().equals(out_uri.getPath())) throw new ZipException("BufferedZipFile3 create failed.(Same path)");
+        } else if (in_uri==null && out_uri==null) {
+            throw new ZipException("BufferedZipFile3 create failed.(Input and output is null)");
+        }
         mInputSafFile=in_uri;
         mOutputSafFile=out_uri;
         mInputUri=mInputSafFile!=null?mInputSafFile.getUri():null;
@@ -251,12 +265,14 @@ public class BufferedZipFile3 {
         return zipModel;
     }
 
-    private boolean isDuplicateEntry(String fp) {
+    private boolean isAlreadyAdded(String fp) {
         boolean result=false;
-        for(BzfFileHeaderItem added: mAddZipFileHeaderList) {
-            if (!added.isRemovedItem && added.file_header.getFileName().equals(fp)) {
-                result=true;
-                break;
+        if (mAddZipFileHeaderList!=null) {
+            for(BzfFileHeaderItem added: mAddZipFileHeaderList) {
+                if (!added.isRemovedItem && added.file_header.getFileName().equals(fp)) {
+                    result=true;
+                    break;
+                }
             }
         }
         return result;
@@ -294,7 +310,7 @@ public class BufferedZipFile3 {
 
     private boolean addItemInternal(SafFile3 input, ZipParameters parameters) throws ZipException {
         boolean result=false;
-        if (isDuplicateEntry(input.getPath())) throw new ZipException("BufferedZipFile3 Already added, name="+input.getPath());
+        if (isAlreadyAdded(input.getPath())) throw new ZipException("BufferedZipFile3 Already added, name="+input.getPath());
         BufferedInputStream inputStream =null;
         try {
             byte[] readBuff = new byte[IO_AREA_SIZE];
@@ -307,7 +323,7 @@ public class BufferedZipFile3 {
             } else {
                 fp_prefix="/storage/"+input.getUuid()+"/";
             }
-            fileParameters.setDefaultFolderPath(input.getParent().getPath().replace(fp_prefix,""));
+            fileParameters.setDefaultFolderPath(input.getParentFile().getPath().replace(fp_prefix,""));
             fileParameters.setIncludeRootFolder(false);
 
             if (!input.isDirectory()) {
@@ -358,6 +374,7 @@ public class BufferedZipFile3 {
                 byte[] gpflags=fh.getGeneralPurposeFlag();
                 log.debug("addItemInternal added name="+fh.getFileName()+", GeneralPurposeFlag="+ StringUtil.getHexString(gpflags, 0, gpflags.length));
             }
+            mAddZipFileItemAdded=true;
             result=true;
         } catch (ZipException e) {
             if (inputStream != null) try {inputStream.close();} catch (IOException ex) {}
@@ -448,12 +465,18 @@ public class BufferedZipFile3 {
             return -1;
         }
     }
-    public void close() throws ZipException, Exception {
+    public boolean close() throws ZipException, Exception {
         checkClosed();
         closed =true;
+        boolean updated=false;
 //        closeFull();
-        if (getInputFileSize()>0) closeUpdate();
-        else closeAddOnly();
+        log.debug("close entered, added="+mAddZipFileItemAdded+", removed="+mInpuZipFileItemRemoved);
+        if (mAddZipFileItemAdded || mInpuZipFileItemRemoved) {
+            if (getInputFileSize()>0) closeUpdate();
+            else closeAddOnly();
+            updated=true;
+        }
+        return updated;
     }
 
     private void closeAddOnly() throws ZipException, Exception {
@@ -663,7 +686,7 @@ public class BufferedZipFile3 {
         return output_size;
     };
 
-    private FileHeader getFileHeader(String item_name) throws ZipException {
+    private FileHeader getInputZipFileFileHeader(String item_name) throws ZipException {
         if (mInputZipModel==null) return null;
 
         for(FileHeader item:mInputZipModel.getCentralDirectory().getFileHeaders()) {
@@ -680,7 +703,7 @@ public class BufferedZipFile3 {
         for(String item:remove_list) {
             FileHeader fh=null;
             try {
-                fh= getFileHeader(item);
+                fh= getInputZipFileFileHeader(item);
             } catch (ZipException ze) {
             }
             if (fh!=null) fhl.add(fh);
@@ -721,6 +744,71 @@ public class BufferedZipFile3 {
             }
         }
         dumpFileHeaderList("AfterDeleted", bzf_file_header_list);
+    }
+
+    public boolean exists(String fp) {
+        boolean result=false;
+        for(BzfFileHeaderItem rfhli:mInputZipFileHeaderList) {
+            if (!rfhli.isRemovedItem) {
+                if (rfhli.file_header.getFileName().equals(fp)) {
+                    result=true;
+                    break;
+                }
+            }
+        }
+        if (!result) {
+            result= isAlreadyAdded(fp);
+        }
+        return result;
+    }
+
+    public ArrayList<FileHeader> getFileHeaderList() {
+        ArrayList<FileHeader> fhl=new ArrayList<FileHeader>();
+
+        if (mInputZipFileHeaderList!=null) {
+            for(BzfFileHeaderItem rfhli:mInputZipFileHeaderList) {
+                if (!rfhli.isRemovedItem) {
+                    fhl.add(rfhli.file_header);
+                }
+            }
+        }
+
+        if (mAddZipFileHeaderList!=null) {
+            for(BzfFileHeaderItem added: mAddZipFileHeaderList) {
+                if (!added.isRemovedItem) {
+                    fhl.add(added.file_header);
+                }
+            }
+        }
+
+        return fhl;
+    }
+
+    public FileHeader getFileHeader(FileHeader fh) {
+        return getFileHeader(fh.getFileName());
+    }
+
+    public FileHeader getFileHeader(String fp) {
+        FileHeader result=null;
+        if (mInputZipFileHeaderList!=null) {
+            for(BzfFileHeaderItem rfhli:mInputZipFileHeaderList) {
+                if (!rfhli.isRemovedItem) {
+                    if (rfhli.file_header.getFileName().equals(fp)) {
+                        result=rfhli.file_header;
+                        break;
+                    }
+                }
+            }
+        }
+        if (result==null && mAddZipFileHeaderList!=null) {
+            for(BzfFileHeaderItem added: mAddZipFileHeaderList) {
+                if (!added.isRemovedItem && added.file_header.getFileName().equals(fp)) {
+                    result=added.file_header;
+                    break;
+                }
+            }
+        }
+        return result;
     }
 
     private void dumpZipModel(String id, ZipModel zm) {

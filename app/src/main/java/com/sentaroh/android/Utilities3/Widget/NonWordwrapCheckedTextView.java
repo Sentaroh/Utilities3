@@ -1,4 +1,26 @@
 package com.sentaroh.android.Utilities3.Widget;
+/*
+The MIT License (MIT)
+Copyright (c) 2011-2019 Sentaroh
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+and to permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or
+substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+*/
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -27,36 +49,35 @@ public class NonWordwrapCheckedTextView extends CheckedTextView {
 
     private boolean mDebugEnabled=false;
 
+    public void setDebugEnabled(boolean debug) {
+        mDebugEnabled=debug;
+    }
+
     public NonWordwrapCheckedTextView(Context context) {
         super(context);
+        if (mDebugEnabled) log.info("constructor 1");
         setWrapFilter();
     }
 
     public NonWordwrapCheckedTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        if (mDebugEnabled) log.info("constructor 2");
         setWrapFilter();
     }
 
     public NonWordwrapCheckedTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        if (mDebugEnabled) log.info("constructor 3");
+        setWrapFilter();
+    }
+
+    public NonWordwrapCheckedTextView(Context context, AttributeSet attrs, int defStyle, int defStyleRes) {
+        super(context, attrs, defStyle, defStyleRes);
+        if (mDebugEnabled) log.info("constructor 4");
         setWrapFilter();
     }
 
     private void setWrapFilter() {
-        if (isWordWrapByFilter()) {
-            if (isWordWrapEnabled()) setFilters(new InputFilter[] {});
-            else setFilters(new InputFilter[] { new CheckedTextViewFilter(this) });
-        }
-    }
-
-    private boolean mWordwrapByFilter =false;
-    public void setWordWrapByFilter(boolean wordwrap_by_filter) {
-        mWordwrapByFilter =wordwrap_by_filter;
-        setWrapFilter();
-    }
-
-    public boolean isWordWrapByFilter() {
-        return mWordwrapByFilter;
     }
 
     public void setWordWrapEnabled(boolean word_wrap_mode) {
@@ -70,45 +91,22 @@ public class NonWordwrapCheckedTextView extends CheckedTextView {
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-//        log.info("onLayout changed="+changed+", left="+left+", top="+top+", right="+right+", bottom="+bottom);
-        if (isWordWrapByFilter()) {
-            setText(mOrgText, mOrgBufferType);
-        } else {
-            if (!isWordWrapEnabled()) {
-                super.setText(mSpannableSplitText, BufferType.SPANNABLE);//mOrgBufferType);
-            }
+        if (mDebugEnabled) log.info("onLayout changed="+changed+", left="+left+", top="+top+", right="+right+", bottom="+bottom);
+        if (!isWordWrapEnabled()) {
+            super.setText(mSpannableSplitText, mOrgBufferType);
+            if (mDebugEnabled) log.info("onLayout setText issued");
         }
     }
 
     @Override
     final protected void onMeasure(int w, int h) {
         if (mDebugEnabled) log.info("onMeasure w="+MeasureSpec.getSize(w)+", h="+MeasureSpec.getSize(h));
-//        TextPaint paint = getPaint();
-        if (isWordWrapByFilter()) {
+        if (!isWordWrapEnabled()) {
+            mSpannableSplitText=buildSplitText(MeasureSpec.getSize(w), MeasureSpec.getSize(h));
+            super.setText(mSpannableSplitText, mOrgBufferType);
             super.onMeasure(w, h);
         } else {
-            if (!isWordWrapEnabled()) {
-                mSpannableSplitText=buildSplitText(MeasureSpec.getSize(w), MeasureSpec.getSize(h));
-//                float sep_line1=0f;//toPixel(getResources(), 3);
-//                int sep_line2=(int)toPixel(getResources(), 3);
-//                TextPaint.FontMetrics fm=paint.getFontMetrics();
-////            float ts_height=getTextSize();//Math.abs(fm.top)+Math.abs(fm.bottom);
-//                float ts_height=Math.abs(fm.ascent)+Math.abs(fm.descent);
-//                int new_h=((int)Math.ceil(ts_height+sep_line1))*mSplitTextLineCount+sep_line2;
-//                if (mDebugEnabled) {
-//                    log.info("onMeasure lineHeight="+ts_height+
-//                            ", ascent="+fm.ascent+", bottom="+fm.bottom+", decent="+fm.descent+", leading="+fm.leading+", top="+fm.top);
-//                    log.info("onMeasure textSize="+getTextSize()+", paint text size="+paint.getTextSize()+", no of lines="+mSplitTextLineCount+
-//                            ", LineSpacing="+getLineSpacingExtra()+", LineSpcingMult="+getLineSpacingMultiplier());
-//                    log.info("onMeasure w="+MeasureSpec.getSize(w)+", h="+MeasureSpec.getSize(h)+
-//                            ", new w="+MeasureSpec.getSize(w)+", new h="+MeasureSpec.getSize(new_h));
-//                }
-//                setMeasuredDimension( MeasureSpec.getSize(w), MeasureSpec.getSize(new_h));
-                super.setText(mSpannableSplitText, mOrgBufferType);
-                super.onMeasure(w, h);
-            } else {
-                super.onMeasure(w, h);
-            }
+            super.onMeasure(w, h);
         }
     }
 
@@ -123,7 +121,8 @@ public class NonWordwrapCheckedTextView extends CheckedTextView {
         mOrgText = text;
         mOrgBufferType = type;
         super.setText(text, type);
-        requestLayout();
+        if (mDebugEnabled) log.info("setText length="+text.length()+", type="+type.toString()+", text="+text);
+//        requestLayout();
     }
 
     public SpannableStringBuilder getModifiedText() {
@@ -156,29 +155,30 @@ public class NonWordwrapCheckedTextView extends CheckedTextView {
             output=new SpannableStringBuilder(mOrgText);
             int start=0;
             if (mDebugEnabled) log.info("input="+output.toString());
-            while(start<output.length()) {
-                if (mDebugEnabled) log.info("start="+start);
-                String in_text=output.subSequence(start, output.length()).toString();
-                int cr_pos=in_text.indexOf("\n");
-                if (cr_pos>0) {
-                    in_text = output.subSequence(start, start + cr_pos).toString();
-                    int nc = paint.breakText(in_text, true, width-1, null);
-                    if (output.charAt(start + nc) != '\n') output.insert(start + nc, "\n");
-                    start = start + nc + 1;
-                } else if (cr_pos==0) {
-                    start = start + 1;
-                } else {
-                    int nc=paint.breakText(in_text, true, width-1, null);
-//                    log.info("start="+start+", nc="+nc);
-//                    log.info("in_text length="+in_text.length()+", text="+in_text);
-                    if (nc<=(output.length()-start-1)) {
-                        output.insert(start+nc, "\n");
-//                        log.info("cr inserted2, pos="+(start + nc)+", output length="+output.length());
-                        start=start+nc+1;
+            if (output.length()>1) {
+                while(start<output.length()) {
+                    if (mDebugEnabled) log.info("start="+start);
+                    String in_text=output.subSequence(start, output.length()).toString();
+                    int cr_pos=in_text.indexOf("\n");
+                    if (cr_pos>0) {
+                        in_text = output.subSequence(start, start + cr_pos).toString();
+                        int nc = paint.breakText(in_text, true, width-1, null);
+                        if (output.charAt(start + nc) != '\n') output.insert(start + nc, "\n");
+                        start = start + nc + 1;
+                    } else if (cr_pos==0) {
+                        start = start + 1;
                     } else {
-                        start=start+nc+1;
+                        int nc=paint.breakText(in_text, true, width-1, null);
+//                        log.info("start="+start+", nc="+nc);
+//                    log.info("in_text length="+in_text.length()+", text="+in_text);
+                        if (nc<=(output.length()-start-1)) {
+                            output.insert(start+nc, "\n");
+//                        log.info("cr inserted2, pos="+(start + nc)+", output length="+output.length());
+                            start=start+nc+1;
+                        } else {
+                            start=start+nc+1;
+                        }
                     }
-
                 }
             }
             mSplitTextLineCount=output.toString().split("\n").length;
@@ -199,48 +199,5 @@ public class NonWordwrapCheckedTextView extends CheckedTextView {
         return px;
     }
 
-    private static class CheckedTextViewFilter implements InputFilter {
-        private static Logger log= LoggerFactory.getLogger(CheckedTextViewFilter.class);
-
-        private final NonWordwrapCheckedTextView view;
-
-        public CheckedTextViewFilter(NonWordwrapCheckedTextView view) {
-            this.view = view;
-        }
-
-        @Override
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-            TextPaint paint = view.getPaint();
-            int w = view.getWidth();
-            int wpl = view.getCompoundPaddingLeft();
-            int wpr = view.getCompoundPaddingRight();
-            int width = w - wpl - wpr;
-//        log.info("source="+source);
-//        log.info("start="+start+", end="+end+", width="+width+", w="+w+", wpl="+wpl+", wpr="+wpr);
-
-            if (width<=0) return source;//Modified by F.Hoshino 2018/08/29
-            SpannableStringBuilder result = new SpannableStringBuilder();
-            for (int index = start; index < end; index++) {
-                float rts= Layout.getDesiredWidth(source, start, index + 1, paint);
-                if (rts > width) {
-                    result.append(source.subSequence(start, index));
-                    result.append("\n");
-                    start = index;
-//                Log.v("CustomTextView","Append cr/lf, result="+result);
-                } else if (source.charAt(index) == '\n') {
-                    result.append(source.subSequence(start, index));
-                    start = index;
-                }
-//            log.info("start="+start+", end="+end+", index="+index+", rts="+rts);
-            }
-            if (start < end) {
-                result.append(source.subSequence(start, end));
-            }
-//        log.info("result char="+result.toString());
-//        log.info("source hex ="+ StringUtil.getDumpFormatHexString(source.toString().getBytes(), 0,source.toString().getBytes().length));
-//        log.info("result hex ="+ StringUtil.getDumpFormatHexString(result.toString().getBytes(), 0,result.toString().getBytes().length));
-            return result;
-        }
-    }
 
 }

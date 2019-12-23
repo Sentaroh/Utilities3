@@ -1,4 +1,26 @@
 package com.sentaroh.android.Utilities3;
+/*
+The MIT License (MIT)
+Copyright (c) 2011-2019 Sentaroh
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+and to permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or
+substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+*/
 
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
@@ -24,6 +46,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+
+import static com.sentaroh.android.Utilities3.SafManager3.SCOPED_STORAGE_SDK;
 
 public class SafFile3 {
     private Context mContext;
@@ -78,7 +102,7 @@ public class SafFile3 {
         }
         String user_path_seg="";
         String rebuild_path="";
-        if (Build.VERSION.SDK_INT>=29) {
+        if (Build.VERSION.SDK_INT>=SCOPED_STORAGE_SDK) {
             if (reformed_fp.startsWith(SAF_FILE_PRIMARY_STORAGE_PREFIX)) {
                 user_path_seg = reformed_fp.replace(SAF_FILE_PRIMARY_STORAGE_PREFIX, "");
                 rebuild_path=reformed_fp;
@@ -122,8 +146,9 @@ public class SafFile3 {
             String[] path_array=mPath.split("/");
             mUuid=path_array[2];
         }
-        File[] app_file_list=mContext.getExternalFilesDirs(null);
-        File app_specfic=getAppDirectoryFile(app_file_list, mUuid);
+//        File[] app_file_list=mContext.getExternalFilesDirs(null);
+//        File app_specfic=getAppDirectoryFile(app_file_list, mUuid);
+        File app_specfic=getAppDirectoryFile(mUuid);
         if (app_specfic!=null) {
             String p_path=app_specfic.getParent();
             mAppDirectoryFiles=p_path+"/files";
@@ -160,8 +185,9 @@ public class SafFile3 {
 
         mUri=buildSafUri(mUuid, u_path);
 
-        File[] app_file_list=mContext.getExternalFilesDirs(null);
-        File app_specfic=getAppDirectoryFile(app_file_list, mUuid);
+//        File[] app_file_list=mContext.getExternalFilesDirs(null);
+//        File app_specfic=getAppDirectoryFile(app_file_list, mUuid);
+        File app_specfic=getAppDirectoryFile(mUuid);
         if (app_specfic!=null) {
             String p_path=app_specfic.getParent();
             mAppDirectoryFiles=p_path+"/files";
@@ -223,7 +249,7 @@ public class SafFile3 {
             mBuildError=true;
             return;
         }
-        if (Build.VERSION.SDK_INT>=29) buildSafFileScopedStorage(c, uri, null);
+        if (Build.VERSION.SDK_INT>=SCOPED_STORAGE_SDK) buildSafFileScopedStorage(c, uri, null);
         else buildSafFileLegacyStorage(c, uri, null);
     }
 
@@ -239,7 +265,7 @@ public class SafFile3 {
             return;
         }
 //        String uuid= SafManager3.getUuidFromTreeUriPath(uri);
-        if (Build.VERSION.SDK_INT>=29) buildSafFileScopedStorage(c, uri, name);
+        if (Build.VERSION.SDK_INT>=SCOPED_STORAGE_SDK) buildSafFileScopedStorage(c, uri, name);
         else buildSafFileLegacyStorage(c, uri, name);
     }
 
@@ -271,8 +297,9 @@ public class SafFile3 {
 
             mUri=buildSafUri(mUuid, u_path);
 
-            File[] app_file_list=mContext.getExternalFilesDirs(null);
-            File app_specfic=getAppDirectoryFile(app_file_list, mUuid);
+//            File[] app_file_list=mContext.getExternalFilesDirs(null);
+//            File app_specfic=getAppDirectoryFile(app_file_list, mUuid);
+            File app_specfic=getAppDirectoryFile(mUuid);
             if (app_specfic!=null) {
                 String p_path=app_specfic.getParent();
                 mAppDirectoryFiles=p_path+"/files";
@@ -297,8 +324,9 @@ public class SafFile3 {
 
             if (mDocName==null) mDocName=getLastPathSegementFromUri(uri.toString());
 
-            File[] app_file_list=mContext.getExternalFilesDirs(null);
-            File app_specfic=getAppDirectoryFile(app_file_list, mUuid);
+//            File[] app_file_list=mContext.getExternalFilesDirs(null);
+//            File app_specfic=getAppDirectoryFile(app_file_list, mUuid);
+            File app_specfic=getAppDirectoryFile(mUuid);
             if (app_specfic!=null) {
                 String p_path=app_specfic.getParent();
                 mAppDirectoryFiles=p_path+"/files";
@@ -324,8 +352,9 @@ public class SafFile3 {
                 String[] path_seg=mPath.split("/");
                 mUuid=path_seg[2];
             }
-            File[] app_file_list=mContext.getExternalFilesDirs(null);
-            File app_specfic=getAppDirectoryFile(app_file_list, mUuid);
+//            File[] app_file_list=mContext.getExternalFilesDirs(null);
+//            File app_specfic=getAppDirectoryFile(app_file_list, mUuid);
+            File app_specfic=getAppDirectoryFile(mUuid);
             if (app_specfic!=null) {
                 String p_path=app_specfic.getParent();
                 mAppDirectoryFiles=p_path+"/files";
@@ -348,8 +377,9 @@ public class SafFile3 {
             }
             if (mPath.endsWith("/")) mPath=mPath.substring(0, mPath.length()-1);
 
-            File[] app_file_list=mContext.getExternalFilesDirs(null);
-            File app_specfic=getAppDirectoryFile(app_file_list, mUuid);
+//            File[] app_file_list=mContext.getExternalFilesDirs(null);
+//            File app_specfic=getAppDirectoryFile(app_file_list, mUuid);
+            File app_specfic=getAppDirectoryFile(mUuid);
             if (app_specfic!=null) {
                 String p_path=app_specfic.getParent();
                 mAppDirectoryFiles=p_path+"/files";
@@ -411,6 +441,16 @@ public class SafFile3 {
             }
         }
         return result;
+    }
+
+    private File getAppDirectoryFile(String uuid) {
+        File result=null;
+        if (uuid.equals(SafManager3.SAF_FILE_PRIMARY_UUID)) {
+            result=new File("/storage/emulated/0/Android/data/"+mContext.getApplicationInfo().packageName+"/files");
+        } else {
+            result=new File("/storage/"+uuid+"/Android/data/"+mContext.getApplicationInfo().packageName+"/files");
+        }
+        return result.canRead()?result:null;
     }
 
     private void putDebugMessage(String msg) {
@@ -846,12 +886,20 @@ public class SafFile3 {
 
     public Context getContext() {return mContext;}
 
-    public SafFile3 getParent() {
+    public SafFile3 getParentFile() {
         if (isBuildError()) return null;
-        if (isSafFile()) return new SafFile3(mContext, getParentUri(mUri.toString()));
-        else {
-            return new SafFile3(mContext, mFile.getParent());
+        if (isSafFile()) {
+            if (mParentFile==null) mParentFile=new SafFile3(mContext, getParentUri(mUri.toString()));
+        } else {
+            if (mParentFile==null) mParentFile=new SafFile3(mContext, mFile.getParent());
         }
+        return mParentFile;
+    }
+
+    public String getParent() {
+        if (isBuildError()) return null;
+        String ppath=getPath().substring(0, getPath().lastIndexOf("/"));
+        return ppath;
     }
 
     private static Uri getParentUri(String uri) {
@@ -1078,6 +1126,20 @@ public class SafFile3 {
         }
     }
 
+    public boolean exists(Uri uri) {
+        if (isBuildError()) return false;
+        final ContentResolver resolver = mContext.getContentResolver();
+        Cursor c = null;
+        try {
+            c = resolver.query(uri, new String[] {DocumentsContract.Document.COLUMN_DOCUMENT_ID }, null, null, null);
+            return c.getCount() > 0;
+        } catch (Exception e) {
+            return false;
+        } finally {
+            closeQuietly(c);
+        }
+    }
+
     public boolean exists(ContentProviderClient cpc) {
         if (isBuildError()) return false;
         if (mSafFile) {
@@ -1108,9 +1170,12 @@ public class SafFile3 {
             return resultFiles;
         } else {
             File[] fl=mFile.listFiles();
-            final SafFile3[] resultFiles = new SafFile3[fl.length];
-            for (int i = 0; i < fl.length; i++) {
-                resultFiles[i] = new SafFile3(mContext, fl[i].getPath());
+            SafFile3[] resultFiles = null;
+            if (fl!=null) {
+                resultFiles = new SafFile3[fl.length];
+                for (int i = 0; i < fl.length; i++) {
+                    resultFiles[i] = new SafFile3(mContext, fl[i].getPath());
+                }
             }
             return resultFiles;
         }
@@ -1308,22 +1373,31 @@ public class SafFile3 {
         return results;
     }
 
-    public boolean renameTo(String displayName) {
-        if (isBuildError()) return false;
-        if (mSafFile) {
-            Uri result=null;
-            try {
-                result = DocumentsContract.renameDocument(mContext.getContentResolver(), mUri, displayName);
-                return true;
-            } catch (FileNotFoundException e) {
-                putErrorMessage("renameTo rename failed, msg="+e.getMessage());
-                return false;
-            }
-        } else {
-            putErrorMessage("renameTo(String displayName) was not supported non-SafFile");
-            return false;
-        }
-    }
+//    public boolean renameTo(String displayName) {
+//        if (isBuildError()) return false;
+//        if (mSafFile) {
+//            Uri result=null;
+//            try {
+//                result = DocumentsContract.renameDocument(mContext.getContentResolver(), mUri, displayName);
+////                log.info("result="+result);
+//                mRenameToFle=null;
+//                return true;
+//            } catch (FileNotFoundException e) {
+////                log.info("result="+result);
+//                if (mRenameToFle==null || !mRenameToFle.exists()) {
+//                    putErrorMessage("renameTo rename failed, msg="+e.getMessage());
+//                    mRenameToFle=null;
+//                    return false;
+//                } else {
+//                    mRenameToFle=null;
+//                    return true;
+//                }
+//            }
+//        } else {
+//            putErrorMessage("renameTo(String displayName) was not supported non-SafFile");
+//            return false;
+//        }
+//    }
 
     public File getFile() {
         return mFile;
@@ -1332,7 +1406,20 @@ public class SafFile3 {
     public boolean renameTo(SafFile3 new_name) {
         if (isBuildError()) return false;
         if (mSafFile) {
-            return renameTo(new_name.getName());
+            Uri result=null;
+            try {
+                result = DocumentsContract.renameDocument(mContext.getContentResolver(), mUri, new_name.getName());
+                return true;
+            } catch (FileNotFoundException e) {
+//                log.info("result="+result);
+                if (!exists(mUri) && new_name.exists()) {
+                    return true;
+                } else {
+                    putErrorMessage("renameTo rename failed, msg="+e.getMessage());
+                    return false;
+                }
+            }
+//            return renameTo(new_name.getName());
         } else {
             return this.mFile.renameTo(new_name.getFile());
         }

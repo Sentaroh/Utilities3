@@ -2,7 +2,7 @@ package com.sentaroh.android.Utilities3;
 
 /*
 The MIT License (MIT)
-Copyright (c) 2011-2013 Sentaroh
+Copyright (c) 2011-2019 Sentaroh
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of 
 this software and associated documentation files (the "Software"), to deal 
@@ -38,14 +38,15 @@ public class MiscUtil{
 
 		for (int i = 0; i < filter.length(); i++) {
 			String temp = filter.substring(i, i + 1);
-			if (temp.equals(";")) {// 区切り文字
-				if ((i + 1) > filter.length()) {
-					// 終了
-					break;
-				} else {
-					out = out + "|";
-				}
-			} else if (temp.equals("\\")) {
+//			if (temp.equals(";")) {// 区切り文字
+//				if ((i + 1) > filter.length()) {
+//					// 終了
+//					break;
+//				} else {
+//					out = out + "|";
+//				}
+//			} else
+			if (temp.equals("\\")) {
 				out = out + "\\\\";
 			} else if (temp.equals("*")) {
 				out = out + ".*";

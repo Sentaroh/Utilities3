@@ -16,10 +16,13 @@
     <string name="msgs_single_item_input_dlg_title">ディレクトリ作成</string>
     <string name="msgs_single_item_input_dlg_duplicate_dir">既に存在しています</string>
     <string name="msgs_file_select_edit_dir_empty">--- ディレクトリは空です ---</string>
-    <string name="msgs_file_select_edit_local_mount_point">マウントポイント</string>
+    <string name="msgs_file_select_edit_local_mount_point">ストレージの選択</string>
     <string name="msgs_file_select_edit_parent_directory">親ディレクトリー</string>
     <string name="msgs_file_select_edit_confirm_create_directory">ディレクトリーを作成しますか？</string>
     <string name="msgs_file_select_edit_confirm_create_file">ファイルを作成しますか？</string>
+
+    <string name="msgs_file_select_edit_remove_invalid_character_for_file_name">ファイル名に使用できない文字が含まれていましたので削除しました。 (/, \", :, \\, *, &lt;, &gt;, \|)</string>
+
     <string name="msgs_file_select_select_this_entry">選択する</string>
     <string name="msgs_file_select_unselect_this_entry">選択を解除</string>
 </resources>

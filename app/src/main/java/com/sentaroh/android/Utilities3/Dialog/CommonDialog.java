@@ -2,7 +2,7 @@ package com.sentaroh.android.Utilities3.Dialog;
 
 /*
 The MIT License (MIT)
-Copyright (c) 2011-2013 Sentaroh
+Copyright (c) 2011-2019 Sentaroh
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of 
 this software and associated documentation files (the "Software"), to deal 
@@ -42,6 +42,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -172,24 +173,44 @@ public class CommonDialog {
         }
     }
 
+    private final static float mEnableAlpha=1.0f;
+    private final static float mDisableAlphaLight=0.6f;
+    private final static float mDisableAlphaSpinner=0.4f;
+    private final static float mDisableAlpha=0.7f;
+    private final static float mDisableAlphaButton=0.4f;
+    private final static float mDisableAlphaEditTextLight=1.0f;
+    private final static float mDisableAlphaEditText=0.6f;
     public static void setButtonEnabled(Activity a, Button btn, boolean enabled) {
-//	    log.debug("setButtonEnabled LightTheme="+ThemeUtil.isLightThemeUsed(a)+", Enabled="+enabled);
-//	    Thread.dumpStack();
-        if (ThemeUtil.isLightThemeUsed(a)) {
-            if (enabled) btn.setAlpha(1.0f);
-            else btn.setAlpha(0.4f);
-        }
-        btn.setEnabled(enabled);
+        setViewEnabled(a, btn, enabled);
     }
 
     public static void setViewEnabled(Activity a, View v, boolean enabled) {
 //	    log.debug("setButtonEnabled LightTheme="+ThemeUtil.isLightThemeUsed(a)+", Enabled="+enabled);
 //	    Thread.dumpStack();
-        if (ThemeUtil.isLightThemeUsed(a)) {
-            if (enabled) v.setAlpha(1.0f);
-            else v.setAlpha(0.4f);
+        boolean isLight=ThemeUtil.isLightThemeUsed(a);
+        if (v instanceof Spinner) {
+            int cc=((Spinner)v).getChildCount();
+            for(int i=0;i<cc;i++) {
+                View cv=(View)((Spinner)v).getChildAt(i);
+                if (cv!=null) {
+                    if (isLight) cv.setAlpha((enabled?mEnableAlpha:mDisableAlphaLight));
+                    else cv.setAlpha((enabled?mEnableAlpha:mDisableAlphaSpinner));
+                }
+            }
+            v.setEnabled(enabled);
+        } else if (v instanceof EditText) {
+            if (isLight) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaEditTextLight));
+            else v.setAlpha((enabled?mEnableAlpha:mDisableAlphaEditText));
+            v.setEnabled(enabled);
+        } else if (v instanceof Button) {
+            if (isLight) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaButton));
+            else v.setAlpha((enabled?mEnableAlpha:mDisableAlpha));
+            v.setEnabled(enabled);
+        } else {
+            if (isLight) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaLight));
+            else v.setAlpha((enabled?mEnableAlpha:mDisableAlpha));
+            v.setEnabled(enabled);
         }
-        v.setEnabled(enabled);
     }
 
     public static void setSpinnerBackground(Activity a, Spinner spinner) {
@@ -199,14 +220,26 @@ public class CommonDialog {
 
 
     static public void showToastLong(Activity a, String msg) {
-        showToast(a, msg, Toast.LENGTH_LONG);
+        Toast toast=showToast(a, msg, Toast.LENGTH_LONG);
+        toast.show();
     }
 
     static public void showToastShort(Activity a, String msg) {
-        showToast(a, msg, Toast.LENGTH_SHORT);
+        Toast toast=showToast(a, msg, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
-    static private void showToast(Activity a, String msg, int duration) {
+    static public Toast getToastShort(Activity a, String msg) {
+        Toast toast=showToast(a, msg, Toast.LENGTH_SHORT);
+        return toast;
+    }
+
+    static public Toast getToastLong(Activity a, String msg) {
+        Toast toast=showToast(a, msg, Toast.LENGTH_LONG);
+        return toast;
+    }
+
+    static private Toast showToast(Activity a, String msg, int duration) {
         Toast toast=Toast.makeText(a, msg, duration);
         View tv=toast.getView();
         int fg_color= Color.DKGRAY, bg_color=Color.LTGRAY;
@@ -230,7 +263,7 @@ public class CommonDialog {
                 }
             }
         }
-        toast.show();
+        return toast;
     }
 
 

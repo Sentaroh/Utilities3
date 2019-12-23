@@ -35,7 +35,7 @@
     <string name="msgs_log_file_list_no_log_files">No log files</string>
 
     <string name="msgs_log_file_list_confirm_send_log_title">Send log file to the developer.</string>
-    <string name="msgs_log_file_list_confirm_send_log_description">Please describe your problem or question below.\n\n\n</string>
+    <string name="msgs_log_file_list_confirm_send_log_description">Please describe app problem or question</string>
     <string name="msgs_log_file_list_confirm_send_log_send">Send</string>
     <string name="msgs_log_file_list_confirm_send_log_preview">Preview</string>
     <string name="msgs_log_file_list_confirm_send_log_msg">Send log file by E-Mail to the developer.\n
@@ -52,4 +52,8 @@
     <string name="msgs_log_file_log_level_minimum_level">1:Minimum debug info</string>
     <string name="msgs_log_file_log_level_verbose_level">2:Detailed debug info</string>
     <string name="msgs_log_file_log_level_trace_level">3:Trace debug info</string>
+
+    <string name="msgs_log_file_prob_question_desc_title">Problem or question</string>
+    <string name="msgs_log_file_prob_question_desc_hint">Please describe app problem or question</string>
+    <string name="msgs_log_file_prob_question_desc_no_desc">Problem/question is not described. If the problem/question of application is not described, it cannot be answered.</string>
 </resources>

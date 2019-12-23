@@ -2,7 +2,7 @@ package com.sentaroh.android.Utilities3.Widget;
 
 /*
 The MIT License (MIT)
-Copyright (c) 2011-2013 Sentaroh
+Copyright (c) 2011-2019 Sentaroh
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of 
 this software and associated documentation files (the "Software"), to deal 
@@ -30,12 +30,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.sentaroh.android.Utilities3.R;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CustomSpinnerAdapter extends ArrayAdapter<String> {
-	
+    private static final Logger log= LoggerFactory.getLogger(CustomSpinnerAdapter.class);
+
 	private Context mContext=null;
     private int mSelectedPosition=0;
 
@@ -43,6 +48,27 @@ public class CustomSpinnerAdapter extends ArrayAdapter<String> {
 		super(c, textViewResourceId);
 		mContext=c;
 	}
+
+	private Spinner mSpinner=null;
+	public void setSpinner(Spinner spinner) {
+	    mSpinner=spinner;
+    }
+
+	private void setSelectedPosition(int pos) {
+//	    Thread.dumpStack();
+        if (mDebugEnabled) log.info("id="+mDebugId+", set="+pos);
+	    mSelectedPosition=pos;};
+    private int getSelectedPosition() {
+//        Thread.dumpStack();
+//        if (mDebugEnabled) log.info("et="+mSelectedPosition);
+        return mSelectedPosition;};
+
+    private boolean mDebugEnabled=false;
+    private String mDebugId="";
+    public void setDebug(boolean enabled, String id) {
+        mDebugEnabled=enabled;
+        mDebugId=id;
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -52,13 +78,13 @@ public class CustomSpinnerAdapter extends ArrayAdapter<String> {
         } else {
             view = (TextView)convertView;
         }
-
+//        log.info("enabled="+isEnabled(position)+", click="+view.isClickable()+", ve="+view.isEnabled());
         view.setText(getItem(position));
         view.setCompoundDrawablePadding(10);
         view.setCompoundDrawablesWithIntrinsicBounds(
                 mContext.getResources().getDrawable(android.R.drawable.arrow_down_float),
                 null, null, null);
-        mSelectedPosition=position;
+        setSelectedPosition(position);
         return view;
     }
 
@@ -72,16 +98,21 @@ public class CustomSpinnerAdapter extends ArrayAdapter<String> {
         final NonWordwrapCheckedTextView text_view=(NonWordwrapCheckedTextView)convertView.findViewById(R.id.text1);
 //        text_view.setWordWrapByFilter(false);
         text_view.setText(text);
-        if (position==mSelectedPosition) text_view.setChecked(true);
-        else text_view.setChecked(false);
+        if (mSpinner!=null) {
+            if (position==mSpinner.getSelectedItemPosition()) text_view.setChecked(true);
+            else text_view.setChecked(false);
+        } else {
+            if (position==getSelectedPosition()) text_view.setChecked(true);
+            else text_view.setChecked(false);
+        }
 
-        text_view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                text_view.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                setMultilineEllipsizeOld(text_view, 3, TextUtils.TruncateAt.START);
-            }
-        });
+//        text_view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                text_view.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+//                setMultilineEllipsizeOld(text_view, 3, TextUtils.TruncateAt.START);
+//            }
+//        });
         return convertView;
     }
 

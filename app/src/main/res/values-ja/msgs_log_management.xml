@@ -35,7 +35,7 @@
 	<string name="msgs_log_file_list_no_log_files">ログファイルが存在しません</string>
 
     <string name="msgs_log_file_list_confirm_send_log_title">ログファイルを開発者に送信</string>
-    <string name="msgs_log_file_list_confirm_send_log_description">下記に貴方の問題・疑問を記述してください。\n\n\n</string>
+    <string name="msgs_log_file_list_confirm_send_log_description">アプリの問題・疑問を記述してください。</string>
     <string name="msgs_log_file_list_confirm_send_log_send">送信</string>
     <string name="msgs_log_file_list_confirm_send_log_preview">内容表示</string>
     <string name="msgs_log_file_list_confirm_send_log_msg">ログを開発者にE-Mailを使用して送信します。\n
