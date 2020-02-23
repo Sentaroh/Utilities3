@@ -27,7 +27,6 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.sentaroh.android.Utilities3.CallBackListener;
-import com.sentaroh.android.Utilities3.NotifyEvent;
 import com.sentaroh.android.Utilities3.SafFile3;
 import com.sentaroh.android.Utilities3.StringUtil;
 
@@ -337,11 +336,13 @@ public class BufferedZipFile3 {
             } else {
                 fp_prefix="/storage/"+input.getUuid()+"/";
             }
-            fileParameters.setDefaultFolderPath(input.getParentFile().getPath().replace(fp_prefix,""));
+//            fileParameters.setDefaultFolderPath(input.getParentFile().getPath().replace(fp_prefix,""));
             fileParameters.setIncludeRootFolder(false);
 
+//            String def_path=fileParameters.getDefaultFolderPath().endsWith("/")?fileParameters.getDefaultFolderPath():fileParameters.getDefaultFolderPath()+"/";
             if (!input.isDirectory()) {
-                fileParameters.setFileNameInZip(input.getPath().replace(fp_prefix,""));
+//                fileParameters.setFileNameInZip(input.getPath().replace(fp_prefix,""));
+//                fileParameters.setFileNameInZip(input.getPath().replace(def_path,""));
                 if (fileParameters.isEncryptFiles() && fileParameters.getEncryptionMethod() == EncryptionMethod.ZIP_STANDARD) {
                     fileParameters.setEntryCRC((int) computeFileCrc(input));
                 }
@@ -354,7 +355,8 @@ public class BufferedZipFile3 {
                     fileParameters.setCompressionMethod(parameters.getCompressionMethod());
                 }
             } else {
-                fileParameters.setFileNameInZip(input.getPath().replace(fp_prefix,"")+"/");
+//                fileParameters.setFileNameInZip(input.getPath().replace(fp_prefix,"")+"/");
+//                fileParameters.setFileNameInZip(input.getPath().replace(def_path,""));
                 fileParameters.setEntrySize(0);
                 fileParameters.setCompressionMethod(CompressionMethod.STORE);
                 fileParameters.setEncryptFiles(false);
@@ -374,31 +376,30 @@ public class BufferedZipFile3 {
                 int progress=0;
                 if (p_cbl!=null) p_cbl.onCallBack(mContext, progress, null);
                 while ((readLen = inputStream.read(readBuff)) != -1) {
+                    if (isAborted()) break;
                     mAddZipOutputStream.write(readBuff, 0, readLen);
-                    if (p_cbl!=null) {
-                        read_count+=readLen;
-                        progress=(int)((read_count*100)/fsz);
-                        p_cbl.onCallBack(mContext, progress, null);
-                    }
+                    read_count+=readLen;
+                    notifyProgress(p_cbl, read_count, fsz);
                 }
                 mAddZipOutputStream.closeEntry();
 
                 inputStream.close();
             }
-
-            List<FileHeader> fhl= mAddZipModel.getCentralDirectory().getFileHeaders();
-            List<LocalFileHeader> lfhl= mAddZipModel.getLocalFileHeaders();
-            log.debug("addItemInternal Central FileHeader size="+fhl.size()+", Local Fileheader size="+lfhl.size());
-            for(int i = mAddZipFileHeaderList.size(); i<fhl.size(); i++) {
-                FileHeader fh=fhl.get(i);
-                BzfFileHeaderItem bfhi=new BzfFileHeaderItem();
-                bfhi.file_header=fh;
-                mAddZipFileHeaderList.add(bfhi);
-                byte[] gpflags=fh.getGeneralPurposeFlag();
-                log.debug("addItemInternal added name="+fh.getFileName()+", GeneralPurposeFlag="+ StringUtil.getHexString(gpflags, 0, gpflags.length));
+            if (!isAborted()) {
+                List<FileHeader> fhl= mAddZipModel.getCentralDirectory().getFileHeaders();
+                List<LocalFileHeader> lfhl= mAddZipModel.getLocalFileHeaders();
+                log.debug("addItemInternal Central FileHeader size="+fhl.size()+", Local Fileheader size="+lfhl.size());
+                for(int i = mAddZipFileHeaderList.size(); i<fhl.size(); i++) {
+                    FileHeader fh=fhl.get(i);
+                    BzfFileHeaderItem bfhi=new BzfFileHeaderItem();
+                    bfhi.file_header=fh;
+                    mAddZipFileHeaderList.add(bfhi);
+                    byte[] gpflags=fh.getGeneralPurposeFlag();
+                    log.debug("addItemInternal added name="+fh.getFileName()+", GeneralPurposeFlag="+ StringUtil.getHexString(gpflags, 0, gpflags.length));
+                }
+                mAddZipFileItemAdded=true;
+                result=true;
             }
-            mAddZipFileItemAdded=true;
-            result=true;
         } catch (ZipException e) {
             if (inputStream != null) try {inputStream.close();} catch (IOException ex) {}
             if (mAddZipOutputStream != null) try {mAddZipOutputStream.close();} catch (IOException ex) {}
@@ -530,12 +531,13 @@ public class BufferedZipFile3 {
                     long read_byte=0;
                     long fsz=fis.available();
                     while((rc=fis.read(buff))>0) {
-                        mOutputOsFileStream.write(buff,0,rc);
-                        if (cbl!=null) {
-                            read_byte+=rc;
-                            int progress=(int)((read_byte*100)/fsz);
-                            cbl.onCallBack(mContext, progress, null);
+                        if (isAborted()) {
+                            log.debug("closeAddOnly aborted");
+                            break;
                         }
+                        mOutputOsFileStream.write(buff,0,rc);
+                        read_byte+=rc;
+                        notifyProgress(cbl, read_byte, fsz);
                     }
                     mOutputOsFileStream.flush();
                     mOutputOsFileStream.close();
@@ -549,8 +551,19 @@ public class BufferedZipFile3 {
         log.debug("closeAddOnly elapsed time="+(System.currentTimeMillis()-b_time));
     }
 
+    private void notifyProgress(CallBackListener cbl, long read_byte, long file_size) {
+        if (cbl!=null) {
+            int progress=(int)((read_byte*100)/file_size);
+            cbl.onCallBack(mContext, progress, null);
+        }
+    }
+
+    private boolean mAbort=false;
+    synchronized public boolean isAborted() {return mAbort;}
+    synchronized public void abort() {mAbort=true;}
+
     private boolean mZipOutputFinalyzeRequired=false;
-    private long mToBeProcessCount=0, mProcessedCount=0;
+    private long mToBeProcessByteCount =0, mProcessedByteCount =0;
     private void closeUpdate(CallBackListener cbl) throws ZipException, Exception {
         log.debug("closeUpdate entered");
         long b_time= System.currentTimeMillis();
@@ -564,7 +577,7 @@ public class BufferedZipFile3 {
             mOutputOsFileStream=mOutputSafFile.getOutputStream();
             mOutputZipFileStream=new BufferedOutputStream(mOutputOsFileStream,IO_AREA_SIZE*4);
 
-            mToBeProcessCount= getZipItemCount();
+            mToBeProcessByteCount = getZipItemCount();
 
             if (!mEmptyInputZipFile) copyInputZipFile(cbl);
 
@@ -628,27 +641,32 @@ public class BufferedZipFile3 {
             else input_file_stream=new SeekableInputStream(mContext, mInputSafFile.getFile());
             if (mInpuZipFileItemRemoved) {
                 for(int i = 0; i< mInputZipFileHeaderList.size(); i++) {
-                    BzfFileHeaderItem rfhli= mInputZipFileHeaderList.get(i);
-                    if (!rfhli.isRemovedItem) {
-                        long primary_file_start_pos=rfhli.file_header.getOffsetLocalHeader();
-                        rfhli.file_header.setOffsetLocalHeader(mOutputZipFilePosition);
-                        long end_pos=0;
-                        if (i==(mInputZipFileHeaderList.size()-1)) {//end pos=startCentralRecord-1
-                            long offsetStartCentralDir = mInputZipModel.getEndOfCentralDirectoryRecord().getOffsetOfStartOfCentralDirectory();
-                            if (mInputZipModel.isZip64Format()) {
-                                if (mInputZipModel.getZip64EndOfCentralDirectoryRecord() != null) {
-                                    offsetStartCentralDir = mInputZipModel.getZip64EndOfCentralDirectoryRecord().getOffsetStartCentralDirectoryWRTStartDiskNumber();
-                                }
-                            }
-                            end_pos=offsetStartCentralDir-1;
-                        } else {
-                            end_pos= mInputZipFileHeaderList.get(i+1).file_header.getOffsetLocalHeader()-1;
-                        }
-                        mOutputZipFilePosition +=copyZipFile(rfhli.file_header.getFileName(),
-                                mOutputZipFileStream, input_file_stream, primary_file_start_pos, end_pos, cbl);
-                        mZipOutputFinalyzeRequired=true;
+                    if (isAborted()) {
+                        log.debug("copyInputZipFile aborted");
+                        break;
                     } else {
-                        mInputZipModel.getCentralDirectory().getFileHeaders().remove(rfhli.file_header);
+                        BzfFileHeaderItem rfhli= mInputZipFileHeaderList.get(i);
+                        if (!rfhli.isRemovedItem) {
+                            long primary_file_start_pos=rfhli.file_header.getOffsetLocalHeader();
+                            rfhli.file_header.setOffsetLocalHeader(mOutputZipFilePosition);
+                            long end_pos=0;
+                            if (i==(mInputZipFileHeaderList.size()-1)) {//end pos=startCentralRecord-1
+                                long offsetStartCentralDir = mInputZipModel.getEndOfCentralDirectoryRecord().getOffsetOfStartOfCentralDirectory();
+                                if (mInputZipModel.isZip64Format()) {
+                                    if (mInputZipModel.getZip64EndOfCentralDirectoryRecord() != null) {
+                                        offsetStartCentralDir = mInputZipModel.getZip64EndOfCentralDirectoryRecord().getOffsetStartCentralDirectoryWRTStartDiskNumber();
+                                    }
+                                }
+                                end_pos=offsetStartCentralDir-1;
+                            } else {
+                                end_pos= mInputZipFileHeaderList.get(i+1).file_header.getOffsetLocalHeader()-1;
+                            }
+                            mOutputZipFilePosition +=copyZipFile(rfhli.file_header.getFileName(),
+                                    mOutputZipFileStream, input_file_stream, primary_file_start_pos, end_pos, cbl);
+                            mZipOutputFinalyzeRequired=true;
+                        } else {
+                            mInputZipModel.getCentralDirectory().getFileHeaders().remove(rfhli.file_header);
+                        }
                     }
                 }
             } else {
@@ -687,19 +705,24 @@ public class BufferedZipFile3 {
                 input_file_stream=new SeekableInputStream(mContext, mAddOsFile);
                 long base_pointer= mOutputZipFilePosition;
                 for(int i = 0; i< mAddZipFileHeaderList.size(); i++) {
-                    BzfFileHeaderItem fh= mAddZipFileHeaderList.get(i);
-                    fh.file_header.setOffsetLocalHeader(mOutputZipFilePosition);
-                    long end_pos=0;
-                    if (i==(mAddZipFileHeaderList.size()-1)) {//end pos=startCentralRecord-1
-                        end_pos=offsetStartCentralDir;
+                    if (isAborted()) {
+                        log.debug("appendAddZipFile aborted");
+                        break;
                     } else {
-                        end_pos= mAddZipFileHeaderList.get(i+1).file_header.getOffsetLocalHeader()-1;
-                    }
-                    mOutputZipFilePosition +=copyZipFile(fh.file_header.getFileName(),
-                            mOutputZipFileStream, input_file_stream, fh.file_header.getOffsetLocalHeader()-base_pointer, end_pos, cbl);
-                    mInputZipModel.getCentralDirectory().getFileHeaders().add(fh.file_header);
+                        BzfFileHeaderItem fh= mAddZipFileHeaderList.get(i);
+                        fh.file_header.setOffsetLocalHeader(mOutputZipFilePosition);
+                        long end_pos=0;
+                        if (i==(mAddZipFileHeaderList.size()-1)) {//end pos=startCentralRecord-1
+                            end_pos=offsetStartCentralDir;
+                        } else {
+                            end_pos= mAddZipFileHeaderList.get(i+1).file_header.getOffsetLocalHeader()-1;
+                        }
+                        mOutputZipFilePosition +=copyZipFile(fh.file_header.getFileName(),
+                                mOutputZipFileStream, input_file_stream, fh.file_header.getOffsetLocalHeader()-base_pointer, end_pos, cbl);
+                        mInputZipModel.getCentralDirectory().getFileHeaders().add(fh.file_header);
 
-                    mZipOutputFinalyzeRequired=true;
+                        mZipOutputFinalyzeRequired=true;
+                    }
                 }
             } finally {
                 if (input_file_stream!=null) try {input_file_stream.close();} catch(Exception e){};
@@ -729,19 +752,23 @@ public class BufferedZipFile3 {
             int rc=input_file.read(buff,0,bufsz);
             int progress=0;
             while(rc>0) {
-                bos.write(buff, 0, rc);
-                if (cbl!=null) {
-                    mProcessedCount+=rc;
-                    progress=(int)((mProcessedCount*100)/mToBeProcessCount);
-                    cbl.onCallBack(mContext, progress, null);
-                }
-                output_size+=rc;
-                if (item_size>output_size) {
-                    if ((item_size-output_size)>0) {
-                        read_size=(int) ((item_size-output_size)>bufsz?bufsz:(item_size-output_size));
-                        rc=input_file.read(buff,0,read_size);
+                if (isAborted()) {
+                    log.debug("copyZip aborted");
+                    break;
+                } else {
+                    bos.write(buff, 0, rc);
+                    if (cbl!=null) {
+                        mProcessedByteCount +=rc;
+                        notifyProgress(cbl, mProcessedByteCount, mToBeProcessByteCount);
+                    }
+                    output_size+=rc;
+                    if (item_size>output_size) {
+                        if ((item_size-output_size)>0) {
+                            read_size=(int) ((item_size-output_size)>bufsz?bufsz:(item_size-output_size));
+                            rc=input_file.read(buff,0,read_size);
+                        } else break;
                     } else break;
-                } else break;
+                }
             }
         } catch (IOException e) {
             throw new IOException(e);
@@ -795,12 +822,13 @@ public class BufferedZipFile3 {
     private void removeItemInternal(ArrayList<FileHeader> remove_item_list,
                                     ArrayList<BzfFileHeaderItem> bzf_file_header_list) throws ZipException {
         checkClosed();
-        for(FileHeader fh:remove_item_list) if (log.isDebugEnabled()) log.debug("removeItem selected name="+fh.getFileName());
+        for(FileHeader fh:remove_item_list) if (log.isDebugEnabled()) log.debug("removeItemInternal selected name="+fh.getFileName());
         for(int i=0;i<bzf_file_header_list.size();i++) {
             BzfFileHeaderItem rfhli=bzf_file_header_list.get(i);
             if (!rfhli.isRemovedItem) {
                 for(FileHeader remove_item:remove_item_list) {
                     if (rfhli.file_header.getFileName().equals(remove_item.getFileName())) {
+                        log.debug("removeItemInternal remove item="+rfhli.file_header.getFileName());
                         rfhli.isRemovedItem=true;
                         mInpuZipFileItemRemoved =true;
                     }
@@ -880,33 +908,33 @@ public class BufferedZipFile3 {
 
     private void dumpZipModel(String id, ZipModel zm) {
         if (!log.isTraceEnabled() ||zm==null || zm.getEndOfCentralDirectoryRecord()==null) return;
-//        long offsetStartCentralDir = zm.getEndCentralDirRecord().getOffsetOfStartOfCentralDir();
-//        if (zm.isZip64Format()) {
-//            if (zm.getZip64EndCentralDirRecord() != null) {
-//                offsetStartCentralDir = zm.getZip64EndCentralDirRecord().getOffsetStartCenDirWRTStartDiskNo();
-//            }
-//        }
-//
-//        log.trace(id+" offsetStartCentralDir="+String.format("%#010x", offsetStartCentralDir));
-//        ArrayList<FileHeader> fhl=zm.getCentralDirectory().getFileHeaders();
-//        for(FileHeader fh:fhl) {
-//            log.trace(id+" FileHeader comp size="+fh.getCompressedSize()+
-//                    ", header offset="+String.format("%#010x",fh.getOffsetLocalHeader())+
-//                    ", crc32="+String.format("%#010x",fh.getCrc32())+
-//                    ", name="+fh.getFileName());
-//        }
+        long offsetStartCentralDir = zm.getEndOfCentralDirectoryRecord().getOffsetOfStartOfCentralDirectory();
+        if (zm.isZip64Format()) {
+            if (zm.getZip64EndOfCentralDirectoryRecord() != null) {
+                offsetStartCentralDir = zm.getZip64EndOfCentralDirectoryRecord().getOffsetStartCentralDirectoryWRTStartDiskNumber();
+            }
+        }
+
+        log.trace(id+" offsetStartCentralDir="+String.format("%#010x", offsetStartCentralDir));
+        List<FileHeader> fhl=zm.getCentralDirectory().getFileHeaders();
+        for(FileHeader fh:fhl) {
+            log.trace(id+" FileHeader comp size="+fh.getCompressedSize()+
+                    ", header offset="+String.format("%#010x",fh.getOffsetLocalHeader())+
+                    ", crc="+String.format("%#010x",fh.getCrc())+
+                    ", name="+fh.getFileName());
+        }
     }
 
     private void dumpFileHeaderList(String id, ArrayList<BzfFileHeaderItem> bzf_file_header_list) {
         if (!log.isTraceEnabled() || bzf_file_header_list==null) return;
-//        for(int i=0;i<bzf_file_header_list.size();i++) {
-//            BufferedZipFile3.BzfFileHeaderItem rfhli=bzf_file_header_list.get(i);
-//            log.trace(id+" BzFileHeader comp size="+rfhli.file_header.getCompressedSize()+
-//                    ", header offset="+String.format("%#010x",rfhli.file_header.getOffsetLocalHeader())+
-//                    ", crc32="+String.format("%#010x",rfhli.file_header.getCrc32())+
-//                    ", removed="+rfhli.isRemovedItem+
-//                    ", name="+rfhli.file_header.getFileName());
-//        }
+        for(int i=0;i<bzf_file_header_list.size();i++) {
+            BufferedZipFile3.BzfFileHeaderItem rfhli=bzf_file_header_list.get(i);
+            log.trace(id+" BzFileHeader comp size="+rfhli.file_header.getCompressedSize()+
+                    ", header offset="+String.format("%#010x",rfhli.file_header.getOffsetLocalHeader())+
+                    ", crc="+String.format("%#010x",rfhli.file_header.getCrc())+
+                    ", removed="+rfhli.isRemovedItem+
+                    ", name="+rfhli.file_header.getFileName());
+        }
     }
 
 }
