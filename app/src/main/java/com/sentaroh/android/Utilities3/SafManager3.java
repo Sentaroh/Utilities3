@@ -192,12 +192,18 @@ public class SafManager3 {
         return mScopedStorageMode;
     }
 
+    private ArrayList<StorageVolumeInfo> mStorageVolumeInfoList=null;
+
+    public ArrayList<StorageVolumeInfo> getLastStorageVolumeInfo() {
+        return mStorageVolumeInfoList;
+    }
+
     private ArrayList<SafStorage3> buildSafFileList() {
         ArrayList<SafStorage3> saf_list=new ArrayList<SafStorage3>();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         StorageManager sm = (StorageManager) mContext.getSystemService(Context.STORAGE_SERVICE);
-        ArrayList<StorageVolumeInfo> svl=getStorageVolumeInfo(mContext);
-        for(StorageVolumeInfo item_svi:svl) {
+        mStorageVolumeInfoList=getStorageVolumeInfo(mContext);
+        for(StorageVolumeInfo item_svi:mStorageVolumeInfoList) {
             SafFile3 rt=null;
             if (!item_svi.isDuplicate) {
                 if (isScopedStorageMode()) {
