@@ -54,11 +54,11 @@ public class CustomSpinnerAdapter extends ArrayAdapter<String> {
 	    mSpinner=spinner;
     }
 
-	private void setSelectedPosition(int pos) {
+	public void setSelectedPosition(int pos) {
 //	    Thread.dumpStack();
         if (mDebugEnabled) log.info("id="+mDebugId+", set="+pos);
 	    mSelectedPosition=pos;};
-    private int getSelectedPosition() {
+    public int getSelectedPosition() {
 //        Thread.dumpStack();
 //        if (mDebugEnabled) log.info("et="+mSelectedPosition);
         return mSelectedPosition;};
