@@ -49,8 +49,14 @@ public class ZipFileListItem implements Serializable, Externalizable {
 	public String getZipFileType() {return zip_file_type;}
 	public void setZipFileType(String p) {zip_file_type=p;}
 
-	public static final int COMPRESSION_METHOD_DEFLATE=1;
-    public static final int COMPRESSION_METHOD_STORE=2;
+    public static final int COMPRESSION_METHOD_STORE=0;
+    public static final int COMPRESSION_METHOD_IMPLOD=6;
+    public static final int COMPRESSION_METHOD_DEFLATE=8;
+    public static final int COMPRESSION_METHOD_DEFLATE64=9;
+    public static final int COMPRESSION_METHOD_BZIP2=12;
+    public static final int COMPRESSION_METHOD_LZMA=14;
+    public static final int COMPRESSION_METHOD_AES=99;
+
     public static final int ENCRPTION_METHOD_NONE=0;
     public static final int ENCRPTION_METHOD_AES=1;
     public static final int ENCRPTION_METHOD_ZIP=2;

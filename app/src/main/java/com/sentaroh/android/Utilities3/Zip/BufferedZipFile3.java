@@ -312,7 +312,7 @@ public class BufferedZipFile3 {
         boolean result=false;
         if (mNoCompressExtention!=null) {
             for (String item:mNoCompressExtention) {
-                if (fp.endsWith("."+item)) {
+                if (fp.toLowerCase().endsWith("."+item.toLowerCase())) {
                     result=true;
                     break;
                 }
