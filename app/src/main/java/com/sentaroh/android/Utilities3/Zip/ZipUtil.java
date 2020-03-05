@@ -64,7 +64,7 @@ public class ZipUtil {
 
     private static Logger log = LoggerFactory.getLogger(ZipUtil.class);
 
-    static public String detectFileNameEncoding(Context c, String zip_path) {
+    static public String detectFileNameEncoding(Context c, String zip_path) throws IOException {
         String encoding = "";
         String result = null;
         UniversalDetector detector = new UniversalDetector(null);
@@ -114,6 +114,7 @@ public class ZipUtil {
         } catch (Exception e) {
             log.debug("detectFileNameEncoding", e);
             result = null;
+            throw e;
         }
         log.trace("detectFileNameEncoding result=" + result);
         return result;
@@ -228,7 +229,7 @@ public class ZipUtil {
         return null;
     }
 
-    static public ArrayList<FileHeader> getFileHeaders(Context c, Uri zip_path, String encoding) {
+    static public ArrayList<FileHeader> getFileHeaders(Context c, Uri zip_path, String encoding) throws IOException {
         try {
             SeekableInputStream sis = new SeekableInputStream(c, zip_path);
             HeaderReader header_reader = new HeaderReader();
@@ -236,12 +237,14 @@ public class ZipUtil {
             ArrayList<FileHeader> file_header_list = (ArrayList<FileHeader>) zm.getCentralDirectory().getFileHeaders();
             return file_header_list;
         } catch (IOException e) {
-            e.printStackTrace();
+//            log.info("error="+e.getMessage());
+//            e.printStackTrace();
+            throw e;
         }
-        return null;
+//        return null;
     }
 
-    static public ArrayList<FileHeader> getFileHeaders(Context c, File zip_file, String encoding) {
+    static public ArrayList<FileHeader> getFileHeaders(Context c, File zip_file, String encoding) throws IOException {
         try {
             SeekableInputStream sis = new SeekableInputStream(c, zip_file);
             HeaderReader header_reader = new HeaderReader();
@@ -249,12 +252,14 @@ public class ZipUtil {
             ArrayList<FileHeader> file_header_list = (ArrayList<FileHeader>) zm.getCentralDirectory().getFileHeaders();
             return file_header_list;
         } catch (IOException e) {
-            e.printStackTrace();
+//            log.info("error="+e.getMessage());
+//            e.printStackTrace();
+            throw e;
         }
-        return null;
+//        return null;
     }
 
-    static public ArrayList<FileHeader> getFileHeaders(Context c, SafFile3 zip_file, String encoding) {
+    static public ArrayList<FileHeader> getFileHeaders(Context c, SafFile3 zip_file, String encoding) throws IOException {
         try {
             SeekableInputStream sis = null;
             if (zip_file.isSafFile()) sis=new SeekableInputStream(c, zip_file.getUri());
@@ -265,8 +270,9 @@ public class ZipUtil {
             return file_header_list;
         } catch (IOException e) {
             e.printStackTrace();
+            throw e;
         }
-        return null;
+//        return null;
     }
 
     static public ArrayList<FileHeader> getFileHeaders(ZipModel zm) {
@@ -274,16 +280,16 @@ public class ZipUtil {
         return file_header_list;
     }
 
-    static public ArrayList<ZipFileListItem> buildZipFileList(Context c, String zip_path, String encoding) {
+    static public ArrayList<ZipFileListItem> buildZipFileList(Context c, String zip_path, String encoding) throws IOException {
         SafFile3 sf=new SafFile3(c, zip_path);
         return buildZipFileList(c, sf, encoding);
     }
-    static public ArrayList<ZipFileListItem> buildZipFileList(Context c, Uri zip_path, String encoding) {
+    static public ArrayList<ZipFileListItem> buildZipFileList(Context c, Uri zip_path, String encoding) throws IOException {
         SafFile3 sf=new SafFile3(c, zip_path);
         return buildZipFileList(c, sf, encoding);
     }
 
-    static private ArrayList<ZipFileListItem> buildZipFileList(Context c, SafFile3 zip_path, String encoding) {
+    static private ArrayList<ZipFileListItem> buildZipFileList(Context c, SafFile3 zip_path, String encoding) throws IOException {
 		ArrayList<ZipFileListItem> tfl=new ArrayList<ZipFileListItem>();
 		try {
             List<FileHeader> fhl=getFileHeaders(c, zip_path, encoding);
@@ -375,6 +381,7 @@ public class ZipUtil {
 			}
         }catch(Exception e) {
             log.debug("buildZipFileList",e);
+            throw e;
 		}
 		return tfl;
 	};
