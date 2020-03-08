@@ -310,6 +310,9 @@ public class ZipUtil {
 						if (t_path.endsWith("/")) t_path=t_path.substring(0,t_path.length()-1);
 					}
 					int zip_comp=fh.getCompressionMethod().getCode();
+					if (zip_comp==CompressionMethod.AES_INTERNAL_ONLY.getCode()) {
+					    zip_comp=fh.getAesExtraDataRecord().getCompressionMethod().getCode();
+                    }
 //					if (fh.getCompressionMethod()==CompressionMethod.STORE) zip_comp=ZipFileListItem.COMPRESSION_METHOD_STORE;
 //					else if (fh.getCompressionMethod()==CompressionMethod.DEFLATE) zip_comp=ZipFileListItem.COMPRESSION_METHOD_DEFLATE;
 					int zip_enc=0;
