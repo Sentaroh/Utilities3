@@ -1535,7 +1535,7 @@ public class SafFile3 {
                 return defaultValue;
             }
         } catch (Exception e) {
-            putErrorMessage("saf_file#queryForString Failed to Query, Error="+e.getMessage());
+            if (log.isTraceEnabled()) putErrorMessage("saf_file#queryForString Failed to Query, Error="+e.getMessage());
             return defaultValue;
         } finally {
             closeQuietly(c);
@@ -1552,7 +1552,7 @@ public class SafFile3 {
                 return defaultValue;
             }
         } catch (Exception e) {
-            putErrorMessage("saf_file#queryForString Failed to Query, Error="+e.getMessage());
+            if (log.isTraceEnabled()) putErrorMessage("saf_file#queryForString Failed to Query, Error="+e.getMessage());
             return defaultValue;
         }
     }
@@ -1583,7 +1583,7 @@ public class SafFile3 {
 //            for (int i=0;i<st.length;i++) {
 //                stm+="\n at "+st[i].getClassName()+"."+ st[i].getMethodName()+"("+st[i].getFileName()+ ":"+st[i].getLineNumber()+")";
 //            }
-            putErrorMessage("saf_file#queryForLong Failed to Query, Error="+e.getMessage());
+            if (log.isTraceEnabled()) putErrorMessage("saf_file#queryForLong Failed to Query, Error="+e.getMessage());
             return defaultValue;
         } finally {
             closeQuietly(c);
@@ -1600,7 +1600,7 @@ public class SafFile3 {
                 return defaultValue;
             }
         } catch (Exception e) {
-            putErrorMessage("saf_file#queryForLong Failed to Query, Error="+e.getMessage());
+            if (log.isTraceEnabled()) putErrorMessage("saf_file#queryForLong Failed to Query, Error="+e.getMessage());
             return defaultValue;
         } finally {
             closeQuietly(c);
