@@ -111,6 +111,11 @@ public class BufferedZipFile3 {
         mNoCompressExtention=list.split(";");
     }
 
+    private int mNoCompressFileLength=100;
+    public void setNoCompressFileLength(int no_compress_file_length) {
+        mNoCompressFileLength=no_compress_file_length;
+    }
+
     public BufferedZipFile3(Context c, String input_path, String output_path, String encoding, String wfp) throws ZipException {
         mContext=c;
         SafFile3 in_uri=input_path!=null?new SafFile3(mContext, input_path):null;
@@ -348,7 +353,7 @@ public class BufferedZipFile3 {
                 }
                 //Add no compress function 2016/07/22 F.Hoshino
 //                if (Zip4jUtil.getFileLengh(input)<100 || !fileParameters.isCompressFileExtention(input.getName())) {
-                if ((input.length()<100) || isNoCompressExtention(input.getPath())) {
+                if ((input.length()<=mNoCompressFileLength) || isNoCompressExtention(input.getPath())) {
                     fileParameters.setCompressionMethod(CompressionMethod.STORE);
                     fileParameters.setEntrySize(input.length());
                 } else {
