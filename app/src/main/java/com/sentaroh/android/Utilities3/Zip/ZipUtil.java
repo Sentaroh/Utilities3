@@ -571,12 +571,12 @@ public class ZipUtil {
 
     public static String getCompressionMethodName(int code) {
         String method_name="Unknown("+String.valueOf(code)+")";
-        if (code==CompressionMethod.STORE.getCode()) method_name="STORE";
+        if (code==CompressionMethod.STORE.getCode()) method_name="STORED";
         else if (code==CompressionMethod.COMP_FACTOR1.getCode()) method_name="REDUCE1";
         else if (code==CompressionMethod.COMP_FACTOR2.getCode()) method_name="REDUCE2";
         else if (code==CompressionMethod.COMP_FACTOR3.getCode()) method_name="REDUCE3";
         else if (code==CompressionMethod.COMP_FACTOR4.getCode()) method_name="REDUCE4";
-        else if (code==CompressionMethod.DEFLATE.getCode()) method_name="DEFLATE";
+        else if (code==CompressionMethod.DEFLATE.getCode()) method_name="DEFLATED";
         else if (code==CompressionMethod.DEFLATE64.getCode()) method_name="DEFLATE64";
         else if (code==CompressionMethod.AES_INTERNAL_ONLY.getCode()) method_name="AE-x";
         else if (code==CompressionMethod.BZIP2.getCode()) method_name="BZIP2";
@@ -586,8 +586,8 @@ public class ZipUtil {
         else if (code==CompressionMethod.JPEG.getCode()) method_name="JPEG";
         else if (code==CompressionMethod.WAVPACK.getCode()) method_name="WavPack";
         else if (code==CompressionMethod.LZMA.getCode()) method_name="LZMA";
-        else if (code==CompressionMethod.PKWARE_IMPLODING.getCode()) method_name="PKWARE_IMPLOD";
-        else if (code==CompressionMethod.IMPLOD.getCode()) method_name="IMPLOD";
+        else if (code==CompressionMethod.PKWARE_IMPLODING.getCode()) method_name="IMPLODING";
+        else if (code==CompressionMethod.IMPLOD.getCode()) method_name="IMPLODED";
         else if (code==CompressionMethod.PPMD.getCode()) method_name="PPMD";
         else if (code==CompressionMethod.SHRUNK.getCode()) method_name="SHRUNK";
         return method_name;
