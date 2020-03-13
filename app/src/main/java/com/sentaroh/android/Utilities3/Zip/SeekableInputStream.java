@@ -96,15 +96,17 @@ public class SeekableInputStream extends InputStream {
             }
             mCurrentPosition=newPosition;
         } else {
-            long new_pos=mCurrentPosition+newPosition;
-            mInputStrean.close();
-            if (mUri!=null) mInputStrean=mContext.getContentResolver().openInputStream(mUri);
-            else mInputStrean=new FileInputStream(mFile);
-            if (new_pos>=0) {
-                mInputStrean.skip(new_pos);
-            } else {
-//                if (log.isTraceEnabled()) log.trace("New position reset by 0."+" Calcurate new pos="+new_pos);
-            }
+            throw new IOException("Negative value specified, value="+newPosition);
+//            long new_pos=mCurrentPosition+newPosition;
+//            mInputStrean.close();
+//            if (mUri!=null) mInputStrean=mContext.getContentResolver().openInputStream(mUri);
+//            else mInputStrean=new FileInputStream(mFile);
+//            if (new_pos>=0) {
+//                mInputStrean.skip(new_pos);
+//            } else {
+////                throw new IOException("Negative value specified, value="+new_pos);
+////                if (log.isTraceEnabled()) log.trace("New position reset by 0."+" Calcurate new pos="+new_pos);
+//            }
         }
     }
 

@@ -179,14 +179,32 @@ public class ZipUtil {
         }
     }
 
-    static public boolean isZipFile(String zip_path) {
-        boolean result = false;
+    static public String isZipFile(Context c, String zip_path) {
+        String result = null;
         try {
-            ZipFile zf = new ZipFile(new File(zip_path));
-            @SuppressWarnings({"unchecked", "unused"})
-            List<FileHeader> fhl = zf.getFileHeaders();
-            result = true;
+            List<FileHeader> fhl = getFileHeaders(c, new SafFile3(c, zip_path), "UTF-8");
         } catch (Exception e) {
+            result=e.getMessage();
+        }
+        return result;
+    }
+
+    static public String isZipFile(Context c, SafFile3 sf) {
+        String result = null;
+        try {
+            List<FileHeader> fhl = getFileHeaders(c, sf, "UTF-8");
+        } catch (Exception e) {
+            result=e.getMessage();
+        }
+        return result;
+    }
+
+    static public String isZipFile(Context c, File lf) {
+        String result = null;
+        try {
+            List<FileHeader> fhl = getFileHeaders(c, lf, "UTF-8");
+        } catch (Exception e) {
+            result=e.getMessage();
         }
         return result;
     }
