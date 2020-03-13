@@ -507,7 +507,8 @@ public class BufferedZipFile3 {
         log.debug("close entered, added="+mAddZipFileItemAdded+", removed="+mInpuZipFileItemRemoved);
         if (mAddZipFileItemAdded || mInpuZipFileItemRemoved) {
             if (cbl!=null) cbl.onCallBack(mContext, 0, null);
-            if (getInputFileSize()>0) closeUpdate(cbl);
+//            if (getInputFileSize()>0) closeUpdate(cbl);
+            if (!mEmptyInputZipFile) closeUpdate(cbl);
             else closeAddOnly(cbl);
             updated=true;
         }
@@ -602,6 +603,10 @@ public class BufferedZipFile3 {
                 HeaderWriter hw=new HeaderWriter();
                 hw.finalizeZipFile(mInputZipModel, mOutputZipFileStream, Charset.forName(mEncoding));
 
+                mOutputZipFileStream.flush();
+                mOutputZipFileStream.close();
+            } else {
+                ZipUtil.writeEmptyZipHeader(mOutputZipFileStream);
                 mOutputZipFileStream.flush();
                 mOutputZipFileStream.close();
             }

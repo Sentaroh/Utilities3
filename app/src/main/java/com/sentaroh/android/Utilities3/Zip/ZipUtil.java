@@ -50,6 +50,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
 import java.util.ArrayList;
@@ -590,6 +591,21 @@ public class ZipUtil {
         else if (code==CompressionMethod.PPMD.getCode()) method_name="PPMD";
         else if (code==CompressionMethod.SHRUNK.getCode()) method_name="SHRUNK";
         return method_name;
+    }
+
+    static public void writeEmptyZipHeader(SafFile3 of) throws Exception {
+        OutputStream os=of.getOutputStream();
+        writeEmptyZipHeader(os);
+        os.flush();
+        os.close();
+    }
+
+    static public void writeEmptyZipHeader(OutputStream os) throws IOException {
+        byte[] null_header=new byte[]{
+                (byte)0x50, (byte)0x4b, (byte)0x05, (byte)0x06, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
+                (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
+                (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, };
+        os.write(null_header);
     }
 
 }

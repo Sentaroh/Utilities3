@@ -84,7 +84,7 @@ public class SeekableInputStream extends InputStream {
     }
 
     public void seek(long newPosition) throws IOException {
-        if (log.isTraceEnabled()) log.trace("seek pos="+newPosition+", current="+mCurrentPosition);
+//        if (log.isTraceEnabled()) log.trace("seek pos="+newPosition+", current="+mCurrentPosition);
         if (newPosition>=0) {
             if (newPosition>mCurrentPosition) {
                 mInputStrean.skip((newPosition-mCurrentPosition));
@@ -103,7 +103,7 @@ public class SeekableInputStream extends InputStream {
             if (new_pos>=0) {
                 mInputStrean.skip(new_pos);
             } else {
-                if (log.isTraceEnabled()) log.trace("New position reset by 0."+" Calcurate new pos="+new_pos);
+//                if (log.isTraceEnabled()) log.trace("New position reset by 0."+" Calcurate new pos="+new_pos);
             }
         }
     }
