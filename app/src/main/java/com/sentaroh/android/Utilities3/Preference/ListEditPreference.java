@@ -23,10 +23,12 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -42,17 +44,22 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.sentaroh.android.Utilities3.Dialog.CommonDialog;
 import com.sentaroh.android.Utilities3.R;
+import com.sentaroh.android.Utilities3.ThemeUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+
+import javax.xml.XMLConstants;
 
 public class ListEditPreference extends DialogPreference {
     private static Logger log= LoggerFactory.getLogger(ListEditPreference.class);
@@ -210,7 +217,7 @@ public class ListEditPreference extends DialogPreference {
         });
 
         final Button add_btn=(Button) mListEditView.findViewById(R.id.list_edit_preference_add_btn);
-        add_btn.setEnabled(false);
+        CommonDialog.setViewEnabled(mContext, add_btn, false);
         final EditText et_list_value=(EditText) mListEditView.findViewById(R.id.list_edit_preference_add_mime_type);
 
         et_list_value.addTextChangedListener(new TextWatcher() {
@@ -224,11 +231,11 @@ public class ListEditPreference extends DialogPreference {
             public void afterTextChanged(Editable editable) {
                 if (editable.length()>0) {
                     for(ListValueItem item: mValueList) {
-                        if (item.getListValue().equals(editable.toString())) add_btn.setEnabled(false);
-                        else add_btn.setEnabled(true);
+                        if (item.getListValue().equals(editable.toString())) CommonDialog.setViewEnabled(mContext, add_btn, false);
+                        else CommonDialog.setViewEnabled(mContext, add_btn, true);
                     }
                 } else {
-                    add_btn.setEnabled(false);
+                    CommonDialog.setViewEnabled(mContext, add_btn, false);
                 }
             }
         });
@@ -380,8 +387,10 @@ public class ListEditPreference extends DialogPreference {
                 v = vi.inflate(id, null);
                 holder = new ViewHolder();
 //            holder.ll_entry=(LinearLayout) v.findViewById(R.id.filter_list_item_entry);
-                holder.btn_row_delbtn = (Button) v.findViewById(R.id.list_edit_preference_entry_item_delete_btn);
+                holder.btn_row_delbtn = (ImageButton) v.findViewById(R.id.list_edit_preference_entry_item_delete_btn);
                 holder.tv_row_filter = (TextView) v.findViewById(R.id.list_edit_preference_entry_item_mime_type);
+
+                if (ThemeUtil.isLightThemeUsed(mContext)) holder.btn_row_delbtn.setBackgroundColor(Color.WHITE);
 
                 v.setTag(holder);
             } else {
@@ -402,9 +411,9 @@ public class ListEditPreference extends DialogPreference {
                     holder.tv_row_filter.setAlpha(0.3f);
                     holder.btn_row_delbtn.setEnabled(false);
                     holder.btn_row_delbtn.setAlpha(0.3f);
-                    holder.btn_row_delbtn.setText(mContext.getString(R.string.msgs_list_edit_preference_list_was_deleted));
+                    CommonDialog.setViewEnabled(mContext, holder.btn_row_delbtn, false);
                 } else {
-                    holder.btn_row_delbtn.setText(mContext.getString(R.string.msgs_list_edit_preference_delete));
+                    CommonDialog.setViewEnabled(mContext, holder.btn_row_delbtn, true);
                 }
 
                 final int p = position;
@@ -429,7 +438,7 @@ public class ListEditPreference extends DialogPreference {
 
         private class ViewHolder {
             TextView tv_row_filter;
-            Button btn_row_delbtn;
+            ImageButton btn_row_delbtn;
         }
     }
 

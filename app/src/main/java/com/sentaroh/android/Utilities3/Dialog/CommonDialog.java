@@ -185,8 +185,33 @@ public class CommonDialog {
     }
 
     public static void setViewEnabled(Activity a, View v, boolean enabled) {
-//	    log.debug("setButtonEnabled LightTheme="+ThemeUtil.isLightThemeUsed(a)+", Enabled="+enabled);
-//	    Thread.dumpStack();
+        boolean isLight=ThemeUtil.isLightThemeUsed(a);
+        if (v instanceof Spinner) {
+            int cc=((Spinner)v).getChildCount();
+            for(int i=0;i<cc;i++) {
+                View cv=(View)((Spinner)v).getChildAt(i);
+                if (cv!=null) {
+                    if (isLight) cv.setAlpha((enabled?mEnableAlpha:mDisableAlphaLight));
+                    else cv.setAlpha((enabled?mEnableAlpha:mDisableAlphaSpinner));
+                }
+            }
+            v.setEnabled(enabled);
+        } else if (v instanceof EditText) {
+            if (isLight) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaEditTextLight));
+            else v.setAlpha((enabled?mEnableAlpha:mDisableAlphaEditText));
+            v.setEnabled(enabled);
+        } else if (v instanceof Button) {
+            if (isLight) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaButton));
+            else v.setAlpha((enabled?mEnableAlpha:mDisableAlpha));
+            v.setEnabled(enabled);
+        } else {
+            if (isLight) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaLight));
+            else v.setAlpha((enabled?mEnableAlpha:mDisableAlpha));
+            v.setEnabled(enabled);
+        }
+    }
+
+    public static void setViewEnabled(Context a, View v, boolean enabled) {
         boolean isLight=ThemeUtil.isLightThemeUsed(a);
         if (v instanceof Spinner) {
             int cc=((Spinner)v).getChildCount();
