@@ -1019,7 +1019,7 @@ public class CommonFileSelector2 extends DialogFragment {
                     for(TreeFilelistItem fi:mTreeFilelistAdapter.getDataList()) if (fi.isChecked()) sel_fi=fi;
                     String sel_dir=sel_fi!=null?sel_fi.getPath()+"/"+sel_fi.getName():mDialogLocalDir;
                     if (ss.isSafFile) {
-                        if (sel_fi!=null) {
+                        if (sel_fi!=null && et_file_name.getText().length()==0) {
                             if (sel_fi.isDir()) {
                                 sel_dir=sel_fi.getPath()+"/"+sel_fi.getName();
                                 fp=sel_dir;
@@ -1044,7 +1044,7 @@ public class CommonFileSelector2 extends DialogFragment {
                             file_uri=sf.getUri();
                         }
                     } else {
-                        if (sel_fi!=null) {
+                        if (sel_fi!=null && et_file_name.getText().length()==0) {
                             if (sel_fi.isDir()) {
                                 sel_dir=sel_fi.getPath()+"/"+sel_fi.getName();
                                 fp=sel_dir;

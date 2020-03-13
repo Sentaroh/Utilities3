@@ -84,16 +84,28 @@ public class SeekableInputStream extends InputStream {
     }
 
     public void seek(long newPosition) throws IOException {
-        log.trace("seek pos="+newPosition);
-        if (newPosition>mCurrentPosition) {
-            mInputStrean.skip((newPosition-mCurrentPosition));
-        } else if (newPosition<mCurrentPosition) {
+        if (log.isTraceEnabled()) log.trace("seek pos="+newPosition+", current="+mCurrentPosition);
+        if (newPosition>=0) {
+            if (newPosition>mCurrentPosition) {
+                mInputStrean.skip((newPosition-mCurrentPosition));
+            } else if (newPosition<mCurrentPosition) {
+                mInputStrean.close();
+                if (mUri!=null) mInputStrean=mContext.getContentResolver().openInputStream(mUri);
+                else mInputStrean=new FileInputStream(mFile);
+                mInputStrean.skip(newPosition);
+            }
+            mCurrentPosition=newPosition;
+        } else {
+            long new_pos=mCurrentPosition+newPosition;
             mInputStrean.close();
             if (mUri!=null) mInputStrean=mContext.getContentResolver().openInputStream(mUri);
             else mInputStrean=new FileInputStream(mFile);
-            mInputStrean.skip(newPosition);
+            if (new_pos>=0) {
+                mInputStrean.skip(new_pos);
+            } else {
+                if (log.isTraceEnabled()) log.trace("New position reset by 0."+" Calcurate new pos="+new_pos);
+            }
         }
-        mCurrentPosition=newPosition;
     }
 
     public void skipBytes(long skipBytes) throws IOException {
