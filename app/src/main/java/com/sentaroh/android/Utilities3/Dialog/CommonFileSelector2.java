@@ -1238,11 +1238,16 @@ public class CommonFileSelector2 extends DialogFragment {
 
     private void createLocalFilelist(final boolean fileOnly, final String dir, final NotifyEvent ntfy, final boolean show_pd_circle_delay) {
         SafFile3 sf= new SafFile3(mContext, dir);
-        if (sf.isSafFile()) createSafApiFilelist(fileOnly, sf, ntfy, show_pd_circle_delay);
-        else createFileApiFilelist(fileOnly, sf, ntfy, show_pd_circle_delay);
+        if (sf.isSafFile()) {
+            File lf=new File(sf.getPath());
+            if (lf.canRead()) createFileApiFilelist(fileOnly, lf, ntfy, show_pd_circle_delay);
+            else createSafApiFilelist(fileOnly, sf, ntfy, show_pd_circle_delay);
+        } else {
+            createFileApiFilelist(fileOnly, sf.getFile(), ntfy, show_pd_circle_delay);
+        }
     }
 
-    private void  createFileApiFilelist(final boolean fileOnly, final SafFile3 target_dir, final NotifyEvent ntfy, final boolean show_pd_circle_delay) {
+    private void  createFileApiFilelist(final boolean fileOnly, final File target_dir, final NotifyEvent ntfy, final boolean show_pd_circle_delay) {
         final Dialog pd= CommonDialog.showProgressSpinIndicator(getActivity());
         if (show_pd_circle_delay) {
             mUiHandler.post(new Runnable(){
@@ -1260,7 +1265,7 @@ public class CommonFileSelector2 extends DialogFragment {
                 if (mDebug) log.debug("createFileApiFilelist Thread started");
                 final ArrayList<TreeFilelistItem> tfl = new ArrayList<TreeFilelistItem>(); ;
                 String tdir,fp;
-                File lf=target_dir.getFile();
+                File lf=target_dir;
                 final File[]  ff = lf.listFiles();
                 if (ff!=null) {
                     if (mDebug) log.debug("createFileApiFilelistNonThread list file size="+ff.length);

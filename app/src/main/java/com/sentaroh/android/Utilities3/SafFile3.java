@@ -393,6 +393,18 @@ public class SafFile3 {
         return Uri.parse(SAF_FILE_DOCUMENT_TREE_URI_PREFIX+uuid+"%3A/document/"+uuid+"%3A"+Uri.encode(file_path));
     }
 
+    public static String getUuidFromFilePath(String fp) {
+        if (fp.startsWith(SafManager3.SAF_FILE_PRIMARY_STORAGE_PREFIX)) return SafFile3.SAF_FILE_PRIMARY_UUID;
+        else {
+            String[] fp_parts=fp.split("/");
+            if (fp_parts[1].equals("storage")) {
+                return fp_parts[2];
+            } else {
+                return SafFile3.SAF_FILE_UNKNOWN_UUID;
+            }
+        }
+    }
+
     public static String getUuidFromTreeUriPath(Uri uri) {
 //        log.debug("getUuidFromTreeUriPath uri="+uri.toString()+", path="+uri.getPath()+", encoded="+uri.getEncodedPath());
         String path=uri.getPath();
