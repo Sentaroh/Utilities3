@@ -53,6 +53,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -72,10 +73,10 @@ public class BufferedZipFile3 {
     private boolean mInpuZipFileItemRemoved =false;
     private boolean mAddZipFileItemAdded =false;
     //    private ZipFile mInputZipFile =null;
-    private ZipFile mAddZipFile =null;
+//    private ZipFile mAddZipFile =null;
     //    private File mInputOsFile =null;
 //    private File mOutputOsFile =null;
-    private File mTempOsFileX =null, mAddOsFile =null;
+//    private File mTempOsFileX =null, mAddOsFile =null;
     private ZipModel mInputZipModel=null;
 
     private ZipModel mAddZipModel =null;
@@ -87,12 +88,13 @@ public class BufferedZipFile3 {
 
     private SafFile3 mInputSafFile=null;
     private SafFile3 mOutputSafFile=null;
+    private SafFile3 mAddSafFile=null;
     private Uri mInputUri=null;
     private Uri mOutputUri=null;
 
     private static final int IO_AREA_SIZE=1024*1024;
     private ZipOutputStream mAddZipOutputStream =null;
-    private SplitOutputStream mAddSplitOutputStream = null;
+//    private OutputStream mAddSplitOutputStream = null;
 
     private String mEncoding =DEFAULT_ZIP_FILENAME_ENCODING;
     private static final String DEFAULT_ZIP_FILENAME_ENCODING="UTF-8";
@@ -116,11 +118,11 @@ public class BufferedZipFile3 {
         mNoCompressFileLength=no_compress_file_length;
     }
 
-    public BufferedZipFile3(Context c, String input_path, String output_path, String encoding, String wfp) throws ZipException {
+    public BufferedZipFile3(Context c, String input_path, String output_path, String encoding) throws ZipException {
         mContext=c;
         SafFile3 in_uri=input_path!=null?new SafFile3(mContext, input_path):null;
         SafFile3 out_uri=new SafFile3(mContext, output_path);
-        init(in_uri, out_uri, encoding, wfp);
+        init(in_uri, out_uri, encoding);
     }
 
     //    public BufferedZipFile3(Context c, File input_file, File output_file, String encoding, String wfp) {
@@ -130,9 +132,10 @@ public class BufferedZipFile3 {
 //        init(in_uri, out_uri, encoding, wfp);
 //    }
 //
-    public BufferedZipFile3(Context c, SafFile3 input_file, SafFile3 output_file, String encoding, String wfp) throws ZipException {
+    public BufferedZipFile3(Context c, SafFile3 input_file, SafFile3 output_file, String encoding) throws ZipException {
         mContext=c;
-        init(input_file, output_file, encoding, wfp);
+        SafFile3 add_wrk_uri=new SafFile3(mContext, output_file.getPath()+".add_work");
+        init(input_file, output_file, encoding);
     }
 
     public SafFile3 getInputZipFile() {
@@ -144,8 +147,8 @@ public class BufferedZipFile3 {
     }
 
     private boolean mEmptyInputZipFile=true;
-    private void init(SafFile3 in_uri, SafFile3 out_uri, String encoding, String work_file_path) throws ZipException {
-        log.debug("<init> Input="+in_uri+", Output="+out_uri+", Encoding="+encoding+", wfp="+work_file_path);
+    private void init(SafFile3 in_uri, SafFile3 out_uri, String encoding) throws ZipException {
+        log.debug("<init> Input="+in_uri+", Output="+out_uri+", Encoding="+encoding);
         if (in_uri!=null && out_uri!=null) {
             if (in_uri.getPath().equals(out_uri.getPath())) throw new ZipException("BufferedZipFile3 create failed.(Same path)");
         } else if (in_uri==null && out_uri==null) {
@@ -156,7 +159,7 @@ public class BufferedZipFile3 {
         mInputUri=mInputSafFile!=null?mInputSafFile.getUri():null;
         mEncoding =encoding;
 //        mTempOsFile =new File(work_file_path+"/ziputility.tmp");
-        mAddOsFile =new File(work_file_path+"/ziputility.add");
+//        mAddOsFile =new File(work_file_path+"/ziputility.add");
         mInputZipFileHeaderList =new ArrayList<BzfFileHeaderItem>();
         try {
             HeaderReader header_reader=new HeaderReader();
@@ -225,27 +228,30 @@ public class BufferedZipFile3 {
 
     public boolean addItem(SafFile3 in_uri, ZipParameters zp, CallBackListener cbl) throws IOException {
         checkClosed();
-        if (mAddZipFile ==null) {
-            mAddOsFile.delete();
-            mAddZipFile =new ZipFile(mAddOsFile);
-            mAddZipFile.setCharset(Charset.forName(mEncoding));
-            mAddZipFileHeaderList =new ArrayList<BzfFileHeaderItem>();
-            mAddZipModel = new ZipModel();
-            mAddZipModel.setZipFile(mAddOsFile);
-            mAddZipModel.setEndOfCentralDirectoryRecord(createEndOfCentralDirectoryRecord());
-            mAddZipModel.setSplitArchive(false);
-            mAddZipModel.setSplitLength(-1);
-
+        if (mAddZipModel ==null) {
+            OutputStream os=null;
             try {
-                mAddSplitOutputStream = new SplitOutputStream(new File(mAddZipModel.getZipFile().getPath()), mAddZipModel.getSplitLength());
+                mAddSafFile=new SafFile3(mContext, mOutputSafFile.getParent()+"/"+System.currentTimeMillis()+".add_work");
+                mAddSafFile.deleteIfExists();
+                mAddSafFile.createNewFile();
+                mAddZipFileHeaderList =new ArrayList<BzfFileHeaderItem>();
+                mAddZipModel = new ZipModel();
+                mAddZipModel.setEndOfCentralDirectoryRecord(createEndOfCentralDirectoryRecord());
+                mAddZipModel.setSplitArchive(false);
+                mAddZipModel.setSplitLength(-1);
+//                mAddSplitOutputStream = new SplitOutputStream(new File(mAddZipModel.getZipFile().getPath()), mAddZipModel.getSplitLength());
+                os = mAddSafFile.getOutputStream();
             } catch (Exception e) {
                 e.printStackTrace();
-                log.error("addItem addSplitOutputStream was not created",e);
+                log.error("addItem OutputStream was not created",e);
                 return false;
             }
             EncryptionMethod em=zp.getEncryptionMethod();
-            if (em.name().equals(EncryptionMethod.NONE.name())) mAddZipOutputStream =new ZipOutputStream(mAddSplitOutputStream, null, Charset.forName(mEncoding), mAddZipModel);
-            else  mAddZipOutputStream =new ZipOutputStream(mAddSplitOutputStream, mPassword, Charset.forName(mEncoding), mAddZipModel);
+            if (em.name().equals(EncryptionMethod.NONE.name())) {
+                mAddZipOutputStream =new ZipOutputStream(os, null, Charset.forName(mEncoding), mAddZipModel);
+            } else {
+                mAddZipOutputStream =new ZipOutputStream(os, mPassword, Charset.forName(mEncoding), mAddZipModel);
+            }
         }
         return addItemInternal(in_uri, zp, cbl);
     };
@@ -477,7 +483,7 @@ public class BufferedZipFile3 {
         if (mAddZipOutputStream !=null) mAddZipOutputStream.close();
 
 //        if (mTempOsFile !=null && mTempOsFile.exists()) mTempOsFile.delete();
-        if (mAddOsFile !=null && mAddOsFile.exists()) mAddOsFile.delete();
+        if (mAddSafFile !=null && mAddSafFile.exists()) mAddSafFile.delete();
 
     }
 
@@ -520,34 +526,42 @@ public class BufferedZipFile3 {
         long b_time= System.currentTimeMillis();
         try {
             mOutputZipFilePosition =0;
-            if (mAddZipFile !=null) {
+            if (mAddSafFile !=null) {
                 if (mAddZipModel !=null && mAddZipModel.getEndOfCentralDirectoryRecord()!=null) {
                     dumpFileHeaderList("WriteHeader", mAddZipFileHeaderList);
 
                     mAddZipOutputStream.flush();;
                     mAddZipOutputStream.close();
 
-                    mOutputSafFile.deleteIfExists();
-                    mOutputSafFile.createNewFile();
-                    mOutputOsFileStream=mOutputSafFile.getOutputStream();
+                    String out_dir=mOutputSafFile.getParent();
+                    String add_dir=mAddSafFile.getParent();
+                    if (out_dir.equals(add_dir)) {
+                        mOutputSafFile.deleteIfExists();
+                        boolean rc=mAddSafFile.renameTo(mOutputSafFile);
+                        if (!rc) throw new ZipException("Rename failed at closeAddOnly()");
+                    } else {
+                        mOutputSafFile.deleteIfExists();
+                        mOutputSafFile.createNewFile();
+                        mOutputOsFileStream=mOutputSafFile.getOutputStream();
 
-                    FileInputStream fis=new FileInputStream(mAddOsFile);
-                    byte[] buff=new byte[IO_AREA_SIZE*4];
-                    int rc=0;
-                    long read_byte=0;
-                    long fsz=fis.available();
-                    while((rc=fis.read(buff))>0) {
-                        if (isAborted()) {
-                            log.debug("closeAddOnly aborted");
-                            break;
+                        InputStream fis=mAddSafFile.getInputStream();
+                        byte[] buff=new byte[IO_AREA_SIZE*4];
+                        int rc=0;
+                        long read_byte=0;
+                        long fsz=fis.available();
+                        while((rc=fis.read(buff))>0) {
+                            if (isAborted()) {
+                                log.debug("closeAddOnly aborted");
+                                break;
+                            }
+                            mOutputOsFileStream.write(buff,0,rc);
+                            read_byte+=rc;
+                            notifyProgress(cbl, read_byte, fsz);
                         }
-                        mOutputOsFileStream.write(buff,0,rc);
-                        read_byte+=rc;
-                        notifyProgress(cbl, read_byte, fsz);
+                        mOutputOsFileStream.flush();
+                        mOutputOsFileStream.close();
+                        mAddSafFile.delete();
                     }
-                    mOutputOsFileStream.flush();
-                    mOutputOsFileStream.close();
-                    mAddOsFile.delete();
                 }
             }
         } catch (IOException e) {
@@ -587,7 +601,7 @@ public class BufferedZipFile3 {
 
             if (!mEmptyInputZipFile) copyInputZipFile(cbl);
 
-            if (mAddZipFile !=null) {
+            if (mAddZipModel !=null) {
                 mAddZipOutputStream.flush();;
                 mAddZipOutputStream.close();
 
@@ -610,7 +624,7 @@ public class BufferedZipFile3 {
                 mOutputZipFileStream.flush();
                 mOutputZipFileStream.close();
             }
-            if (mAddZipFile !=null) mAddZipFile.getFile().delete();
+            if (mAddSafFile !=null) mAddSafFile.deleteIfExists();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -633,7 +647,7 @@ public class BufferedZipFile3 {
         }
 
         if (mAddZipFileHeaderList!=null) {
-            size+=mAddOsFile.length();
+            size+=mAddSafFile.length();
         }
         return size;
     }
@@ -702,7 +716,7 @@ public class BufferedZipFile3 {
         log.debug("appendAddZipFile entered");
         long b_time= System.currentTimeMillis();
 
-        long offsetStartCentralDir= mAddZipFile.getFile().length();
+        long offsetStartCentralDir= mAddSafFile.length();
         if (mEmptyInputZipFile) {
 //            mTempOsFile.delete();
 //            mAddOsFile.renameTo(mTempOsFile);
@@ -712,7 +726,8 @@ public class BufferedZipFile3 {
             SeekableInputStream input_file_stream =null;
             try {
 //                input_file_stream=new SeekableInputStream(mContext, new SafFile3(mContext, mAddOsFile.getPath()).getUri());
-                input_file_stream=new SeekableInputStream(mContext, mAddOsFile);
+                if (mAddSafFile.getUri()==null) input_file_stream=new SeekableInputStream(mContext, mAddSafFile.getFile());
+                else input_file_stream=new SeekableInputStream(mContext, mAddSafFile.getUri());
                 long base_pointer= mOutputZipFilePosition;
                 for(int i = 0; i< mAddZipFileHeaderList.size(); i++) {
                     if (isAborted()) {
