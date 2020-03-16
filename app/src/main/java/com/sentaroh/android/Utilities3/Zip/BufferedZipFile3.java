@@ -75,7 +75,7 @@ public class BufferedZipFile3 {
     private ZipFile mAddZipFile =null;
     //    private File mInputOsFile =null;
 //    private File mOutputOsFile =null;
-    private File mTempOsFile =null, mAddOsFile =null;
+    private File mTempOsFileX =null, mAddOsFile =null;
     private ZipModel mInputZipModel=null;
 
     private ZipModel mAddZipModel =null;
@@ -155,7 +155,7 @@ public class BufferedZipFile3 {
         mOutputSafFile=out_uri;
         mInputUri=mInputSafFile!=null?mInputSafFile.getUri():null;
         mEncoding =encoding;
-        mTempOsFile =new File(work_file_path+"/ziputility.tmp");
+//        mTempOsFile =new File(work_file_path+"/ziputility.tmp");
         mAddOsFile =new File(work_file_path+"/ziputility.add");
         mInputZipFileHeaderList =new ArrayList<BzfFileHeaderItem>();
         try {
@@ -476,7 +476,7 @@ public class BufferedZipFile3 {
         if (mOutputZipFileStream !=null) mOutputZipFileStream.close();
         if (mAddZipOutputStream !=null) mAddZipOutputStream.close();
 
-        if (mTempOsFile !=null && mTempOsFile.exists()) mTempOsFile.delete();
+//        if (mTempOsFile !=null && mTempOsFile.exists()) mTempOsFile.delete();
         if (mAddOsFile !=null && mAddOsFile.exists()) mAddOsFile.delete();
 
     }
@@ -704,8 +704,8 @@ public class BufferedZipFile3 {
 
         long offsetStartCentralDir= mAddZipFile.getFile().length();
         if (mEmptyInputZipFile) {
-            mTempOsFile.delete();
-            mAddOsFile.renameTo(mTempOsFile);
+//            mTempOsFile.delete();
+//            mAddOsFile.renameTo(mTempOsFile);
             mOutputZipFilePosition++;
         } else {
             dumpZipModel("WriteAddZipFile", mAddZipModel);
