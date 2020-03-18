@@ -59,6 +59,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.xml.XMLConstants;
+
 public class ZipUtil {
 
     public static final String DEFAULT_ZIP_FILENAME_ENCODING = "UTF-8";
@@ -221,8 +223,13 @@ public class ZipUtil {
     }
 
     static public ZipModel getZipModel(Context c, Uri zip_path, String password, String encoding) {
+        SafFile3 sf=new SafFile3(c, zip_path);
+        return getZipModel(c, sf, password, encoding);
+    }
+
+    static public ZipModel getZipModel(Context c, SafFile3 sf, String password, String encoding) {
         try {
-            SeekableInputStream sis = new SeekableInputStream(c, zip_path);
+            SeekableInputStream sis = new SeekableInputStream(c, sf.getUri(), sf.length());
             HeaderReader header_reader = new HeaderReader();
             ZipModel zm = header_reader.readAllHeaders(sis, Charset.forName(encoding));
             return zm;
@@ -249,18 +256,8 @@ public class ZipUtil {
     }
 
     static public ArrayList<FileHeader> getFileHeaders(Context c, Uri zip_path, String encoding) throws IOException {
-        try {
-            SeekableInputStream sis = new SeekableInputStream(c, zip_path);
-            HeaderReader header_reader = new HeaderReader();
-            ZipModel zm = header_reader.readAllHeaders(sis, Charset.forName(encoding));
-            ArrayList<FileHeader> file_header_list = (ArrayList<FileHeader>) zm.getCentralDirectory().getFileHeaders();
-            return file_header_list;
-        } catch (IOException e) {
-//            log.info("error="+e.getMessage());
-//            e.printStackTrace();
-            throw e;
-        }
-//        return null;
+        SafFile3 sf=new SafFile3(c, zip_path);
+        return getFileHeaders(c, sf, encoding);
     }
 
     static public ArrayList<FileHeader> getFileHeaders(Context c, File zip_file, String encoding) throws IOException {
@@ -281,7 +278,7 @@ public class ZipUtil {
     static public ArrayList<FileHeader> getFileHeaders(Context c, SafFile3 zip_file, String encoding) throws IOException {
         try {
             SeekableInputStream sis = null;
-            if (zip_file.isSafFile()) sis=new SeekableInputStream(c, zip_file.getUri());
+            if (zip_file.isSafFile()) sis=new SeekableInputStream(c, zip_file.getUri(), zip_file.length());
             else sis=new SeekableInputStream(c, zip_file.getFile());
             HeaderReader header_reader = new HeaderReader();
             ZipModel zm = header_reader.readAllHeaders(sis, Charset.forName(encoding));

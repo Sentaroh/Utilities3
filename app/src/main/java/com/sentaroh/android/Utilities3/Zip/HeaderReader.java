@@ -43,6 +43,9 @@ import net.lingala.zip4j.model.enums.CompressionMethod;
 import net.lingala.zip4j.model.enums.EncryptionMethod;
 import net.lingala.zip4j.util.InternalZipConstants;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
@@ -60,6 +63,7 @@ import static net.lingala.zip4j.util.InternalZipConstants.ZIP_64_SIZE_LIMIT;
  * Helper class to read header information for the zip file
  */
 public class HeaderReader {
+  private static Logger log= LoggerFactory.getLogger(HeaderReader.class);
 
   private ZipModel zipModel;
   private RawIO rawIO = new RawIO();
@@ -99,6 +103,7 @@ public class HeaderReader {
   private EndOfCentralDirectoryRecord readEndOfCentralDirectoryRecord(SeekableInputStream zip4jRaf, RawIO rawIO)
       throws IOException {
     long pos = zip4jRaf.length() - ENDHDR;
+//    log.info("position="+pos+", len="+zip4jRaf.length());
 
     EndOfCentralDirectoryRecord endOfCentralDirectoryRecord = new EndOfCentralDirectoryRecord();
 

@@ -165,7 +165,7 @@ public class BufferedZipFile3 {
             HeaderReader header_reader=new HeaderReader();
             SeekableInputStream sis=null;
             if (mInputSafFile!=null && mInputSafFile.exists()) {
-                if (mInputSafFile.isSafFile()) sis=new SeekableInputStream(mContext, mInputUri);
+                if (mInputSafFile.isSafFile()) sis=new SeekableInputStream(mContext, mInputUri, mInputSafFile.length());
                 else sis=new SeekableInputStream(mContext, mInputSafFile.getFile());
             }
             try {
@@ -266,28 +266,28 @@ public class BufferedZipFile3 {
         return endCentralDirRecord;
     }
 
-    private ZipModel readZipInfo(Uri uri, String encoding) throws ZipException {
-        ZipModel zipModel=null;
-        SeekableInputStream ss=null;
-        try {
-            ss=new SeekableInputStream(mContext, uri);
-            HeaderReader headerReader = new HeaderReader();
-            zipModel = headerReader.readAllHeaders(ss, Charset.forName(encoding));
-        } catch (FileNotFoundException e) {
-            throw new ZipException(e);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (ss != null) {
-                try {
-                    ss.close();
-                } catch (IOException e) {
-                    //ignore
-                }
-            }
-        }
-        return zipModel;
-    }
+//    private ZipModel readZipInfo(Uri uri, String encoding) throws ZipException {
+//        ZipModel zipModel=null;
+//        SeekableInputStream ss=null;
+//        try {
+//            ss=new SeekableInputStream(mContext, uri);
+//            HeaderReader headerReader = new HeaderReader();
+//            zipModel = headerReader.readAllHeaders(ss, Charset.forName(encoding));
+//        } catch (FileNotFoundException e) {
+//            throw new ZipException(e);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (ss != null) {
+//                try {
+//                    ss.close();
+//                } catch (IOException e) {
+//                    //ignore
+//                }
+//            }
+//        }
+//        return zipModel;
+//    }
 
     private boolean isAlreadyAdded(String fp) {
         boolean result=false;
@@ -661,7 +661,7 @@ public class BufferedZipFile3 {
         dumpFileHeaderList("WriteRemoveFile", mInputZipFileHeaderList);
         SeekableInputStream input_file_stream =null;
         try {
-            if (mInputSafFile.isSafFile()) input_file_stream=new SeekableInputStream(mContext, mInputUri);
+            if (mInputSafFile.isSafFile()) input_file_stream=new SeekableInputStream(mContext, mInputUri, mInputSafFile.length());
             else input_file_stream=new SeekableInputStream(mContext, mInputSafFile.getFile());
             if (mInpuZipFileItemRemoved) {
                 for(int i = 0; i< mInputZipFileHeaderList.size(); i++) {
@@ -727,7 +727,7 @@ public class BufferedZipFile3 {
             try {
 //                input_file_stream=new SeekableInputStream(mContext, new SafFile3(mContext, mAddOsFile.getPath()).getUri());
                 if (mAddSafFile.getUri()==null) input_file_stream=new SeekableInputStream(mContext, mAddSafFile.getFile());
-                else input_file_stream=new SeekableInputStream(mContext, mAddSafFile.getUri());
+                else input_file_stream=new SeekableInputStream(mContext, mAddSafFile.getUri(), mAddSafFile.length());
                 long base_pointer= mOutputZipFilePosition;
                 for(int i = 0; i< mAddZipFileHeaderList.size(); i++) {
                     if (isAborted()) {
@@ -761,13 +761,14 @@ public class BufferedZipFile3 {
         if (log.isTraceEnabled())
             log.trace("CopyZipFile output="+ String.format("%#010x", mOutputZipFilePosition)+
                     ", start="+ String.format("%#010x",start_pos)+", end="+ String.format("%#010x",end_pos)+", Name="+name);
-        int item_size=(int) (end_pos-start_pos)+1;
+        long item_size=(end_pos-start_pos)+1;
         byte[] buff=null;
-        if (item_size>(IO_AREA_SIZE)) buff=new byte[IO_AREA_SIZE];
-        else {
-            if (item_size<1) throw(new Exception("Buffer size error. size="+item_size));
-            buff=new byte[item_size];
-        }
+        buff=new byte[IO_AREA_SIZE*4];
+//        if (item_size>(IO_AREA_SIZE)) buff=new byte[IO_AREA_SIZE];
+//        else {
+//            if (item_size<1) throw(new Exception("Buffer size error. size="+item_size));
+//            buff=new byte[IO_AREA_SIZE];
+//        }
         int bufsz=buff.length;
 
         long output_size=0;

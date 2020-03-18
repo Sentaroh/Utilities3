@@ -51,16 +51,23 @@ public class SeekableInputStream extends InputStream {
     private File mFile=null;
     private long mCurrentPosition=0L;
     private long mLength=0L;
-    public SeekableInputStream(Context c, Uri uri) throws IOException {
+//    public SeekableInputStream(Context c, Uri uri) throws IOException {
+//        mInputStrean=c.getContentResolver().openInputStream(uri);
+//        mLength=mInputStrean.available();
+//        mContext=c;
+//        mUri=uri;
+//    }
+
+    public SeekableInputStream(Context c, Uri uri, long file_length) throws IOException {
         mInputStrean=c.getContentResolver().openInputStream(uri);
-        mLength=mInputStrean.available();
+        mLength=file_length;
         mContext=c;
         mUri=uri;
     }
 
     public SeekableInputStream(Context c, File lf) throws IOException {
         mInputStrean=new FileInputStream(lf);
-        mLength=mInputStrean.available();
+        mLength=lf.length();
         mContext=c;
         mFile=lf;
     }
