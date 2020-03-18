@@ -572,9 +572,10 @@ public class BufferedZipFile3 {
     }
 
     private void notifyProgress(CallBackListener cbl, long read_byte, long file_size) {
-        if (cbl!=null) {
+        if (cbl!=null && file_size>0) {
             int progress=(int)((read_byte*100)/file_size);
             cbl.onCallBack(mContext, progress, null);
+//            log.info("progress="+progress);
         }
     }
 
@@ -598,6 +599,7 @@ public class BufferedZipFile3 {
             mOutputZipFileStream=new BufferedOutputStream(mOutputOsFileStream,IO_AREA_SIZE*4);
 
             mToBeProcessByteCount = getZipItemCount();
+//            log.info("mToBeProcessByteCount="+mToBeProcessByteCount);
 
             if (!mEmptyInputZipFile) copyInputZipFile(cbl);
 
@@ -640,6 +642,7 @@ public class BufferedZipFile3 {
                 BzfFileHeaderItem rfhli= mInputZipFileHeaderList.get(i);
                 if (!rfhli.isRemovedItem) {
                     size+=rfhli.file_header.getCompressedSize();
+//                    log.info("remove size="+rfhli.file_header.getCompressedSize()+", name="+rfhli.file_header.getFileName());
                 }
             }
         } else {
@@ -656,6 +659,18 @@ public class BufferedZipFile3 {
         log.debug("copyInputZipFile entered");
         long b_time= System.currentTimeMillis();
         if (mEmptyInputZipFile) return;
+
+        Collections.sort(mInputZipFileHeaderList, new Comparator<BzfFileHeaderItem>(){
+            @Override
+            public int compare(BzfFileHeaderItem o1, BzfFileHeaderItem o2) {
+                long diff=(o1.file_header.getOffsetLocalHeader()-o2.file_header.getOffsetLocalHeader());
+                int result=0;
+                if (diff>0) result=1;
+                else if (diff==0) result=0;
+                else result=-1;
+                return result;
+            }
+        });
 
         dumpZipModel("WriteRemoveFile", mInputZipModel);
         dumpFileHeaderList("WriteRemoveFile", mInputZipFileHeaderList);
@@ -758,17 +773,16 @@ public class BufferedZipFile3 {
 
     private long copyZipFile(String name, BufferedOutputStream bos, SeekableInputStream input_file, long start_pos, long end_pos, CallBackListener cbl)
             throws IOException, Exception {
+        long item_size=(end_pos-start_pos)+1;
         if (log.isTraceEnabled())
             log.trace("CopyZipFile output="+ String.format("%#010x", mOutputZipFilePosition)+
-                    ", start="+ String.format("%#010x",start_pos)+", end="+ String.format("%#010x",end_pos)+", Name="+name);
-        long item_size=(end_pos-start_pos)+1;
+                    ", start="+ String.format("%#010x",start_pos)+", end="+ String.format("%#010x",end_pos)+", length="+item_size+", Name="+name);
         byte[] buff=null;
-        buff=new byte[IO_AREA_SIZE*4];
-//        if (item_size>(IO_AREA_SIZE)) buff=new byte[IO_AREA_SIZE];
-//        else {
-//            if (item_size<1) throw(new Exception("Buffer size error. size="+item_size));
-//            buff=new byte[IO_AREA_SIZE];
-//        }
+        if (item_size>IO_AREA_SIZE) buff=new byte[IO_AREA_SIZE];
+        else {
+            if (item_size<1) throw new Exception("Buffer size error. size="+item_size);
+            buff=new byte[(int)item_size];
+        }
         int bufsz=buff.length;
 
         long output_size=0;
@@ -947,6 +961,7 @@ public class BufferedZipFile3 {
             log.trace(id+" FileHeader comp size="+fh.getCompressedSize()+
                     ", header offset="+String.format("%#010x",fh.getOffsetLocalHeader())+
                     ", crc="+String.format("%#010x",fh.getCrc())+
+                    ", extra field length="+fh.getExtraFieldLength()+
                     ", name="+fh.getFileName());
         }
     }
@@ -958,6 +973,7 @@ public class BufferedZipFile3 {
             log.trace(id+" BzFileHeader comp size="+rfhli.file_header.getCompressedSize()+
                     ", header offset="+String.format("%#010x",rfhli.file_header.getOffsetLocalHeader())+
                     ", crc="+String.format("%#010x",rfhli.file_header.getCrc())+
+                    ", extra field length="+rfhli.file_header.getExtraFieldLength()+
                     ", removed="+rfhli.isRemovedItem+
                     ", name="+rfhli.file_header.getFileName());
         }
