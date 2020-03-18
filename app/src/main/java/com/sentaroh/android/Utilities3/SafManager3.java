@@ -154,9 +154,21 @@ public class SafManager3 {
 
     static public boolean isUuidRegistered(Context c, String uuid) {
         long b_time= System.currentTimeMillis();
-        SafFile3 rt=SafFile3.fromTreeUri(c, Uri.parse(SAF_FILE_DOCUMENT_TREE_URI_PREFIX+uuid+"%3A"));
+        SafFile3 rt=null;
+        boolean result=false;
+        if (uuid.equals(SafFile3.SAF_FILE_PRIMARY_UUID)) {
+            if ( Build.VERSION.SDK_INT>=SafManager3.SCOPED_STORAGE_SDK) {
+                rt=SafFile3.fromTreeUri(c, Uri.parse(SAF_FILE_DOCUMENT_TREE_URI_PREFIX+uuid+"%3A"));
+                result=rt.exists();
+            } else {
+                result=true;
+            }
+        } else {
+            rt=SafFile3.fromTreeUri(c, Uri.parse(SAF_FILE_DOCUMENT_TREE_URI_PREFIX+uuid+"%3A"));
+            result=rt.exists();
+        }
 //        log.debug("isUuidRegistered elapsed time="+(System.currentTimeMillis()-b_time));
-        return rt.exists();
+        return result;
     }
 
     public boolean isStoragePermissionRequired() {
