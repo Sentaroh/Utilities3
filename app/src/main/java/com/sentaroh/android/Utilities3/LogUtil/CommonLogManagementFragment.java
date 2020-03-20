@@ -121,7 +121,7 @@ public class CommonLogManagementFragment extends DialogFragment {
 
 	public static CommonLogManagementFragment newInstance(boolean retainInstance, String title,
                                                           String send_msg, String enable_msg, String send_subject) {
-		if (log.isInfoEnabled()) log.info("newInstance");
+//		log.debug("newInstance");
 		CommonLogManagementFragment frag = new CommonLogManagementFragment();
         Bundle bundle = new Bundle();
         bundle.putString("theme_id", "");
@@ -152,19 +152,19 @@ public class CommonLogManagementFragment extends DialogFragment {
 //    }
 
     public CommonLogManagementFragment() {
-		if (log.isInfoEnabled()) log.info("Constructor(Default)");
+//		log.debug("Constructor(Default)");
 	}; 
 	
 	@Override
 	public void onAttach(Activity activity) {
 	    super.onAttach(activity);
-	    if (log.isInfoEnabled()) log.info("onAttach");
+//	    log.debug("onAttach");
 	};
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		if (log.isInfoEnabled()) log.info("onSaveInstanceState");
+//		log.debug("onSaveInstanceState");
 		if(outState.isEmpty()){
 	        outState.putBoolean("WORKAROUND_FOR_BUG_19917_KEY", true);
 	    }
@@ -175,7 +175,7 @@ public class CommonLogManagementFragment extends DialogFragment {
 	public void onConfigurationChanged(final Configuration newConfig) {
 	    // Ignore orientation change to keep activity from restarting
 	    super.onConfigurationChanged(newConfig);
-	    if (log.isInfoEnabled()) log.info("onConfigurationChanged");
+//	    log.debug("onConfigurationChanged");
 
 	    reInitViewWidget();
 	};
@@ -183,12 +183,12 @@ public class CommonLogManagementFragment extends DialogFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 	    super.onActivityCreated(savedInstanceState);
-	    if (log.isInfoEnabled()) log.info("onActivityCreated");
+//	    log.debug("onActivityCreated");
 	};
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    	if (log.isInfoEnabled()) log.info("onCreateView");
+//    	log.debug("onCreateView");
     	View view=super.onCreateView(inflater, container, savedInstanceState);
     	return view;
     };
@@ -198,7 +198,7 @@ public class CommonLogManagementFragment extends DialogFragment {
     	super.onCreate(savedInstanceState);
         mContext=getActivity().getApplicationContext();
         mClog= CommonLogParametersFactory.getLogParms(mContext);
-        if (log.isInfoEnabled()) log.info("onCreate");
+//        log.debug("onCreate");
         mUiHandler=new Handler();
     	mFragment=this;
         if (!mTerminateRequired) {
@@ -215,7 +215,7 @@ public class CommonLogManagementFragment extends DialogFragment {
     
 	@Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-    	if (log.isInfoEnabled()) log.info("onCreateDialog");
+//    	log.debug("onCreateDialog");
 
         mDialog=new Dialog(getActivity(), ThemeUtil.getAppTheme(getActivity()));
 
@@ -233,7 +233,7 @@ public class CommonLogManagementFragment extends DialogFragment {
 	public void onStart() {
     	CommonDialog.setDlgBoxSizeLimit(mDialog,true);
 	    super.onStart();
-	    if (log.isInfoEnabled()) log.info("onStart");
+//	    log.debug("onStart");
 	    if (mTerminateRequired) mDialog.cancel();
 	    else {
 	    	mDialog.setOnKeyListener(new OnKeyListener(){
@@ -259,26 +259,26 @@ public class CommonLogManagementFragment extends DialogFragment {
 	
 	@Override
 	public void onCancel(DialogInterface di) {
-		if (log.isInfoEnabled()) log.info("onCancel");
+//		log.debug("onCancel");
 		mFragment.dismiss();
 		super.onCancel(di);
 	};
 	
 	@Override
 	public void onDismiss(DialogInterface di) {
-		if (log.isInfoEnabled()) log.info("onDismiss");
+//		log.debug("onDismiss");
 		super.onDismiss(di);
 	};
 
 	@Override
 	public void onStop() {
 	    super.onStop();
-	    if (log.isInfoEnabled()) log.info("onStop");
+//	    log.debug("onStop");
 	};
 	
 	@Override
 	public void onDestroyView() {
-		if (log.isInfoEnabled()) log.info("onDestroyView");
+//		log.debug("onDestroyView");
 	    if (getDialog() != null && getRetainInstance())
 	        getDialog().setDismissMessage(null);
 	    super.onDestroyView();
@@ -289,12 +289,12 @@ public class CommonLogManagementFragment extends DialogFragment {
 	@Override
 	public void onDetach() {
 	    super.onDetach();
-	    if (log.isInfoEnabled()) log.info("onDetach");
+//	    log.debug("onDetach");
 	};
 
 
     private void reInitViewWidget() {
-    	if (log.isInfoEnabled()) log.info("reInitViewWidget");
+//    	log.debug("reInitViewWidget");
     	if (!mTerminateRequired) {
     		Handler hndl=new Handler();
     		hndl.post(new Runnable(){
@@ -324,7 +324,7 @@ public class CommonLogManagementFragment extends DialogFragment {
     };
     
     private void initViewWidget() {
-    	if (log.isInfoEnabled()) log.info("initViewWidget");
+//    	log.debug("initViewWidget");
 
     	mDialog.setContentView(R.layout.log_file_list_dlg);
     	
@@ -696,14 +696,14 @@ public class CommonLogManagementFragment extends DialogFragment {
     }
 
     private void createTempLogFile() {
-        log.info("Create temp log file");
+//        log.debug("Create temp log file");
 
         File olf=new File(getTempLogFilePath());
 		ArrayList<File> in_log_file_list=new ArrayList<File>();
         for(int i=mLogFileList.size()-1;i>=0;i--) {
             if (mLogFileList.get(i).log_file_path!=null) {
                 in_log_file_list.add(new File(mLogFileList.get(i).log_file_path));
-                log.info("log file appended, path="+mLogFileList.get(i).log_file_path);
+                log.debug("log file appended, path="+mLogFileList.get(i).log_file_path);
             }
         }
         in_log_file_list.add(new File(mClog.getLogDirName()+"/"+mClog.getLogFileName()+".txt"));
@@ -1125,7 +1125,7 @@ public class CommonLogManagementFragment extends DialogFragment {
     };
 
     public void showDialog(FragmentManager fm, Fragment frag, NotifyEvent ntfy) {
-    	log.info("showDialog test");
+//        log.debug("showDialog test");
     	mTerminateRequired=false;
 	    FragmentTransaction ft = fm.beginTransaction();
 	    ft.add(frag,null);

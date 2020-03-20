@@ -27,6 +27,7 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.sentaroh.android.Utilities3.CallBackListener;
+import com.sentaroh.android.Utilities3.MiscUtil;
 import com.sentaroh.android.Utilities3.SafFile3;
 import com.sentaroh.android.Utilities3.StringUtil;
 
@@ -700,6 +701,9 @@ public class BufferedZipFile3 {
                             } else {
                                 end_pos= mInputZipFileHeaderList.get(i+1).file_header.getOffsetLocalHeader()-1;
                             }
+//                            long end_pos_x=primary_file_start_pos+30+rfhli.file_header.getExtraFieldLength()+
+//                                    rfhli.file_header.getFileNameLength()+rfhli.file_header.getCompressedSize();
+//                            log.info("end_pos="+end_pos+", end_pos_x="+end_pos_x+", diff="+(end_pos-end_pos_x));
                             mOutputZipFilePosition +=copyZipFile(rfhli.file_header.getFileName(),
                                     mOutputZipFileStream, input_file_stream, primary_file_start_pos, end_pos, cbl);
                             mZipOutputFinalyzeRequired=true;
@@ -961,6 +965,7 @@ public class BufferedZipFile3 {
             log.trace(id+" FileHeader comp size="+fh.getCompressedSize()+
                     ", header offset="+String.format("%#010x",fh.getOffsetLocalHeader())+
                     ", crc="+String.format("%#010x",fh.getCrc())+
+                    ", GPF=0x"+ StringUtil.getHexString(fh.getGeneralPurposeFlag(), 0,2)+
                     ", extra field length="+fh.getExtraFieldLength()+
                     ", name="+fh.getFileName());
         }
