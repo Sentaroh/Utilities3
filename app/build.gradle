@@ -44,4 +44,5 @@ dependencies {
     implementation files('libs/zip4j_2.2.3_20191102_03.jar')
     implementation files('libs/WrapperForSlf4j-1.0.2.jar')
 
+    implementation 'com.google.android.material:material:1.2.0-alpha05'
 }
