@@ -1211,11 +1211,15 @@ public class SafFile3 {
             return resultFiles;
         } else {
             File[] fl=mFile.listFiles();
-            final SafFile3[] resultFiles = new SafFile3[fl.length];
-            for (int i = 0; i < fl.length; i++) {
-                resultFiles[i] = new SafFile3(mContext, fl[i].getPath());
+            if (fl!=null) {
+                final SafFile3[] resultFiles = new SafFile3[fl.length];
+                for (int i = 0; i < fl.length; i++) {
+                    resultFiles[i] = new SafFile3(mContext, fl[i].getPath());
+                }
+                return resultFiles;
+            } else {
+                return null;
             }
-            return resultFiles;
         }
     }
 
