@@ -124,7 +124,16 @@ public class TreeFilelistAdapter extends BaseAdapter {
 	public void setSelectable(boolean selectable) {mSelectable=selectable;}
     public boolean isSelectable() {return mSelectable;}
 
-	public void setDataList(ArrayList<TreeFilelistItem> fl) {
+    private boolean mHideSingleSelectRadioButton=false;
+    public void setHideSingleSelectRadioButton(boolean hide) {
+        mHideSingleSelectRadioButton=hide;
+    }
+
+    public boolean isHideSingleSelectRadioButton() {
+        return mHideSingleSelectRadioButton;
+    }
+
+    public void setDataList(ArrayList<TreeFilelistItem> fl) {
 //		mDataItems.clear();
 //		if (fl!=null) {
 //			for (int i=0;i<fl.size();i++) mDataItems.add(fl.get(i));
@@ -547,8 +556,8 @@ public class TreeFilelistAdapter extends BaseAdapter {
                 if (isSelectable()) {
                     if (mSingleSelectMode) {
                         holder.cb_cb1.setVisibility(CheckBox.GONE);
-                        holder.rb_rb1.setVisibility(RadioButton.VISIBLE);
-//                        holder.rb_rb1.setVisibility(RadioButton.GONE);
+                        if (!isHideSingleSelectRadioButton()) holder.rb_rb1.setVisibility(RadioButton.VISIBLE);
+                        else holder.rb_rb1.setVisibility(RadioButton.GONE);
                     } else {
                         holder.cb_cb1.setVisibility(CheckBox.VISIBLE);
                         holder.rb_rb1.setVisibility(RadioButton.GONE);

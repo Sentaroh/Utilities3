@@ -593,7 +593,7 @@ public class CommonFileSelector2 extends DialogFragment {
         mTreeFilelistAdapter.setSelectable(!(mDialogSelectCat==DIALOG_SELECT_CATEGORY_FILE));
 //        mTreeFilelistAdapter.setSelectable(false);
         mTreeFileListView.setAdapter(mTreeFilelistAdapter);
-
+        if (mDialogSelectCat==DIALOG_SELECT_CATEGORY_DIRECTORY && mDialogSingleSelect) mTreeFilelistAdapter.setHideSingleSelectRadioButton(true);
 
 //        if (mDialogLocalMP.equals("")) mDialogLocalMP =adapter.getItem(0);
 
