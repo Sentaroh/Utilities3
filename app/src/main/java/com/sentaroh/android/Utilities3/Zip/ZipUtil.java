@@ -182,17 +182,15 @@ public class ZipUtil {
     }
 
     static public String isZipFile(Context c, String zip_path) {
-        String result = null;
-        try {
-            List<FileHeader> fhl = getFileHeaders(c, new SafFile3(c, zip_path), "UTF-8");
-        } catch (Exception e) {
-            result=e.getMessage();
-        }
-        return result;
+        File lf=new File(zip_path);
+        if (lf.exists()) return isZipFile(c, lf);
+        return isZipFile(c, new SafFile3(c, zip_path));
     }
 
     static public String isZipFile(Context c, SafFile3 sf) {
         String result = null;
+        File lf=new File(sf.getPath());
+        if (lf.exists()) return isZipFile(c, lf);
         try {
             List<FileHeader> fhl = getFileHeaders(c, sf, "UTF-8");
         } catch (Exception e) {
@@ -204,7 +202,8 @@ public class ZipUtil {
     static public String isZipFile(Context c, File lf) {
         String result = null;
         try {
-            List<FileHeader> fhl = getFileHeaders(c, lf, "UTF-8");
+            ZipFile zf=new ZipFile(lf);
+            List<FileHeader> fhl = zf.getFileHeaders();
         } catch (Exception e) {
             result=e.getMessage();
         }
