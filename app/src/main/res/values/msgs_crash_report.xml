@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="msgs_crash_report_share_btn">Share</string>
-    <string name="msgs_crash_report_copy_to_clipboard_btn">Copy to Clipboad</string>
-</resources>
