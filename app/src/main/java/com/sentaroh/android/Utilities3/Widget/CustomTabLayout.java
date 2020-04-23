@@ -1,6 +1,7 @@
 package com.sentaroh.android.Utilities3.Widget;
 
 import android.content.Context;
+import android.text.Layout;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,6 +27,17 @@ public class CustomTabLayout extends TabLayout {
 
     public void addTab(String tab_name) {
         addTab(this.newTab().setText(tab_name).setTag(tab_name));
+    }
+
+    public void adjustTabWidth() {
+        LinearLayout tab_layout=((LinearLayout)this.getChildAt(0));
+        for(int i = 0; i<tab_layout.getChildCount(); i++) {
+            LinearLayout layout = ((LinearLayout) tab_layout.getChildAt(i));
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layout.getLayoutParams();
+            layoutParams.weight = 1.0f; // e.g. 0.5f
+            layoutParams.width= LinearLayout.LayoutParams.WRAP_CONTENT;
+            layout.setLayoutParams(layoutParams);
+        }
     }
 
     public void setCurrentTabByPosition(int position) {

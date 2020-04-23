@@ -71,7 +71,7 @@ public class SystemInfo {
 
         out.add("  Manufacturer="+ Build.MANUFACTURER+", Model="+ Build.MODEL);
 
-//        out.addAll(listsMountPoint());
+        out.addAll(listsMountPoint());
 
 //        out.add("getExternalStorageDirectory="+ LocalMountPoint.getExternalStorageDir());
 
