@@ -59,8 +59,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import javax.xml.XMLConstants;
-
 public class ZipUtil {
 
     public static final String DEFAULT_ZIP_FILENAME_ENCODING = "UTF-8";
@@ -194,6 +192,7 @@ public class ZipUtil {
         try {
             List<FileHeader> fhl = getFileHeaders(c, sf, "UTF-8");
         } catch (Exception e) {
+            e.printStackTrace();
             result=e.getMessage();
         }
         return result;
@@ -205,6 +204,7 @@ public class ZipUtil {
             ZipFile zf=new ZipFile(lf);
             List<FileHeader> fhl = zf.getFileHeaders();
         } catch (Exception e) {
+            e.printStackTrace();
             result=e.getMessage();
         }
         return result;
@@ -614,12 +614,13 @@ public class ZipUtil {
         os.close();
     }
 
+    final public static byte[] ZIP_EMPTY_HEADER =new byte[]{
+            (byte)0x50, (byte)0x4b, (byte)0x05, (byte)0x06, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
+            (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
+            (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, };
+
     static public void writeEmptyZipHeader(OutputStream os) throws IOException {
-        byte[] null_header=new byte[]{
-                (byte)0x50, (byte)0x4b, (byte)0x05, (byte)0x06, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
-                (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
-                (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, };
-        os.write(null_header);
+        os.write(ZIP_EMPTY_HEADER);
     }
 
 }
