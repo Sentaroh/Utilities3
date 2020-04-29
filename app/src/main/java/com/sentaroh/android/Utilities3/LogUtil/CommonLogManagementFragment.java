@@ -118,6 +118,7 @@ public class CommonLogManagementFragment extends DialogFragment {
 	private String mEnableMessage="";
     private String mSendMessage="";
     private String mSendSubject="";
+    private String mSendHint="";
 
 	public static CommonLogManagementFragment newInstance(boolean retainInstance, String title,
                                                           String send_msg, String enable_msg, String send_subject) {
@@ -131,6 +132,24 @@ public class CommonLogManagementFragment extends DialogFragment {
         bundle.putString("msgtext", send_msg);
         bundle.putString("enableMsg", enable_msg);
         bundle.putString("subject", send_subject);
+        bundle.putString("hint", "");
+        frag.setArguments(bundle);
+        return frag;
+    }
+
+    public static CommonLogManagementFragment newInstance(boolean retainInstance, String title,
+                                                          String send_msg, String enable_msg, String send_subject, String send_hint) {
+//		log.debug("newInstance");
+        CommonLogManagementFragment frag = new CommonLogManagementFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("theme_id", "");
+        bundle.putBoolean("retainInstance", retainInstance);
+        bundle.putBoolean("showSaveButton", true);
+        bundle.putString("title", title);
+        bundle.putString("msgtext", send_msg);
+        bundle.putString("enableMsg", enable_msg);
+        bundle.putString("subject", send_subject);
+        bundle.putString("hint", send_hint);
         frag.setArguments(bundle);
         return frag;
     }
@@ -209,6 +228,9 @@ public class CommonLogManagementFragment extends DialogFragment {
             mEnableMessage=bd.getString("enableMsg");
             mSendMessage=bd.getString("msgtext");
             mSendSubject=bd.getString("subject");
+            String hint=bd.getString("hint");
+            if (hint.equals("")) mSendHint=mContext.getString(R.string.msgs_log_file_prob_question_desc_hint);
+            else mSendHint=hint;
         	mLogFileList=CommonLogUtil.createLogFileList(mContext);
         }
     };
@@ -617,9 +639,9 @@ public class CommonLogManagementFragment extends DialogFragment {
         final TextView tv_msg=(TextView)dialog.findViewById(R.id.single_item_input_msg);
         tv_msg.setVisibility(TextView.GONE);
         final TextView tv_desc=(TextView)dialog.findViewById(R.id.single_item_input_name);
-        tv_desc.setText(mContext.getString(R.string.msgs_log_file_prob_question_desc_hint));
+        tv_desc.setText(mSendHint);//mContext.getString(R.string.msgs_log_file_prob_question_desc_hint));
         final EditText et_msg=(EditText)dialog.findViewById(R.id.single_item_input_dir);
-        et_msg.setHint(mContext.getString(R.string.msgs_log_file_prob_question_desc_hint));
+        et_msg.setHint(mSendHint);
         et_msg.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         final Button btn_ok=(Button)dialog.findViewById(R.id.single_item_input_ok_btn);
         final Button btn_cancel=(Button)dialog.findViewById(R.id.single_item_input_cancel_btn);
