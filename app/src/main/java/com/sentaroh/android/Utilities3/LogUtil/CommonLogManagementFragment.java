@@ -229,7 +229,7 @@ public class CommonLogManagementFragment extends DialogFragment {
             mSendMessage=bd.getString("msgtext");
             mSendSubject=bd.getString("subject");
             String hint=bd.getString("hint");
-            if (hint.equals("")) mSendHint=mContext.getString(R.string.msgs_log_file_prob_question_desc_hint);
+            if (hint!=null && hint.equals("")) mSendHint=mContext.getString(R.string.msgs_log_file_prob_question_desc_hint);
             else mSendHint=hint;
         	mLogFileList=CommonLogUtil.createLogFileList(mContext);
         }
