@@ -830,6 +830,9 @@ public class CommonLogManagementFragment extends DialogFragment {
         ImageButton ib_unselect_all=(ImageButton)ll_prof.findViewById(R.id.log_context_button_unselect_all);
     	final ImageButton dlg_done=(ImageButton)mDialog.findViewById(R.id.log_file_list_dlg_done);
 
+    	if (ThemeUtil.isLightThemeUsed(getActivity())) ib_share.setImageResource(R.drawable.context_button_share_dark);
+    	else ib_share.setImageResource(R.drawable.context_button_share);
+
     	dlg_done.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {

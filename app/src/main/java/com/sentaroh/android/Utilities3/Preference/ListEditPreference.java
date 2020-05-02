@@ -64,42 +64,42 @@ import javax.xml.XMLConstants;
 public class ListEditPreference extends DialogPreference {
     private static Logger log= LoggerFactory.getLogger(ListEditPreference.class);
     private static boolean mDebugEnabled=false;
-    private final static String APPLICATION_TAG="ColorPickerPreference";
+    private final static String APPLICATION_TAG="ListEditPreference";
     private Context mContext=null;
 
     public ListEditPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext=context;
-        if (mDebugEnabled) log.debug("ColorPickerPreference");
+        if (mDebugEnabled) log.debug(APPLICATION_TAG);
     }
 
     public ListEditPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mContext=context;
-        if (mDebugEnabled) log.debug("ColorPickerPreference style");
+        if (mDebugEnabled) log.debug(APPLICATION_TAG+" style");
     }
 
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
-        if (mDebugEnabled) log.debug("onGetDefaultValue");
+        if (mDebugEnabled) log.debug(APPLICATION_TAG+" onGetDefaultValue");
         return a.getString(index);
     }
 
     @Override
     protected void onBindDialogView(View view) {
-        if (mDebugEnabled) log.debug("onBindDialogView");
+        if (mDebugEnabled) log.debug(APPLICATION_TAG+" onBindDialogView");
         super.onBindDialogView(view);
     }
 
     @Override
     public void onActivityDestroy() {
-        if (mDebugEnabled) log.debug("onActivityDestroy");
+        if (mDebugEnabled) log.debug(APPLICATION_TAG+" onActivityDestroy");
         super.onActivityDestroy();
     };
 
     @Override
     protected Parcelable onSaveInstanceState() {
-        if (mDebugEnabled) log.debug("onSaveInstanceState");
+        if (mDebugEnabled) log.debug(APPLICATION_TAG+" onSaveInstanceState");
         final Parcelable superState = super.onSaveInstanceState();
         final ListEditPreference.MySavedState myState = new ListEditPreference.MySavedState(superState);
         myState.list_item = mCurrentListData;
@@ -135,7 +135,7 @@ public class ListEditPreference extends DialogPreference {
 
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
-        if (mDebugEnabled) log.debug("onRestoreInstanceState state="+state);
+        if (mDebugEnabled) log.debug(APPLICATION_TAG+" onRestoreInstanceState state="+state);
         if (state == null) {
             super.onRestoreInstanceState(state);
             return;
@@ -147,7 +147,7 @@ public class ListEditPreference extends DialogPreference {
 
     @Override
     protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
-        if (mDebugEnabled) log.debug("onSetInitialValue");
+        if (mDebugEnabled) log.debug(APPLICATION_TAG+" onSetInitialValue");
         if (restorePersistedValue) {
             mCurrentListData = getPersistedString(mCurrentListData);
         } else {
@@ -159,14 +159,14 @@ public class ListEditPreference extends DialogPreference {
 
     @Override
     protected View onCreateDialogView() {
-        if (mDebugEnabled) log.debug("onCreateDialogView");
+        if (mDebugEnabled) log.debug(APPLICATION_TAG+" onCreateDialogView");
         mListEditView =initViewWidget();
         return mListEditView;
     };
 
     @Override
     protected void onDialogClosed(boolean positiveResult) {
-        if (mDebugEnabled) log.debug("onDialogClosed positiveResult="+positiveResult);
+        if (mDebugEnabled) log.debug(APPLICATION_TAG+" onDialogClosed positiveResult="+positiveResult);
         if (positiveResult) {
             persistString(buildSaveValue());
         }
@@ -175,7 +175,7 @@ public class ListEditPreference extends DialogPreference {
 
     @Override
     protected void showDialog(Bundle state) {
-        if (mDebugEnabled) log.debug("showDialog");
+        if (mDebugEnabled) log.debug(APPLICATION_TAG+" showDialog");
         super.showDialog(state);
         CommonDialog.setDlgBoxSizeLimit(getDialog(), true);
     };
@@ -185,7 +185,7 @@ public class ListEditPreference extends DialogPreference {
     private ArrayList<ListValueItem> mValueList =new ArrayList<ListValueItem>();
 
     private View initViewWidget() {
-        if (mDebugEnabled) log.debug("initViewWidget");
+        if (mDebugEnabled) log.debug(APPLICATION_TAG+" initViewWidget");
         final Context context=getContext();
 
         mCurrentListData = getPersistedString(mCurrentListData);

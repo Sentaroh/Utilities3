@@ -11,6 +11,6 @@
         android:layout_height="@dimen/context_button_height"
         android:layout_gravity="center_horizontal"
         android:scaleType="centerCrop"
-        android:src="@drawable/log_context_trash" />
+        android:src="@drawable/context_button_trash" />
 
 </LinearLayout>
