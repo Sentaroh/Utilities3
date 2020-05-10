@@ -89,6 +89,8 @@ public class SafFile3 {
             return;
         }
 //        long b_time=System.currentTimeMillis();
+        boolean all_file_access=false;
+        if (Build.VERSION.CODENAME.equals("R")) all_file_access=true;
         mContext = context;
         String remove_redundant_separator=fpath;
         while(remove_redundant_separator.indexOf("//")>=0) {
@@ -118,17 +120,32 @@ public class SafFile3 {
 
             buildSafStorage(rebuild_path, user_path_seg);
         } else {
-            if (reformed_fp.startsWith(SAF_FILE_PRIMARY_STORAGE_PREFIX)) {
-                user_path_seg=reformed_fp.replace(SAF_FILE_PRIMARY_STORAGE_PREFIX,"");
-                rebuild_path=reformed_fp;
-                buildOsFile(rebuild_path, user_path_seg);
+            if (all_file_access) {
+                if (reformed_fp.startsWith(SAF_FILE_PRIMARY_STORAGE_PREFIX)) {
+                    user_path_seg=reformed_fp.replace(SAF_FILE_PRIMARY_STORAGE_PREFIX,"");
+                    rebuild_path=reformed_fp;
+                    buildOsFile(rebuild_path, user_path_seg);
+                } else {
+                    String[] path_array=reformed_fp.split("/");
+                    String t_uuid=path_array.length>=3?path_array[2]:"";
+                    String t_user_path_seg=reformed_fp.replace("/"+path_array[1]+"/"+t_uuid,"");
+                    user_path_seg=t_user_path_seg.startsWith("/")?t_user_path_seg.substring(1):t_user_path_seg;
+                    rebuild_path=reformed_fp;
+                    buildOsFile(rebuild_path, user_path_seg);
+                }
             } else {
-                String[] path_array=reformed_fp.split("/");
-                String t_uuid=path_array.length>=3?path_array[2]:"";
-                String t_user_path_seg=reformed_fp.replace("/"+path_array[1]+"/"+t_uuid,"");
-                user_path_seg=t_user_path_seg.startsWith("/")?t_user_path_seg.substring(1):t_user_path_seg;
-                rebuild_path=reformed_fp;
-                buildSafStorage(rebuild_path, user_path_seg);
+                if (reformed_fp.startsWith(SAF_FILE_PRIMARY_STORAGE_PREFIX)) {
+                    user_path_seg=reformed_fp.replace(SAF_FILE_PRIMARY_STORAGE_PREFIX,"");
+                    rebuild_path=reformed_fp;
+                    buildOsFile(rebuild_path, user_path_seg);
+                } else {
+                    String[] path_array=reformed_fp.split("/");
+                    String t_uuid=path_array.length>=3?path_array[2]:"";
+                    String t_user_path_seg=reformed_fp.replace("/"+path_array[1]+"/"+t_uuid,"");
+                    user_path_seg=t_user_path_seg.startsWith("/")?t_user_path_seg.substring(1):t_user_path_seg;
+                    rebuild_path=reformed_fp;
+                    buildSafStorage(rebuild_path, user_path_seg);
+                }
             }
         }
     }
@@ -249,8 +266,15 @@ public class SafFile3 {
             mBuildError=true;
             return;
         }
-        if (Build.VERSION.SDK_INT>=SCOPED_STORAGE_SDK) buildSafFileScopedStorage(c, uri, null);
-        else buildSafFileLegacyStorage(c, uri, null);
+        boolean all_file_access=false;
+        if (Build.VERSION.CODENAME.equals("R")) all_file_access=true;
+
+        if (all_file_access) {
+            buildSafFileLegacyStorage(c, uri, null, all_file_access);
+        } else {
+            if (Build.VERSION.SDK_INT>=SCOPED_STORAGE_SDK) buildSafFileScopedStorage(c, uri, null);
+            else buildSafFileLegacyStorage(c, uri, null, all_file_access);
+        }
     }
 
     public SafFile3(Context c, Uri uri, String name) {
@@ -264,9 +288,15 @@ public class SafFile3 {
             mBuildError=true;
             return;
         }
-//        String uuid= SafManager3.getUuidFromTreeUriPath(uri);
-        if (Build.VERSION.SDK_INT>=SCOPED_STORAGE_SDK) buildSafFileScopedStorage(c, uri, name);
-        else buildSafFileLegacyStorage(c, uri, name);
+        boolean all_file_access=false;
+        if (Build.VERSION.CODENAME.equals("R")) all_file_access=true;
+
+        if (all_file_access) {
+            buildSafFileLegacyStorage(c, uri, null, all_file_access);
+        } else {
+            if (Build.VERSION.SDK_INT>=SCOPED_STORAGE_SDK) buildSafFileScopedStorage(c, uri, name);
+            else buildSafFileLegacyStorage(c, uri, name, all_file_access);
+        }
     }
 
     private boolean isBuildError() {
@@ -335,7 +365,7 @@ public class SafFile3 {
         }
     }
 
-    private void buildSafFileLegacyStorage(Context c, Uri uri, String name) {
+    private void buildSafFileLegacyStorage(Context c, Uri uri, String name, boolean all_file_access) {
         // For SafFile
         mContext = c;
         mUri = uri;
@@ -361,29 +391,52 @@ public class SafFile3 {
                 mAppDirectoryCache=p_path+"/cache";
             }
         } else {
-            mSafFile =true;
-            mUuid= getUuidFromTreeUriPath(mUri);
-            if (name!=null) mDocName=name;
-            else mDocName=queryForString(mContext, mUri, DocumentsContract.Document.COLUMN_DISPLAY_NAME, null);
+            if (all_file_access) {
+                mSafFile =false;
+                mUuid= getUuidFromTreeUriPath(mUri);
+                if (name!=null) mDocName=name;
+                else mDocName=queryForString(mContext, mUri, DocumentsContract.Document.COLUMN_DISPLAY_NAME, null);
 
-            if (uri.toString().startsWith(SAF_FILE_DOCUMENT_TREE_URI_PREFIX)) {
-                if (mUuid.equals(SAF_FILE_PRIMARY_UUID)) mPath="/storage/emulated/0/"+uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
-                else if (mUuid.equals(SAF_FILE_UNKNOWN_UUID)) mPath=uri.getPath();
-                else mPath=SAF_FILE_EXTERNAL_STORAGE_PREFIX+mUuid+"/"+uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
+                if (uri.toString().startsWith(SAF_FILE_DOCUMENT_TREE_URI_PREFIX)) {
+                    if (mUuid.equals(SAF_FILE_PRIMARY_UUID)) mPath="/storage/emulated/0/"+uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
+                    else mPath=SAF_FILE_EXTERNAL_STORAGE_PREFIX+mUuid+"/"+uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
+                    mFile=new File(mPath);
+                } else {
+                    if (mUuid.equals(SAF_FILE_PRIMARY_UUID)) mPath=uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
+                    else mPath=uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
+                    mFile=new File(mPath);
+                }
+                if (mPath.endsWith("/")) mPath=mPath.substring(0, mPath.length()-1);
+
+                File app_specfic=getAppDirectoryFile(mUuid);
+                if (app_specfic!=null) {
+                    String p_path=app_specfic.getParent();
+                    mAppDirectoryFiles=p_path+"/files";
+                    mAppDirectoryCache=p_path+"/cache";
+                }
             } else {
-                if (mUuid.equals(SAF_FILE_PRIMARY_UUID)) mPath=uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
-                else if (mUuid.equals(SAF_FILE_UNKNOWN_UUID)) mPath=uri.getPath();
-                else mPath=uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
-            }
-            if (mPath.endsWith("/")) mPath=mPath.substring(0, mPath.length()-1);
+                mSafFile =true;
+                mUuid= getUuidFromTreeUriPath(mUri);
+                if (name!=null) mDocName=name;
+                else mDocName=queryForString(mContext, mUri, DocumentsContract.Document.COLUMN_DISPLAY_NAME, null);
 
-//            File[] app_file_list=mContext.getExternalFilesDirs(null);
-//            File app_specfic=getAppDirectoryFile(app_file_list, mUuid);
-            File app_specfic=getAppDirectoryFile(mUuid);
-            if (app_specfic!=null) {
-                String p_path=app_specfic.getParent();
-                mAppDirectoryFiles=p_path+"/files";
-                mAppDirectoryCache=p_path+"/cache";
+                if (uri.toString().startsWith(SAF_FILE_DOCUMENT_TREE_URI_PREFIX)) {
+                    if (mUuid.equals(SAF_FILE_PRIMARY_UUID)) mPath="/storage/emulated/0/"+uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
+                    else if (mUuid.equals(SAF_FILE_UNKNOWN_UUID)) mPath=uri.getPath();
+                    else mPath=SAF_FILE_EXTERNAL_STORAGE_PREFIX+mUuid+"/"+uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
+                } else {
+                    if (mUuid.equals(SAF_FILE_PRIMARY_UUID)) mPath=uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
+                    else if (mUuid.equals(SAF_FILE_UNKNOWN_UUID)) mPath=uri.getPath();
+                    else mPath=uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
+                }
+                if (mPath.endsWith("/")) mPath=mPath.substring(0, mPath.length()-1);
+
+                File app_specfic=getAppDirectoryFile(mUuid);
+                if (app_specfic!=null) {
+                    String p_path=app_specfic.getParent();
+                    mAppDirectoryFiles=p_path+"/files";
+                    mAppDirectoryCache=p_path+"/cache";
+                }
             }
         }
 
