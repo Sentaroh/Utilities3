@@ -623,16 +623,17 @@ public class CommonFileSelector2 extends DialogFragment {
                 mTreeFileListView.setScrollbarFadingEnabled(false);
             }
         });
+        String stg_name=mStorageSelectorSpinner.getSelectedItem().toString();
+        SafStorage3 ss= getSafStorageFromName(stg_name);
         if (init_file_list_required) {
-            String stg_name=mStorageSelectorSpinner.getSelectedItem().toString();
-            SafStorage3 ss= getSafStorageFromName(stg_name);
             mDialogLocalDir=ss.saf_file.getPath();
             createLocalFilelist(mDialogSelectCat==DIALOG_SELECT_CATEGORY_FILE, mDialogLocalDir, ntfy_file_list, true);
         }
         mTreeFileListView.setVisibility(TextView.INVISIBLE);
         tv_empty.setVisibility(TextView.GONE);
 
-        setTopUpButtonEnabled(false);
+        if (mDialogLocalDir.equals(ss.saf_file.getPath())) setTopUpButtonEnabled(false);
+        else setTopUpButtonEnabled(true);
 
         if (mSavedViewContentsValue!=null && mSavedViewContentsValue.mainDialogFilename!=null) {
             et_file_name.setText(mSavedViewContentsValue.mainDialogFilename);
@@ -808,6 +809,7 @@ public class CommonFileSelector2 extends DialogFragment {
                                 if (tfl.size()==0) {
                                     tv_empty.setVisibility(TextView.VISIBLE);
                                     mTreeFileListView.setVisibility(TextView.GONE);
+                                    mTreeFilelistAdapter.setDataList(tfl);
                                 } else {
                                     tv_empty.setVisibility(TextView.GONE);
                                     mTreeFileListView.setVisibility(TextView.VISIBLE);
