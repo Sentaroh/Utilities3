@@ -76,10 +76,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="5dp">
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:text="@string/msgs_log_file_log_level_title"
             android:textAppearance="?android:attr/textAppearanceMedium" />
         <Spinner
@@ -87,6 +89,7 @@
             style="?android:attr/spinnerStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginTop="2dp"
             android:background="@drawable/spinner_color_background"
             android:gravity="left"
@@ -97,7 +100,7 @@
     </LinearLayout>
 
     <include
-        layout="@layout/divider_line3" />
+        layout="@layout/divider_line1" />
     
     <TextView
         android:id="@+id/textView2"
