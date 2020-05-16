@@ -354,6 +354,8 @@ public class CommonFileSelector2 extends DialogFragment {
         public int[] mainDailogListViewPos=new int[]{-1,-1};
         public ArrayList<TreeFilelistItem> mainDailogListItems=null;
         public int mainDialogSpinnerPos=-1;
+
+        public boolean mainDialogOkButtonEnabled=false;
     }
 
     private SavedViewContentsValue mSavedViewContentsValue=null;
@@ -385,6 +387,9 @@ public class CommonFileSelector2 extends DialogFragment {
         mSavedViewContentsValue.mainDailogListItems=mTreeFilelistAdapter.getDataList();
 
         mSavedViewContentsValue.mainDialogSpinnerPos= mStorageSelectorSpinner.getSelectedItemPosition();
+
+        final Button btnOk = (Button) mDialog.findViewById(R.id.common_file_selector_btn_ok);
+        mSavedViewContentsValue.mainDialogOkButtonEnabled=btnOk.isEnabled();
     };
 
     private void restoreViewContents() {
@@ -427,6 +432,10 @@ public class CommonFileSelector2 extends DialogFragment {
                     mSavedViewContentsValue.mainDailogListViewPos[1]);
             mTreeFilelistAdapter.notifyDataSetChanged();
         }
+
+        final Button btnOk = (Button) mDialog.findViewById(R.id.common_file_selector_btn_ok);
+        CommonDialog.setViewEnabled(getActivity(), btnOk, mSavedViewContentsValue.mainDialogOkButtonEnabled);
+
         resetSavedViewContents();
     };
 
