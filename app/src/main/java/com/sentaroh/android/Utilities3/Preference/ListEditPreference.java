@@ -63,7 +63,7 @@ import javax.xml.XMLConstants;
 
 public class ListEditPreference extends DialogPreference {
     private static Logger log= LoggerFactory.getLogger(ListEditPreference.class);
-    private static boolean mDebugEnabled=false;
+    private static boolean mDebugEnabled=true;
     private final static String APPLICATION_TAG="ListEditPreference";
     private Context mContext=null;
 
@@ -95,6 +95,7 @@ public class ListEditPreference extends DialogPreference {
     public void onActivityDestroy() {
         if (mDebugEnabled) log.debug(APPLICATION_TAG+" onActivityDestroy");
         super.onActivityDestroy();
+        if (mEditItemDialog!=null && mEditItemDialog.isShowing()) mEditItemDialog.dismiss();
     };
 
     @Override
@@ -103,11 +104,22 @@ public class ListEditPreference extends DialogPreference {
         final Parcelable superState = super.onSaveInstanceState();
         final ListEditPreference.MySavedState myState = new ListEditPreference.MySavedState(superState);
         myState.list_item = mCurrentListData;
+        if (mEditItemDialog!=null) {
+            final Button btn_ok = (Button) mEditItemDialog.findViewById(R.id.list_edit_preference_item_edit_ok_btn);
+            final EditText et_data = (EditText) mEditItemDialog.findViewById(R.id.list_edit_preference_item_edit_new_value);
+            myState.edit_dialog_ok_button_enabled=btn_ok.isEnabled();
+            myState.edit_dialog_value=et_data.getText();
+            myState.edit_dialog_item_position=mEditItemPosition;
+        }
+
         return myState;
     };
 
     private static class MySavedState extends BaseSavedState {
         public String list_item;
+        public boolean edit_dialog_ok_button_enabled=false;
+        public Editable edit_dialog_value=null;
+        public int edit_dialog_item_position=0;
         @SuppressWarnings("unchecked")
         public MySavedState(Parcel source) {
             super(source);
@@ -143,6 +155,10 @@ public class ListEditPreference extends DialogPreference {
         ListEditPreference.MySavedState myState = (ListEditPreference.MySavedState) state;
 
         super.onRestoreInstanceState(myState.getSuperState());
+        if (myState.edit_dialog_value!=null) {
+            editListValue(mValueList.get(myState.edit_dialog_item_position), myState.edit_dialog_ok_button_enabled, myState.edit_dialog_value);
+        }
+
     };
 
     @Override
@@ -183,6 +199,8 @@ public class ListEditPreference extends DialogPreference {
     private View mListEditView =null;
     private String mCurrentListData ="";
     private ArrayList<ListValueItem> mValueList =new ArrayList<ListValueItem>();
+    private int mEditItemPosition=0;
+    private AdapterListEditor mListadapter=null;
 
     private View initViewWidget() {
         if (mDebugEnabled) log.debug(APPLICATION_TAG+" initViewWidget");
@@ -203,16 +221,16 @@ public class ListEditPreference extends DialogPreference {
         View mListEditView = inflater.inflate(R.layout.list_edit_preference, null);
 
         final ListView lv=(ListView)mListEditView.findViewById(R.id.list_edit_ppreference_list_view);
-
-        final AdapterListEditor adapter=new AdapterListEditor(mContext, R.layout.list_edit_preference_entry_item, mValueList);
-
-        lv.setAdapter(adapter);
-
+        mListadapter=new AdapterListEditor(mContext, R.layout.list_edit_preference_entry_item, mValueList);
+        lv.setAdapter(mListadapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (!mValueList.get(i).isDeleted()) editListValue(mValueList.get(i));
+                if (!mValueList.get(i).isDeleted()) {
+                    mEditItemPosition=i;
+                    editListValue(mValueList.get(i), false, null);
+                }
             }
         });
 
@@ -245,7 +263,7 @@ public class ListEditPreference extends DialogPreference {
             public void onClick(View view) {
                 ListValueItem mi=new ListValueItem(et_list_value.getText().toString());
                 mValueList.add(mi);
-                adapter.sort();
+                mListadapter.sort();
                 et_list_value.setText("");
             }
         });
@@ -263,26 +281,31 @@ public class ListEditPreference extends DialogPreference {
         return list_value;
     }
 
-    private void editListValue(final ListValueItem list_item) {
+    private Dialog mEditItemDialog=null;
+    private void editListValue(final ListValueItem list_item, boolean ok_button_enabled, Editable init_value) {
+        if (mDebugEnabled) log.debug(APPLICATION_TAG+" editListValue value="+list_item.getListValue());
         // カスタムダイアログの生成
         final Dialog dialog = new Dialog(mContext);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setContentView(R.layout.list_edit_preference_item_edit);
-
+        mEditItemDialog=dialog;
 
         final TextView title = (TextView) dialog.findViewById(R.id.list_edit_preference_item_edit_title);
 
         final TextView message = (TextView) dialog.findViewById(R.id.list_edit_preference_item_edit_msg);
 
         final EditText et_data = (EditText) dialog.findViewById(R.id.list_edit_preference_item_edit_new_value);
-        et_data.setText(list_item.getListValue());
+        if (init_value==null) et_data.setText(list_item.getListValue());
+        else et_data.setText(init_value);
 
         final Button btn_ok = (Button) dialog.findViewById(R.id.list_edit_preference_item_edit_ok_btn);
         final Button btn_cancel = (Button) dialog.findViewById(R.id.list_edit_preference_item_edit_cancel_btn);
 
-        btn_ok.setEnabled(false);
-        btn_ok.setAlpha(0.3f);
+        if (!ok_button_enabled) {
+            btn_ok.setEnabled(false);
+            btn_ok.setAlpha(0.3f);
+        }
         message.setText(mContext.getString(R.string.msgs_list_edit_preference_list_edit_list_specify_new_value));
         et_data.addTextChangedListener(new TextWatcher() {
             @Override
@@ -319,6 +342,7 @@ public class ListEditPreference extends DialogPreference {
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 dialog.dismiss();
+                mEditItemDialog=null;
             }
         });
         // Cancelリスナーの指定
@@ -332,7 +356,9 @@ public class ListEditPreference extends DialogPreference {
         btn_ok.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 list_item.setListValue(et_data.getText().toString());
+                mListadapter.notifyDataSetChanged();
                 dialog.dismiss();
+                mEditItemDialog=null;
             }
         });
         dialog.show();
