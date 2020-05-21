@@ -36,10 +36,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -323,9 +320,9 @@ public class CommonLogManagementFragment extends DialogFragment {
 				@Override
 				public void run() {
 					boolean scb=mLogFileManagementAdapter.isShowCheckBox();
-			    	saveViewContents();
+			    	ViewSaveValue sv=saveViewContents();
 			    	initViewWidget();
-			    	restoreViewContents();
+			    	restoreViewContents(sv);
 		        	if (scb) {
 		        		mLogFileManagementAdapter.setShowCheckBox(true);
 		        		setContextButtonSelecteMode(mLogFileManagementAdapter);
@@ -336,13 +333,25 @@ public class CommonLogManagementFragment extends DialogFragment {
     		});
     	}
     };
-    
-    private void saveViewContents() {
-    	
+
+    class ViewSaveValue {
+        public boolean log_enabled=false;
+        public int log_level=0;
+    }
+    private ViewSaveValue saveViewContents() {
+        ViewSaveValue sv=new ViewSaveValue();
+        final Spinner sp_log_level=(Spinner)mDialog.findViewById(R.id.log_file_list_dlg_log_level);
+        final CheckBox cb_log_enabled=(CheckBox)mDialog.findViewById(R.id.log_file_list_dlg_log_enabled);
+        sv.log_enabled=cb_log_enabled.isChecked();
+        sv.log_level=sp_log_level.getSelectedItemPosition();
+    	return sv;
     };
     
-    private void restoreViewContents() {
-    	
+    private void restoreViewContents(ViewSaveValue sv) {
+        final Spinner sp_log_level=(Spinner)mDialog.findViewById(R.id.log_file_list_dlg_log_level);
+        final CheckBox cb_log_enabled=(CheckBox)mDialog.findViewById(R.id.log_file_list_dlg_log_enabled);
+    	sp_log_level.setSelection(sv.log_level);
+    	cb_log_enabled.setChecked(sv.log_enabled);
     };
     
     private void initViewWidget() {
@@ -369,11 +378,6 @@ public class CommonLogManagementFragment extends DialogFragment {
 			@Override
 			public void positiveResponse(Context c, Object[] o) {
 				if (mLogFileManagementAdapter.isShowCheckBox()) {
-//		        	if (mLogFileManagementAdapter.isAnyItemSelected()) {
-//		        		setContextButtonSelecteMode(mLogFileManagementAdapter);
-//		        	} else {
-//		        		setContextButtonNormalMode(mLogFileManagementAdapter);
-//		        	}
 					setContextButtonSelecteMode(mLogFileManagementAdapter);
 				}
 			};
@@ -383,8 +387,7 @@ public class CommonLogManagementFragment extends DialogFragment {
     	});
     	
     	mLogFileManagementAdapter=
-    				new CommonLogFileListAdapter(getActivity(), R.layout.log_file_list_item,mLogFileList,  
-    						ntfy_cb_listener);
+    				new CommonLogFileListAdapter(getActivity(), R.layout.log_file_list_item,mLogFileList, ntfy_cb_listener);
     	lv_log_file.setAdapter(mLogFileManagementAdapter);
     	
     	setContextButtonListener();
@@ -395,17 +398,14 @@ public class CommonLogManagementFragment extends DialogFragment {
     	final Button btn_browse=(Button)mDialog.findViewById(R.id.log_file_list_dlg_log_browse_active_log);
     	final Button btn_send_dev=(Button)mDialog.findViewById(R.id.log_file_list_dlg_log_send);
     	final CheckBox cb_log_enabled=(CheckBox)mDialog.findViewById(R.id.log_file_list_dlg_log_enabled);
-//    	if (mShowSaveButton) btn_save.setVisibility(Button.VISIBLE);
-//    	else btn_save.setVisibility(Button.GONE);
         CommonDialog.setButtonEnabled(getActivity(), btn_browse, mClog.isLogEnabled());
         CommonDialog.setButtonEnabled(getActivity(), btn_send_dev, mClog.isLogEnabled());
         CommonDialog.setSpinnerBackground(getActivity(), sp_log_level);
     	cb_log_enabled.setChecked(mClog.isLogEnabled());
+        mDisableChangeLogEnabled=true;
     	cb_log_enabled.setOnCheckedChangeListener(new OnCheckedChangeListener(){
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//			    if (cb_log_enabled.isChecked()) ll_log_level_view.setVisibility(LinearLayout.VISIBLE);
-//			    else ll_log_level_view.setVisibility(LinearLayout.GONE);
                 CommonDialog.setViewEnabled(getActivity(), sp_log_level, cb_log_enabled.isChecked());
                 if (cb_log_enabled.isChecked()) ll_log_level_view.setAlpha(1.0f);
                 else ll_log_level_view.setAlpha(0.4f);
@@ -413,6 +413,12 @@ public class CommonLogManagementFragment extends DialogFragment {
 				mDisableChangeLogEnabled=false;
             }
     	});
+    	mUiHandler.post(new Runnable(){
+            @Override
+            public void run() {
+                mDisableChangeLogEnabled=false;
+            }
+        });
 
     	btn_browse.setOnClickListener(new OnClickListener(){
 			@Override
@@ -460,11 +466,6 @@ public class CommonLogManagementFragment extends DialogFragment {
 					mLogFileManagementAdapter.getItem(pos).isChecked=
 							!mLogFileManagementAdapter.getItem(pos).isChecked;
 					mLogFileManagementAdapter.notifyDataSetChanged();
-//		        	if (mLogFileManagementAdapter.isAnyItemSelected()) {
-//		        		setContextButtonSelecteMode(mLogFileManagementAdapter);
-//		        	} else {
-//		        		setContextButtonNormalMode(mLogFileManagementAdapter);
-//		        	}
 		        	setContextButtonSelecteMode(mLogFileManagementAdapter);
 				} else {
 					showLogFile(mLogFileManagementAdapter,pos);
@@ -792,6 +793,9 @@ public class CommonLogManagementFragment extends DialogFragment {
 		ntfy.setListener(new NotifyEventListener(){
 			@Override
 			public void positiveResponse(Context c, Object[] o) {
+                final Button btn_browse=(Button)mDialog.findViewById(R.id.log_file_list_dlg_log_browse_active_log);
+                final Button btn_send_dev=(Button)mDialog.findViewById(R.id.log_file_list_dlg_log_send);
+                final CheckBox cb_log_enabled=(CheckBox)mDialog.findViewById(R.id.log_file_list_dlg_log_enabled);
 			    mClog.setLogOptionLogEnabled(mContext, cb_log_enabled.isChecked());
                 if (!cb_log_enabled.isChecked()) performRotateLog();
                 CommonDialog.setButtonEnabled(getActivity(), btn_browse, enabled);
@@ -810,6 +814,9 @@ public class CommonLogManagementFragment extends DialogFragment {
 			}
 			@Override
 			public void negativeResponse(Context c, Object[] o) {
+                final Button btn_browse=(Button)mDialog.findViewById(R.id.log_file_list_dlg_log_browse_active_log);
+                final Button btn_send_dev=(Button)mDialog.findViewById(R.id.log_file_list_dlg_log_send);
+                final CheckBox cb_log_enabled=(CheckBox)mDialog.findViewById(R.id.log_file_list_dlg_log_enabled);
 				mDisableChangeLogEnabled=true;
 				cb_log_enabled.setChecked(!cb_log_enabled.isChecked());
 			}
