@@ -1519,6 +1519,44 @@ public class SafFile3 {
         }
     }
 
+    public boolean moveToWithRename(SafFile3 to_file) {
+        if (isBuildError()) return false;
+        if (mSafFile) {
+            Uri move_result=null;
+            try {
+                if (log.isDebugEnabled()) putDebugMessage("moveTo mUri="+mUri.getPath()+", to_file="+to_file.getUri().getPath());
+                Uri f_parent=getParentUri(mUri.toString());
+                Uri t_parent=getParentUri(to_file.getUri().toString());
+                move_result = DocumentsContract.moveDocument(mContext.getContentResolver(), mUri, f_parent, t_parent);
+                mUri = move_result;
+                if (mUri!=null) {
+                    if (!this.getName().toLowerCase().equals(to_file.getName().toLowerCase())) {
+                        try {
+                            this.renameTo(to_file);
+                            return true;
+                        } catch(Exception e) {
+                            if (!to_file.exists()) {
+                                putErrorMessage("moveTo rename failed, to="+to_file+", error="+e.getMessage());
+                                return false;
+                            }
+                            return true;
+                        }
+                    } else {
+                        return true;
+                    }
+                } else {
+                    putErrorMessage("moveTo move failed, to="+to_file);
+                    return false;
+                }
+            } catch (FileNotFoundException e) {
+                putErrorMessage("moveTo move failed, msg="+e.getMessage());
+                return false;
+            }
+        } else {
+            return mFile.renameTo(to_file.getFile());
+        }
+    }
+
     private static final String METHOD_CREATE_DOCUMENT = "android:createDocument";
     private static final String METHOD_RENAME_DOCUMENT = "android:renameDocument";
     private static final String METHOD_DELETE_DOCUMENT = "android:deleteDocument";
