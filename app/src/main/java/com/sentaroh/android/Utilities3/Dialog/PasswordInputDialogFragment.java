@@ -122,7 +122,7 @@ public class PasswordInputDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
         if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"onCreate terminateRequired="+terminateRequired);
-        mContext=getActivity().getApplicationContext();
+        mContext=getActivity();
         if (!terminateRequired) {
             Bundle bd=getArguments();
             setRetainInstance(true);

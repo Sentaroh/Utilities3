@@ -48,7 +48,7 @@ public class CrashReport extends AppCompatActivity {
         Log.v("CrashReport","onCreate entered");
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.crash_report);
-        mContext=getApplicationContext();
+        mContext=CrashReport.this;
         Intent in=getIntent();
         showCrashReport(in);
     }

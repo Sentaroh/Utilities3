@@ -212,7 +212,7 @@ public class CommonFileSelector2 extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity=getActivity();
-        mContext=mActivity.getApplicationContext();
+        mContext=mActivity;
 
         mUiHandler=new Handler();
         Bundle bd=getArguments();

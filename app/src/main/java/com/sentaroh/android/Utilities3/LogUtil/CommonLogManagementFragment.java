@@ -203,7 +203,7 @@ public class CommonLogManagementFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
-        mContext=getActivity().getApplicationContext();
+        mContext=getActivity();
         mClog= CommonLogParametersFactory.getLogParms(mContext);
         mUiHandler=new Handler();
     	mFragment=this;
