@@ -23,7 +23,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -46,7 +46,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.sentaroh.android.Utilities3.Dialog.CommonDialog;
@@ -59,24 +58,32 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import javax.xml.XMLConstants;
-
 public class ListEditPreference extends DialogPreference {
     private static Logger log= LoggerFactory.getLogger(ListEditPreference.class);
     private static boolean mDebugEnabled=true;
     private final static String APPLICATION_TAG="ListEditPreference";
     private Context mContext=null;
+    private String mHint="";
 
     public ListEditPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext=context;
         if (mDebugEnabled) log.debug(APPLICATION_TAG);
+        initAttrs(context, attrs);
     }
 
     public ListEditPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mContext=context;
         if (mDebugEnabled) log.debug(APPLICATION_TAG+" style");
+        initAttrs(context, attrs);
+    }
+
+    private void initAttrs(Context context, AttributeSet attrs) {
+        TypedArray a = context.obtainStyledAttributes(attrs,
+                R.styleable.ListEditPreference);
+        mHint = a.getString(R.styleable.ListEditPreference_hint);
+        a.recycle();
     }
 
     @Override
@@ -193,8 +200,18 @@ public class ListEditPreference extends DialogPreference {
     protected void showDialog(Bundle state) {
         if (mDebugEnabled) log.debug(APPLICATION_TAG+" showDialog");
         super.showDialog(state);
-        CommonDialog.setDlgBoxSizeLimit(getDialog(), true);
+//        CommonDialog.setDlgBoxSizeLimit(getDialog(), true);
+
+        AlertDialog ad=(AlertDialog)getDialog();
+        mDialogOkButton=ad.getButton(AlertDialog.BUTTON_POSITIVE);
+        mDialogOkButton.setText(R.string.msgs_common_dialog_save);
+        mDialogCancelButton=ad.getButton(AlertDialog.BUTTON_NEGATIVE);
+
+        CommonDialog.setViewEnabled(getContext(), mDialogOkButton, false);
     };
+
+    private Button mDialogOkButton=null;
+    private Button mDialogCancelButton=null;
 
     private View mListEditView =null;
     private String mCurrentListData ="";
@@ -236,7 +253,8 @@ public class ListEditPreference extends DialogPreference {
 
         final Button add_btn=(Button) mListEditView.findViewById(R.id.list_edit_preference_add_btn);
         CommonDialog.setViewEnabled(mContext, add_btn, false);
-        final EditText et_list_value=(EditText) mListEditView.findViewById(R.id.list_edit_preference_add_mime_type);
+        final EditText et_list_value=(EditText) mListEditView.findViewById(R.id.list_edit_preference_add_item);
+        et_list_value.setHint(mHint);
 
         et_list_value.addTextChangedListener(new TextWatcher() {
             @Override
@@ -265,6 +283,7 @@ public class ListEditPreference extends DialogPreference {
                 mValueList.add(mi);
                 mListadapter.sort();
                 et_list_value.setText("");
+                CommonDialog.setViewEnabled(getContext(), mDialogOkButton, true);
             }
         });
 
@@ -359,6 +378,7 @@ public class ListEditPreference extends DialogPreference {
                 mListadapter.notifyDataSetChanged();
                 dialog.dismiss();
                 mEditItemDialog=null;
+                CommonDialog.setViewEnabled(getContext(), mDialogOkButton, true);
             }
         });
         dialog.show();
@@ -452,6 +472,7 @@ public class ListEditPreference extends DialogPreference {
                         o.setDeleted(true);
                         notifyDataSetChanged();
 
+                        CommonDialog.setViewEnabled(c, mDialogOkButton, true);
 //                        if (mNotifyDeleteListener != null)
 //                            mNotifyDeleteListener.notifyToListener(true, new Object[]{o});
                     }

@@ -575,7 +575,7 @@ public class BufferedZipFile3 {
     private void notifyProgress(CallBackListener cbl, long read_byte, long file_size) {
         if (cbl!=null && file_size>0) {
             int progress=(int)((read_byte*100)/file_size);
-            cbl.onCallBack(mContext, progress, null);
+            cbl.onCallBack(mContext, progress>100?100:progress, null);
 //            log.info("progress="+progress);
         }
     }
