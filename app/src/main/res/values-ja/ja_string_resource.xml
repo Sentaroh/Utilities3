@@ -16,6 +16,7 @@
         <string name="msgs_file_select_edit_dlg_directory_not_selected">ディレクトリーが選択されていません</string>
         <string name="msgs_single_item_input_dlg_title">ディレクトリ作成</string>
         <string name="msgs_single_item_input_dlg_duplicate_dir">既に存在しています</string>
+        <string name="msgs_single_item_input_dlg_prohibit_access_directory">ディレクトリーはアクセスが禁止されています。ディレクトリー=%s</string>
         <string name="msgs_file_select_edit_dir_empty">--- ディレクトリは空です ---</string>
         <string name="msgs_file_select_edit_local_mount_point">ストレージの選択</string>
         <string name="msgs_file_select_edit_parent_directory">親ディレクトリー</string>

@@ -16,6 +16,7 @@
         <string name="msgs_file_select_edit_dlg_directory_not_selected">Каталог не выбран</string>
         <string name="msgs_single_item_input_dlg_title">Создать каталог</string>
         <string name="msgs_single_item_input_dlg_duplicate_dir">Указанное имя уже существует.</string>
+        <string name="msgs_single_item_input_dlg_prohibit_access_directory">Доступ к каталогу запрещен. Каталог=%</string>
         <string name="msgs_file_select_edit_dir_empty">--- Каталог пуст ---</string>
         <string name="msgs_file_select_edit_local_mount_point">Маунт-Пойнт</string>
         <string name="msgs_file_select_edit_parent_directory">Родительский каталог</string>

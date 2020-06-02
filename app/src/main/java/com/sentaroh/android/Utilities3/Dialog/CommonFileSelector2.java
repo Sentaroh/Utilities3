@@ -30,6 +30,7 @@ import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -1258,6 +1259,30 @@ public class CommonFileSelector2 extends DialogFragment {
         }
     }
 
+    private String getRootFilePath(String fp) {
+        if (fp.startsWith("/storage/emulated/0")) return "/storage/emulated/0";
+        else {
+            String[] fp_parts=fp.startsWith("/")?fp.substring(1).split("/"):fp.split("/");
+            String rt_fp="/"+fp_parts[0]+"/"+fp_parts[1];
+            return rt_fp;
+        }
+    }
+
+    public static String removeRedundantDirectorySeparator(String in_str) {
+        String[] dir_array=in_str.split("/");
+        String out ="";
+        for(String item:dir_array) {
+            if (item!=null && item.length()>0) {
+                out+="/"+item;
+            }
+        }
+        return out;
+    }
+
+    private boolean isAndroidVersion30orUp() {
+        return Build.VERSION.CODENAME.equals("R") || Build.VERSION.SDK_INT>=30;
+    }
+
     private void  createFileApiFilelist(final boolean fileOnly, final File target_dir, final NotifyEvent ntfy, final boolean show_pd_circle_delay) {
         final Dialog pd= CommonDialog.showProgressSpinIndicator(getActivity());
         if (show_pd_circle_delay) {
@@ -1270,6 +1295,7 @@ public class CommonFileSelector2 extends DialogFragment {
         } else {
             pd.show();
         }
+        final String prohibit_directory=getProhibitAccessDirectory(target_dir.getPath()).toLowerCase();
         Thread th=new Thread(){
             @Override
             public void run() {
@@ -1291,16 +1317,33 @@ public class CommonFileSelector2 extends DialogFragment {
                                         for (int j=0;j<sdc_list.length;j++) {
                                             if (!fileOnly) {
                                                 if (sdc_list[j].isDirectory()) dirct++;
-                                            } else dirct++;
-//									dirct++;
+                                            } else {
+                                                dirct++;
+                                            }
                                         }
                                     }
                                 }
                                 TreeFilelistItem tfi= buildFileApiTreeFileListItem(ff[i], lf.getPath());
                                 tfi.setSubDirItemCount(dirct);
                                 if (!fileOnly) {
-                                    if (ff[i].isDirectory()) tfl.add(tfi);
-                                } else tfl.add(tfi);
+                                    if (ff[i].isDirectory()) {
+                                        if (!isAndroidVersion30orUp() ||
+                                                (isAndroidVersion30orUp() && !(ff[i].getPath()+"/").toLowerCase().startsWith(prohibit_directory))) {
+                                            tfl.add(tfi);
+                                        }
+                                    } else {
+                                        tfl.add(tfi);
+                                    }
+                                } else {
+                                    if (ff[i].isDirectory()) {
+                                        if (!isAndroidVersion30orUp() ||
+                                                (isAndroidVersion30orUp() && !(ff[i].getPath()+"/").toLowerCase().startsWith(prohibit_directory))) {
+                                            tfl.add(tfi);
+                                        }
+                                    } else {
+                                        tfl.add(tfi);
+                                    }
+                                }
                             }
                         }
                     }
@@ -1319,6 +1362,11 @@ public class CommonFileSelector2 extends DialogFragment {
             }
         };
         th.start();
+    }
+
+    private String getProhibitAccessDirectory(String fp) {
+        String prohibit_directory=getRootFilePath(fp)+"/Android/";
+        return prohibit_directory;
     }
 
     private void  createSafApiFilelist(final boolean fileOnly, final SafFile3 target_dir, final NotifyEvent ntfy, final boolean show_pd_circle_delay) {
@@ -1526,16 +1574,20 @@ public class CommonFileSelector2 extends DialogFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length()>0) {
-                    File lf=new File(dir+"/"+s.toString());
-//					Log.v("","fp="+lf.getPath());
+                    String create_dir=removeRedundantDirectorySeparator(dir+"/"+s.toString());
+                    if (isAndroidVersion30orUp()) {
+                        String prohibit_dir=getProhibitAccessDirectory(create_dir);
+                        if ((create_dir+"/").toLowerCase().startsWith(prohibit_dir.toLowerCase())) {
+                            dlg_msg.setText(context.getString(R.string.msgs_single_item_input_dlg_prohibit_access_directory, s.toString()));
+                            return;
+                        }
+                    }
+                    File lf=new File(create_dir);
                     if (lf.exists()) {
                         btnOk.setEnabled(false);
-//                        dlg_msg.setVisibility(TextView.VISIBLE);
-                        dlg_msg.setText(context.getString(
-                                R.string.msgs_single_item_input_dlg_duplicate_dir));
+                        dlg_msg.setText(context.getString(R.string.msgs_single_item_input_dlg_duplicate_dir));
                     } else {
                         btnOk.setEnabled(true);
-//                        dlg_msg.setVisibility(TextView.GONE);
                         dlg_msg.setText("");
                     }
                 }
@@ -1548,7 +1600,7 @@ public class CommonFileSelector2 extends DialogFragment {
             public void onClick(View v) {
 //				NotifyEvent
                 final String creat_dir=etDir.getText().toString();
-                final String n_path=dir+"/"+creat_dir;
+                final String n_path=removeRedundantDirectorySeparator(dir+"/"+creat_dir);
                 NotifyEvent ntfy=new NotifyEvent(context);
                 ntfy.setListener(new NotifyEvent.NotifyEventListener(){
                     @Override
