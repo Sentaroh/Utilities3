@@ -40,10 +40,11 @@
         <string name="msgs_progress_spin_dlg_processing">En cours de traitement, veuillez patienter.</string>
         <string name="msgs_dlg_hardkey_back_button">La &#8220;touche retour&#8220; ne peut pas être utilisée, veuillez appuyer sur le bouton à l\'écran.</string>
     <!-- msgs_common_file_selector -->
-        <string name="msgs_common_file_selector_up_btn">Début</string>
-        <string name="msgs_common_file_selector_top_btn">Haut</string>
+        <string name="msgs_common_file_selector_up_btn">Haut</string>
+        <string name="msgs_common_file_selector_top_btn">Début</string>
         <string name="msgs_common_file_selector_create_btn">Créer</string>
-        <string name="msgs_common_file_selector_refresh_btn">Rafraîchir</string>
+        <string name="msgs_common_file_selector_refresh_btn">Actualiser</string>
+        <string name="msgs_common_file_selector_empty_directory">Dossier vide</string>
     <!-- msgs_crash_report -->
         <string name="msgs_crash_report_share_btn">Partager</string>
         <string name="msgs_crash_report_copy_to_clipboard_btn">Copie dans le Clipboad</string>

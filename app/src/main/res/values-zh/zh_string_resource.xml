@@ -43,7 +43,8 @@
         <string name="msgs_common_file_selector_up_btn">上图</string>
         <string name="msgs_common_file_selector_top_btn">頂層</string>
         <string name="msgs_common_file_selector_create_btn">创建</string>
-        <string name="msgs_common_file_selector_refresh_btn">刷新</string>
+        <string name="msgs_common_file_selector_refresh_btn">空目录</string>
+        <string name="msgs_common_file_selector_empty_directory">刷新</string>
     <!-- msgs_crash_report -->
         <string name="msgs_crash_report_share_btn">分享到</string>
         <string name="msgs_crash_report_copy_to_clipboard_btn">Copy to Clipboad</string>

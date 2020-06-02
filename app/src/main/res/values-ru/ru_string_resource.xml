@@ -44,6 +44,7 @@
         <string name="msgs_common_file_selector_top_btn">Топ</string>
         <string name="msgs_common_file_selector_create_btn">Создать</string>
         <string name="msgs_common_file_selector_refresh_btn">Обновить</string>
+        <string name="msgs_common_file_selector_empty_directory">Пустой каталог</string>
     <!-- msgs_crash_report -->
         <string name="msgs_crash_report_share_btn">Поделиться</string>
         <string name="msgs_crash_report_copy_to_clipboard_btn">Скопировать в Clipboad</string>

@@ -43,7 +43,8 @@
         <string name="msgs_common_file_selector_up_btn">Nach oben</string>
         <string name="msgs_common_file_selector_top_btn">Nach oben</string>
         <string name="msgs_common_file_selector_create_btn">erstellen</string>
-        <string name="msgs_common_file_selector_refresh_btn">Aktualisieren Sie</string>
+        <string name="msgs_common_file_selector_refresh_btn">Leeres Verzeichnis</string>
+        <string name="msgs_common_file_selector_empty_directory">Aktualisieren Sie</string>
     <!-- msgs_crash_report -->
         <string name="msgs_crash_report_share_btn">teilen</string>
         <string name="msgs_crash_report_copy_to_clipboard_btn">In Zwischenablage kopieren</string>
