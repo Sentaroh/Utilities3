@@ -104,7 +104,7 @@ public class CommonLogManagementFragment extends DialogFragment {
 	
 	private CommonLogFileListAdapter mLogFileManagementAdapter=null;
 	
-	private Context mContext=null;
+	private Activity mContext=null;
 	
 	private Handler mUiHandler=null;
 
