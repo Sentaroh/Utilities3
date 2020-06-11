@@ -90,7 +90,7 @@ public class SafFile3 {
         }
 //        long b_time=System.currentTimeMillis();
         boolean all_file_access=false;
-        if (Build.VERSION.CODENAME.equals("R")) all_file_access=true;
+        if (Build.VERSION.SDK_INT>=30) all_file_access=true;
         mContext = context;
         String remove_redundant_separator=fpath;
         while(remove_redundant_separator.indexOf("//")>=0) {
@@ -267,7 +267,7 @@ public class SafFile3 {
             return;
         }
         boolean all_file_access=false;
-        if (Build.VERSION.CODENAME.equals("R")) all_file_access=true;
+        if (Build.VERSION.SDK_INT>=30) all_file_access=true;
 
         if (all_file_access) {
             buildSafFileLegacyStorage(c, uri, null, all_file_access);
@@ -289,7 +289,7 @@ public class SafFile3 {
             return;
         }
         boolean all_file_access=false;
-        if (Build.VERSION.CODENAME.equals("R")) all_file_access=true;
+        if (Build.VERSION.SDK_INT>=30) all_file_access=true;
 
         if (all_file_access) {
             buildSafFileLegacyStorage(c, uri, null, all_file_access);

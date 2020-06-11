@@ -89,7 +89,7 @@ public class SafManager3 {
         //NOP
     }
 
-    public static final int SCOPED_STORAGE_SDK=30;
+    public static final int SCOPED_STORAGE_SDK=99;
     public SafManager3(Context c) {
         mContext=c;
         baseMp= Environment.getExternalStorageDirectory().getPath();
