@@ -64,9 +64,7 @@ public class ContextButtonUtil {
             @Override
             public boolean onLongClick(View v) {
                 Toast toast= CommonDialog.getToastShort(a, label);
-                if (Build.VERSION.SDK_INT<30) {
-                    positionToast(toast, v, a.getWindow(), 0, 0);
-                }
+                positionToast(toast, v, a.getWindow(), 0, 0);
                 toast.show();
                 return true;
             }

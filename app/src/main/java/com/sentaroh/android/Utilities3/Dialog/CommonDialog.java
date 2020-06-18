@@ -35,6 +35,7 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,6 +45,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -266,31 +268,29 @@ public class CommonDialog {
     }
 
     static private Toast showToast(Activity a, String msg, int duration) {
-        Toast toast=Toast.makeText(a, msg, duration);
-        if (Build.VERSION.SDK_INT<30) {
-            View tv=toast.getView();
-            int fg_color= Color.DKGRAY, bg_color=Color.LTGRAY;
-            if (ThemeUtil.isLightThemeUsed(a)) {
-                fg_color=Color.WHITE;
-                bg_color=0xff666666;//<-Color.DKGRAY 0xff444444;
-            }
-            GradientDrawable drawable = new GradientDrawable();
-            drawable.setStroke(3, bg_color);
-            drawable.setCornerRadius(22);
-            drawable.setColor(bg_color);
-            tv.setBackground(drawable);
-//        tv.setBackgroundColor(bg_color);
-            if (tv instanceof ViewGroup) {
-                ViewGroup vg = (ViewGroup)tv;
-                for (int i = 0; i < vg.getChildCount(); i++) {
-                    View cv = vg.getChildAt(i);
-                    if (cv instanceof TextView) {
-                        ((TextView) cv).setBackgroundColor(bg_color);
-                        ((TextView) cv).setTextColor(fg_color);
-                    }
-                }
-            }
+        Toast toast = new Toast(a);
+        LayoutInflater inflater = a.getLayoutInflater();
+        LinearLayout custom_toast_view=(LinearLayout)inflater.inflate( R.layout.custom_toast_view, null);
+        TextView toast_message = (TextView)custom_toast_view.findViewById(R.id.custom_toast_message);
+        toast_message.setText(msg);
+
+        int fg_color= Color.DKGRAY, bg_color=Color.LTGRAY;
+        if (ThemeUtil.isLightThemeUsed(a)) {
+            fg_color=Color.WHITE;
+            bg_color=0xff666666;//<-Color.DKGRAY 0xff444444;
+        } else {
+            fg_color=Color.BLACK;
         }
+        toast_message.setTextColor(fg_color);
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setStroke(3, bg_color);
+        drawable.setCornerRadius(11);
+        drawable.setColor(bg_color);
+        custom_toast_view.setBackground(drawable);
+        toast.setView( custom_toast_view );
+        toast.setDuration( duration );
+        toast.setGravity(Gravity.BOTTOM, 0, (int)CommonDialog.toPixel(a.getResources(), 100));
+
         return toast;
     }
 
