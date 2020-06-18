@@ -26,6 +26,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -63,7 +64,9 @@ public class ContextButtonUtil {
             @Override
             public boolean onLongClick(View v) {
                 Toast toast= CommonDialog.getToastShort(a, label);
-                positionToast(toast, v, a.getWindow(), 0, 0);
+                if (Build.VERSION.SDK_INT<30) {
+                    positionToast(toast, v, a.getWindow(), 0, 0);
+                }
                 toast.show();
                 return true;
             }

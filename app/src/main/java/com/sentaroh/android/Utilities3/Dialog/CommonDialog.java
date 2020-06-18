@@ -29,6 +29,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.preference.Preference;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -266,25 +267,27 @@ public class CommonDialog {
 
     static private Toast showToast(Activity a, String msg, int duration) {
         Toast toast=Toast.makeText(a, msg, duration);
-        View tv=toast.getView();
-        int fg_color= Color.DKGRAY, bg_color=Color.LTGRAY;
-        if (ThemeUtil.isLightThemeUsed(a)) {
-            fg_color=Color.WHITE;
-            bg_color=0xff666666;//<-Color.DKGRAY 0xff444444;
-        }
-        GradientDrawable drawable = new GradientDrawable();
-        drawable.setStroke(3, bg_color);
-        drawable.setCornerRadius(22);
-        drawable.setColor(bg_color);
-        tv.setBackground(drawable);
+        if (Build.VERSION.SDK_INT<30) {
+            View tv=toast.getView();
+            int fg_color= Color.DKGRAY, bg_color=Color.LTGRAY;
+            if (ThemeUtil.isLightThemeUsed(a)) {
+                fg_color=Color.WHITE;
+                bg_color=0xff666666;//<-Color.DKGRAY 0xff444444;
+            }
+            GradientDrawable drawable = new GradientDrawable();
+            drawable.setStroke(3, bg_color);
+            drawable.setCornerRadius(22);
+            drawable.setColor(bg_color);
+            tv.setBackground(drawable);
 //        tv.setBackgroundColor(bg_color);
-        if (tv instanceof ViewGroup) {
-            ViewGroup vg = (ViewGroup)tv;
-            for (int i = 0; i < vg.getChildCount(); i++) {
-                View cv = vg.getChildAt(i);
-                if (cv instanceof TextView) {
-                    ((TextView) cv).setBackgroundColor(bg_color);
-                    ((TextView) cv).setTextColor(fg_color);
+            if (tv instanceof ViewGroup) {
+                ViewGroup vg = (ViewGroup)tv;
+                for (int i = 0; i < vg.getChildCount(); i++) {
+                    View cv = vg.getChildAt(i);
+                    if (cv instanceof TextView) {
+                        ((TextView) cv).setBackgroundColor(bg_color);
+                        ((TextView) cv).setTextColor(fg_color);
+                    }
                 }
             }
         }
