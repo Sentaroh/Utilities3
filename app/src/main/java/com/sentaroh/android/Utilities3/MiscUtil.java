@@ -106,12 +106,17 @@ public class MiscUtil{
 	};
 
 	final static public String getStackTraceString(Exception e) {
-        final StringWriter sw = new StringWriter();
-        final PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
-        pw.flush();
-        pw.close();
-        return sw.toString();
+        return getStackTraceString(e.getStackTrace());
+    }
+
+    final static public String getStackTraceString(StackTraceElement[] st) {
+        String st_msg = "";
+        for (int i = 0; i < st.length; i++) {
+            st_msg += "\n at " + st[i].getClassName() + "." +
+                    st[i].getMethodName() + "(" + st[i].getFileName() +
+                    ":" + st[i].getLineNumber() + ")";
+        }
+        return st_msg;
     }
 
 }
