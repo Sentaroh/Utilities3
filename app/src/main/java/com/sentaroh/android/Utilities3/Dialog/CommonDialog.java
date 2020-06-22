@@ -38,6 +38,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -46,6 +47,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -273,7 +275,70 @@ public class CommonDialog {
         LinearLayout custom_toast_view=(LinearLayout)inflater.inflate( R.layout.custom_toast_view, null);
         TextView toast_message = (TextView)custom_toast_view.findViewById(R.id.custom_toast_message);
         toast_message.setText(msg);
+        setToastMessageView(a, custom_toast_view, toast_message);
+        toast.setView( custom_toast_view );
+        toast.setDuration( duration );
+        toast.setGravity(Gravity.BOTTOM, 0, (int)CommonDialog.toPixel(a.getResources(), 100));
 
+        return toast;
+    }
+
+    static public void showPopupMessageAsUpAnchorView(Activity a, View anchor, String msg, int duration) {
+        showPopupDropDownMessage(false, a, anchor, msg, duration, 0);
+    }
+
+    static public void showPopupMessageAsUpAnchorView(Activity a, View anchor, String msg, int duration, int yOffset) {
+        showPopupDropDownMessage(false, a, anchor, msg, duration, -yOffset);
+    }
+
+    static public void showPopupMessageAsDownAnchorView(Activity a, View anchor, String msg, int duration) {
+        showPopupDropDownMessage(true, a, anchor, msg, duration, 0);
+    }
+
+    static public void showPopupMessageAsDownAnchorView(Activity a, View anchor, String msg, int duration, int yOffset) {
+        showPopupDropDownMessage(true, a, anchor, msg, duration, yOffset);
+    }
+
+    static public void showPopupDropDownMessage(final boolean down_direction, Activity a, View anchor, String msg, int duration, int yOffset) {
+        LayoutInflater inflater = a.getLayoutInflater();
+        LinearLayout custom_toast_view=(LinearLayout)inflater.inflate( R.layout.custom_toast_view, null);
+        TextView toast_message = (TextView)custom_toast_view.findViewById(R.id.custom_toast_message);
+        toast_message.setText(msg);
+        setToastMessageView(a, custom_toast_view, toast_message);
+        final PopupWindow popupWindow = new PopupWindow();
+
+//        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if(event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+//                    popupWindow.dismiss();
+//                    return false;
+//                }
+//                return false;
+//            }
+//        });
+//        popupWindow.setTouchable(true);
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(true);
+
+        popupWindow.setWindowLayoutMode(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        anchor.postDelayed(new Runnable(){
+            @Override
+            public void run() {
+                popupWindow.dismiss();
+            }
+        }, duration*1000);
+        popupWindow.setContentView(custom_toast_view);//custom_toast_view);
+        int spacer=(int)toPixel(a.getResources(), 10);
+        if (down_direction) {
+            popupWindow.showAsDropDown(anchor, 0, spacer);
+        } else {
+            int yOffset_base=anchor.getHeight()+anchor.getHeight()/2+yOffset;
+            popupWindow.showAsDropDown(anchor, 0, -yOffset_base-spacer);
+        }
+
+    }
+
+    static private void setToastMessageView(Activity a, View custom_toast_view, TextView toast_message) {
         int fg_color= Color.DKGRAY, bg_color=Color.LTGRAY;
         if (ThemeUtil.isLightThemeUsed(a)) {
             fg_color=Color.WHITE;
@@ -287,13 +352,7 @@ public class CommonDialog {
         drawable.setCornerRadius(11);
         drawable.setColor(bg_color);
         custom_toast_view.setBackground(drawable);
-        toast.setView( custom_toast_view );
-        toast.setDuration( duration );
-        toast.setGravity(Gravity.BOTTOM, 0, (int)CommonDialog.toPixel(a.getResources(), 100));
-
-        return toast;
     }
-
 
 //	public void fileOnlySelectWithCreate(String lurl, String ldir,
 //			String file_name,String dlg_title, NotifyEvent ntfy) {
