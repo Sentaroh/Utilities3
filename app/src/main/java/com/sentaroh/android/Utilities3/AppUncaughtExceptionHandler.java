@@ -43,12 +43,14 @@ public class AppUncaughtExceptionHandler implements Thread.UncaughtExceptionHand
         try {
             if (!mCrashing) {
                 mCrashing = true;
-                String strace=getStackTrace(ex);
+                String strace = getStackTrace(ex);
                 invokeActivity(strace);
                 appUniqueProcess(ex, strace);
             } else {
-                Log.v("AppUncaughtExceptionHandler","Second crash detected.");
+                Log.v("AppUncaughtExceptionHandler", "Second crash detected.");
             }
+        } catch(Exception e) {
+            e.printStackTrace();
         } finally {
             defaultUEH.uncaughtException(thread, ex);
         }
