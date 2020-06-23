@@ -27,8 +27,11 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Spannable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +66,7 @@ public class MessageDialogFragment extends DialogFragment {
 	private boolean terminateRequired=true;
 
     private String mDialogTitleType="", mDialogTitle="",mDialogMsgText="", mDialogButtonOkText="", mDialogButtonCancelText="";
+    private Spannable mDialogMsgSpannable=null;
 	private boolean mDialogTypeNegative=false;
 	
 	private NotifyEvent mNotifyEvent=null;
@@ -71,7 +75,6 @@ public class MessageDialogFragment extends DialogFragment {
 
 	public static MessageDialogFragment newInstance(
             boolean negative, String type, String title, String msgtext) {
-//		log.debug("newInstance sub="+title+", msg="+msgtext);
         MessageDialogFragment frag = new MessageDialogFragment();
         Bundle bundle = new Bundle();
 
@@ -139,8 +142,10 @@ public class MessageDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (mDebugEnabled) log.debug("onCreateView terminateRequired="+terminateRequired);
     	View view=super.onCreateView(inflater, container, savedInstanceState);
-    	CommonDialog.setDlgBoxSizeCompact(mDialog);
-    	return view;
+//    	CommonDialog.setDlgBoxSizeCompact(mDialog);
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        mDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        return view;
     };
 
     @Override
@@ -252,7 +257,11 @@ public class MessageDialogFragment extends DialogFragment {
     		});
 		}
     };
-    
+
+    private NonWordwrapTextView mCustomTextView=null;
+    private int mMessageTextColor=-1;
+    private boolean mWordWrap =false;
+
     private void initViewWidget() {
         if (mDebugEnabled) log.debug("initViewWidget enterd");
 
@@ -260,38 +269,47 @@ public class MessageDialogFragment extends DialogFragment {
 
     	ImageView title_icon=(ImageView)mDialog.findViewById(R.id.common_dialog_icon);
         NonWordwrapTextView title=(NonWordwrapTextView)mDialog.findViewById(R.id.common_dialog_title);
+        title.setWordWrapEnabled(true);
     	LinearLayout title_view=(LinearLayout)mDialog.findViewById(R.id.common_dialog_title_view);
     	title_view.setBackgroundColor(mThemeColorList.title_background_color);
     	ScrollView msg_view=(ScrollView)mDialog.findViewById(R.id.common_dialog_msg_view);
-//    	msg_view.setBackgroundColor(mThemeColorList.dialog_msg_background_color);
-    	
+    	msg_view.setBackgroundColor(Color.DKGRAY);
+
     	LinearLayout btn_view=(LinearLayout)mDialog.findViewById(R.id.common_dialog_btn_view);
-//    	btn_view.setBackgroundColor(mThemeColorList.dialog_msg_background_color);
-    	
+        btn_view.setBackgroundColor(Color.DKGRAY);
+
+        TextView msg_text=(TextView)mDialog.findViewById(R.id.common_dialog_msg);
+        msg_text.setVisibility(TextView.GONE);
+        mCustomTextView=(NonWordwrapTextView)mDialog.findViewById(R.id.common_dialog_custom_text_view);
+        mCustomTextView.setWordWrapEnabled(mWordWrap);
+//        mCustomTextView.setBackgroundColor(Color.DKGRAY);
+
+        mCustomTextView.setTextColor(Color.LTGRAY);
 		if (mDialogTitleType.equals("I")) {
 			title_icon.setImageResource(R.drawable.dialog_information);
-//			title.setTextColor(mThemeColorList.text_color_info);
+			title.setTextColor(Color.WHITE);
+//            mCustomTextView.setTextColor(Color.LTGRAY);
 		} else if (mDialogTitleType.equals("W")) {
 			title_icon.setImageResource(R.drawable.dialog_warning);
-//			title.setTextColor(Color.YELLOW);
+			title.setTextColor(Color.YELLOW);
+//            mCustomTextView.setTextColor(Color.YELLOW);
 		} else if (mDialogTitleType.equals("E")) {
 			title_icon.setImageResource(R.drawable.dialog_error);
-//			title.setTextColor(mThemeColorList.text_color_error);
+            title.setTextColor(Color.RED);
+//            mCustomTextView.setTextColor(Color.RED);
 		}
-		title.setTextColor(mThemeColorList.title_text_color);
 		title.setText(mDialogTitle);
 //		title.setDebugEnable(true);
-        TextView msg_text=(TextView)mDialog.findViewById(R.id.common_dialog_msg);
-		msg_text.setVisibility(TextView.GONE);
-        NonWordwrapTextView cust_msg_text=(NonWordwrapTextView)mDialog.findViewById(R.id.common_dialog_custom_text_view);
+        if (mMessageTextColor!=-1) mCustomTextView.setTextColor(mMessageTextColor);
 //        cust_msg_text.setDebugEnable(true);
-        cust_msg_text.setVisibility(TextView.VISIBLE);
+        mCustomTextView.setVisibility(TextView.VISIBLE);
 //        cust_msg_text.setWordWrapEnabled(true);
-		if (mDialogMsgText.equals("")) cust_msg_text.setVisibility(View.GONE);
+		if (mDialogMsgText.equals("") && mDialogMsgSpannable==null) mCustomTextView.setVisibility(View.GONE);
 		else {
-            cust_msg_text.setText(mDialogMsgText);
-            cust_msg_text.invalidate();
-            cust_msg_text.requestLayout();
+		    if (mDialogMsgSpannable!=null) mCustomTextView.setText(mDialogMsgSpannable);
+            else mCustomTextView.setText(mDialogMsgText);
+            mCustomTextView.invalidate();
+            mCustomTextView.requestLayout();
 //            msg_view.invalidate();
 //            msg_view.requestLayout();
 //			msg_text.setTextColor(mThemeColorList.text_color_primary);
@@ -338,6 +356,22 @@ public class MessageDialogFragment extends DialogFragment {
 //	    ft.commitAllowingStateLoss();
 ////      show(fm, "MessageDialogFragment");
 //    };
+
+    public void setTextColor(int color) {
+        mMessageTextColor=color;
+    }
+
+    public void setMessageText(Spannable msg_text) {
+        mDialogMsgSpannable=msg_text;
+    }
+
+    public void setMessageText(String msg_text) {
+        mDialogMsgText=msg_text;
+    }
+
+    public void setWordWrapEanbled(boolean enabled) {
+        mWordWrap =enabled;
+    }
 
     public void showDialog(boolean debug, FragmentManager fm, Fragment frag, NotifyEvent ntfy) {
         mDebugEnabled=debug;

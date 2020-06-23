@@ -72,6 +72,13 @@ public class CommonDialog {
         cdf.showDialog(mFragMgr,cdf,ntfy);
 	};
 
+    static public void showCommonDialog(FragmentManager fm,
+            final boolean negative, String type, String title, String msgtext,
+            final NotifyEvent ntfy) {
+        MessageDialogFragment cdf =MessageDialogFragment.newInstance(negative, type, title, msgtext);
+        cdf.showDialog(fm,cdf,ntfy);
+    };
+
     static public Dialog showProgressSpinIndicator(Activity a) {
         final Dialog dialog=new Dialog(a, android.R.style.Theme_Translucent);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
