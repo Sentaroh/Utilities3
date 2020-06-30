@@ -63,7 +63,7 @@ public class ContextButtonUtil {
         ib.setOnLongClickListener(new OnLongClickListener(){
             @Override
             public boolean onLongClick(View v) {
-                CommonDialog.showPopupMessageAsUpAnchorView(a, ib, label, 3);
+                CommonDialog.showPopupMessageAsUpAnchorView(a, ib, label, 2);
                 return true;
             }
         });
