@@ -314,17 +314,17 @@ public class CommonDialog {
         setToastMessageView(a, custom_toast_view, toast_message);
         final PopupWindow popupWindow = new PopupWindow();
 
-//        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if(event.getAction() == MotionEvent.ACTION_OUTSIDE) {
-//                    popupWindow.dismiss();
-//                    return false;
-//                }
-//                return false;
-//            }
-//        });
-//        popupWindow.setTouchable(true);
-        popupWindow.setFocusable(true);
+        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                    popupWindow.dismiss();
+                    return false;
+                }
+                return false;
+            }
+        });
+        popupWindow.setTouchable(true);
+        popupWindow.setFocusable(false);
         popupWindow.setOutsideTouchable(true);
 
         popupWindow.setWindowLayoutMode(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
