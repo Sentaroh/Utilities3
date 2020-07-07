@@ -8,7 +8,7 @@
         <string name="msgs_file_select_edit_dlg_cancel">Отменить</string>
         <string name="msgs_file_select_edit_dlg_filename">Имя файла</string>
         <string name="msgs_file_select_edit_dlg_dir_name">Название каталога</string>
-        <string name="msgs_file_select_edit_dlg_dir_created">%создал</string>
+        <string name="msgs_file_select_edit_dlg_dir_created">%s создал</string>
         <string name="msgs_file_select_edit_dlg_dir_not_created">%s не удалось создать</string>
         <string name="msgs_file_select_edit_dlg_dir_create_file">Создать новый файл</string>
         <string name="msgs_file_select_edit_dlg_filename_not_specified">Имя файла не указано</string>
@@ -16,7 +16,7 @@
         <string name="msgs_file_select_edit_dlg_directory_not_selected">Каталог не выбран</string>
         <string name="msgs_single_item_input_dlg_title">Создать каталог</string>
         <string name="msgs_single_item_input_dlg_duplicate_dir">Указанное имя уже существует.</string>
-        <string name="msgs_single_item_input_dlg_prohibit_access_directory">Доступ к каталогу запрещен. Каталог=%</string>
+        <string name="msgs_single_item_input_dlg_prohibit_access_directory">Доступ к каталогу запрещен. Каталог=%s</string>
         <string name="msgs_file_select_edit_dir_empty">--- Каталог пуст ---</string>
         <string name="msgs_file_select_edit_local_mount_point">Маунт-Пойнт</string>
         <string name="msgs_file_select_edit_parent_directory">Родительский каталог</string>
