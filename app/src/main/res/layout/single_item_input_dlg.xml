@@ -35,7 +35,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:text=""
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#ff0000" />
 
     <TextView
@@ -45,7 +45,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:text="a"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <CheckedTextView
         android:id="@+id/single_item_input_type"
