@@ -77,6 +77,12 @@ public class SafFile3 {
     public final static String SAF_FILE_PRIMARY_STORAGE_PREFIX="/storage/emulated/0";
     public final static String SAF_FILE_EXTERNAL_STORAGE_PREFIX="/storage/";
     public final static String SAF_FILE_DOCUMENT_TREE_URI_PREFIX="content://com.android.externalstorage.documents/tree/";
+
+    static public boolean isAllFileAccessAvailable() {
+        if (Build.VERSION.SDK_INT>=30) return true;
+        else return false;
+    }
+
     public SafFile3(Context context, String fpath) {
         if (fpath==null || fpath.length()==0) {
             putErrorMessage("SafFile3 build error, File path was empty");
@@ -89,8 +95,7 @@ public class SafFile3 {
             return;
         }
 //        long b_time=System.currentTimeMillis();
-        boolean all_file_access=false;
-        if (Build.VERSION.SDK_INT>=30) all_file_access=true;
+        boolean all_file_access=isAllFileAccessAvailable();
         mContext = context;
         String remove_redundant_separator=fpath;
         while(remove_redundant_separator.indexOf("//")>=0) {

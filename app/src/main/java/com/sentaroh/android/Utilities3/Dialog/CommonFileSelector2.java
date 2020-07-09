@@ -1295,7 +1295,6 @@ public class CommonFileSelector2 extends DialogFragment {
         } else {
             pd.show();
         }
-        final String prohibit_directory=getProhibitAccessDirectory(target_dir.getPath()).toLowerCase();
         Thread th=new Thread(){
             @Override
             public void run() {
@@ -1328,7 +1327,7 @@ public class CommonFileSelector2 extends DialogFragment {
                                 if (!fileOnly) {
                                     if (ff[i].isDirectory()) {
                                         if (!isAndroidVersion30orUp() ||
-                                                (isAndroidVersion30orUp() && !(ff[i].getPath()+"/").toLowerCase().startsWith(prohibit_directory))) {
+                                                (isAndroidVersion30orUp() && canAccessDirectory(ff[i].getPath()))) {
                                             tfl.add(tfi);
                                         }
                                     } else {
@@ -1337,7 +1336,7 @@ public class CommonFileSelector2 extends DialogFragment {
                                 } else {
                                     if (ff[i].isDirectory()) {
                                         if (!isAndroidVersion30orUp() ||
-                                                (isAndroidVersion30orUp() && !(ff[i].getPath()+"/").toLowerCase().startsWith(prohibit_directory))) {
+                                                (isAndroidVersion30orUp() && canAccessDirectory(ff[i].getPath()))) {
                                             tfl.add(tfi);
                                         }
                                     } else {
@@ -1364,10 +1363,34 @@ public class CommonFileSelector2 extends DialogFragment {
         th.start();
     }
 
-    private String getProhibitAccessDirectory(String fp) {
-        String prohibit_directory=getRootFilePath(fp)+"/Android/";
-        return prohibit_directory;
+    private boolean canAccessDirectory(String path) {
+        boolean result=true;
+        if (path.endsWith(".android_secure")) result=false;
+        else {
+            if (Build.VERSION.SDK_INT>=30) {
+                String[] fp_array=path.split("/");
+                if (path.startsWith("/storage/emulated/0")) {
+                    String abs_dir=path.replace("/storage/emulated/0", "");
+                    if (!abs_dir.equals("")) {
+                        if (abs_dir.startsWith("/Android/data") || abs_dir.startsWith("/Android/obb")) {
+                            result=false;
+                        }
+                    }
+                } else {
+                    if (fp_array.length>=3) {
+                        String abs_dir=path.replace("/"+fp_array[1]+"/"+fp_array[2], "");
+                        if (!abs_dir.equals("")) {
+                            if (abs_dir.startsWith("/Android/data") || abs_dir.startsWith("/Android/obb")) {
+                                result=false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return result;
     }
+
 
     private void  createSafApiFilelist(final boolean fileOnly, final SafFile3 target_dir, final NotifyEvent ntfy, final boolean show_pd_circle_delay) {
         final Dialog pd= CommonDialog.showProgressSpinIndicator(getActivity());
@@ -1576,8 +1599,7 @@ public class CommonFileSelector2 extends DialogFragment {
                 if (s.length()>0) {
                     String create_dir=removeRedundantDirectorySeparator(dir+"/"+s.toString());
                     if (isAndroidVersion30orUp()) {
-                        String prohibit_dir=getProhibitAccessDirectory(create_dir);
-                        if ((create_dir+"/").toLowerCase().startsWith(prohibit_dir.toLowerCase())) {
+                        if (canAccessDirectory(create_dir)) {
                             dlg_msg.setText(context.getString(R.string.msgs_single_item_input_dlg_prohibit_access_directory, s.toString()));
                             return;
                         }
