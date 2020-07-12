@@ -169,33 +169,18 @@ public class EncryptUtilV3 {
 		byte[] encrypted=null;
 		if (inStr!=null && ep!=null) {
 			try {
-		        MessageDigest md = MessageDigest.getInstance("MD5");
-		        md.reset();
-		        String time= Long.toString(System.currentTimeMillis());
-		        byte[] buffer = time.getBytes();
-		        md.update(buffer);
-		        byte[] digest = md.digest();
-		        String md_str=StringUtil.getHexString(digest, 0, 16).substring(0, 8)+inStr;
+//		        MessageDigest md = MessageDigest.getInstance("MD5");
+//		        md.reset();
+		        String time= String.valueOf(System.currentTimeMillis()).concat("12345678");
+//		        byte[] buffer = time.getBytes();
+//		        md.update(buffer);
+//		        byte[] digest = md.digest();
+		        String md_str=time.substring(0, 8)+inStr;
 
 				Cipher cipher= Cipher.getInstance(ALGORITM);
 				cipher.init(Cipher.ENCRYPT_MODE, ep.key,ep.iv);
 				encrypted = cipher.doFinal(md_str.getBytes());
-			} catch (IllegalBlockSizeException e) {
-				e.printStackTrace();
-                log.error("encrypt error.", e);
-			} catch (BadPaddingException e) {
-				e.printStackTrace();
-                log.error("encrypt error.", e);
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-                log.error("encrypt error.", e);
-			} catch (NoSuchPaddingException e) {
-				e.printStackTrace();
-                log.error("encrypt error.", e);
-			} catch (InvalidKeyException e) {
-				e.printStackTrace();
-                log.error("encrypt error.", e);
-			} catch (InvalidAlgorithmParameterException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
                 log.error("encrypt error.", e);
 			}
@@ -216,23 +201,8 @@ public class EncryptUtilV3 {
 				if (decrypted_array!=null) {
 					decrypted_data = (new String(decrypted_array)).substring(8);
 				}
-			} catch (IllegalBlockSizeException e) {
-				e.printStackTrace();
-                log.error("decrypt error.", e);
-			} catch (BadPaddingException e) {
-//				e.printStackTrace();
-                log.error("decrypt error.", e);
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-                log.error("decrypt error.", e);
-			} catch (NoSuchPaddingException e) {
-				e.printStackTrace();
-                log.error("decrypt error.", e);
-			} catch (InvalidKeyException e) {
-				e.printStackTrace();
-                log.error("decrypt error.", e);
-			} catch (InvalidAlgorithmParameterException e) {
-				e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
                 log.error("decrypt error.", e);
 			}
 		}
