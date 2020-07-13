@@ -29,6 +29,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 
@@ -147,7 +148,8 @@ public class EncryptUtilV3 {
                 }
                 KeySpec keySpec = null;
                 keySpec = new PBEKeySpec(password, salt, 1024, 256);
-				factory = SecretKeyFactory.getInstance("PBEWITHSHAAND256BITAES-CBC-BC");
+//				factory = SecretKeyFactory.getInstance("PBEWITHSHAAND256BITAES-CBC-BC");
+                factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
 				secretKey = factory.generateSecret(keySpec);
 			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
