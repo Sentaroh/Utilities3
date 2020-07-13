@@ -49,7 +49,7 @@ public class ThemeUtil {
         tcd.text_color_primary=0xff000000;
         tcd.text_color_disabled= Color.LTGRAY;
 //        tcd.text_color_dialog_title=0xffffffff;
-        tcd.text_background_color=0xffe8e8e8;//0xffc0c0c0;
+        tcd.text_background_color=0xffffffff;//0xffe8e8e8;//0xffc0c0c0;
 //        if (Build.VERSION.SDK_INT>=21) {
 //            tcd.dialog_title_background_color=0xff303030;//515151;
 //            tcd.dialog_msg_background_color=0xffc0c0c0;
@@ -76,7 +76,7 @@ public class ThemeUtil {
 //        tcd.text_color_dialog_title=0xffffffff;
 //        tcd.dialog_title_background_color=0xff303030;//515151;
 //        tcd.dialog_msg_background_color=0xff303030;
-        tcd.text_background_color=0xff303030;
+        tcd.text_background_color=0xff444444;//0xff303030;
 //        tcd.window_background_color_content=0xff303030;
         tcd.text_color_warning= Color.YELLOW;
 //

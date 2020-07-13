@@ -267,16 +267,21 @@ public class MessageDialogFragment extends DialogFragment {
 
     	mDialog.setContentView(R.layout.common_dialog);
 
+
+        LinearLayout dlg_view=(LinearLayout)mDialog.findViewById(R.id.common_dialog_view);
+        dlg_view.setBackgroundColor(mThemeColorList.text_background_color);
+//        if (mThemeColorList.theme_is_light) dlg_view.setBackgroundColor(Color.parseColor("#ffffff"));
+//        else dlg_view.setBackgroundColor(Color.parseColor("#444444"));
     	ImageView title_icon=(ImageView)mDialog.findViewById(R.id.common_dialog_icon);
         NonWordwrapTextView title=(NonWordwrapTextView)mDialog.findViewById(R.id.common_dialog_title);
         title.setWordWrapEnabled(true);
     	LinearLayout title_view=(LinearLayout)mDialog.findViewById(R.id.common_dialog_title_view);
     	title_view.setBackgroundColor(mThemeColorList.title_background_color);
     	ScrollView msg_view=(ScrollView)mDialog.findViewById(R.id.common_dialog_msg_view);
-    	msg_view.setBackgroundColor(Color.DKGRAY);
+//    	msg_view.setBackgroundColor(mThemeColorList.text_background_color);
 
     	LinearLayout btn_view=(LinearLayout)mDialog.findViewById(R.id.common_dialog_btn_view);
-        btn_view.setBackgroundColor(Color.DKGRAY);
+//        btn_view.setBackgroundColor(mThemeColorList.text_background_color);
 
         TextView msg_text=(TextView)mDialog.findViewById(R.id.common_dialog_msg);
         msg_text.setVisibility(TextView.GONE);
@@ -284,7 +289,7 @@ public class MessageDialogFragment extends DialogFragment {
         mCustomTextView.setWordWrapEnabled(mWordWrap);
 //        mCustomTextView.setBackgroundColor(Color.DKGRAY);
 
-        mCustomTextView.setTextColor(Color.LTGRAY);
+//        mCustomTextView.setTextColor(Color.LTGRAY);
 		if (mDialogTitleType.equals("I")) {
 			title_icon.setImageResource(R.drawable.dialog_information);
 			title.setTextColor(Color.WHITE);
