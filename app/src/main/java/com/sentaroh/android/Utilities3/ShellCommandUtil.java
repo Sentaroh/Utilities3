@@ -92,7 +92,8 @@ public class ShellCommandUtil {
 	    return result;
 	};
 
-	public static String executeShellCommand(String cmd) throws IOException, InterruptedException {
+	public static String executeShellCommand(String[] cmd) throws IOException, InterruptedException {
+//      String resp= executeShellCommand(new String[]{"/bin/sh", "-c", "mount | grep "+uuid});
 		String result=null;
 		Process p = Runtime.getRuntime().exec(cmd);
 		BufferedReader std_out = new BufferedReader(new InputStreamReader(p.getInputStream()));

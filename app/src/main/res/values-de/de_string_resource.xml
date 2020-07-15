@@ -29,10 +29,12 @@
         <string name="msgs_common_dialog_information">Informationen</string>
         <string name="msgs_common_dialog_warning">Warnhinweis</string>
         <string name="msgs_common_dialog_error">Fehler</string>
+        <string name="msgs_common_dialog_danger">Gefährlich</string>
         <string name="msgs_common_dialog_ok">OK</string>
         <string name="msgs_common_dialog_cancel">Abbrechen</string>
         <string name="msgs_common_dialog_canceling">Stornierung von</string>
         <string name="msgs_common_dialog_save">Speichern</string>
+        <string name="msgs_common_dialog_confirm">Bestätigen Sie</string>
         <string name="msgs_common_dialog_add">hinzufugen</string>
         <string name="msgs_common_dialog_search">Suche</string>
         <string name="msgs_common_dialog_close">schliesen</string>

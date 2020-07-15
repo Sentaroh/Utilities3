@@ -29,10 +29,12 @@
         <string name="msgs_common_dialog_information">信息</string>
         <string name="msgs_common_dialog_warning">Warnning</string>
         <string name="msgs_common_dialog_error">错误</string>
+        <string name="msgs_common_dialog_danger">危险</string>
         <string name="msgs_common_dialog_ok">好的</string>
         <string name="msgs_common_dialog_cancel">取消</string>
         <string name="msgs_common_dialog_canceling">取消</string>
         <string name="msgs_common_dialog_save">拯救</string>
+        <string name="msgs_common_dialog_confirm">確認</string>
         <string name="msgs_common_dialog_add">添加</string>
         <string name="msgs_common_dialog_search">搜索</string>
         <string name="msgs_common_dialog_close">关闭</string>

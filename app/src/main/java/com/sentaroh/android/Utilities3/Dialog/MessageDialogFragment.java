@@ -262,6 +262,11 @@ public class MessageDialogFragment extends DialogFragment {
     private int mMessageTextColor=-1;
     private boolean mWordWrap =false;
 
+    final static public String CATEGORY_INFO="I";
+    final static public String CATEGORY_WARN="W";
+    final static public String CATEGORY_ERROR="E";
+    final static public String CATEGORY_DANGER="D";
+
     private void initViewWidget() {
         if (mDebugEnabled) log.debug("initViewWidget enterd");
 
@@ -290,19 +295,25 @@ public class MessageDialogFragment extends DialogFragment {
 //        mCustomTextView.setBackgroundColor(Color.DKGRAY);
 
 //        mCustomTextView.setTextColor(Color.LTGRAY);
-		if (mDialogTitleType.equals("I")) {
-			title_icon.setImageResource(R.drawable.dialog_information);
-			title.setTextColor(Color.WHITE);
-//            mCustomTextView.setTextColor(Color.LTGRAY);
-		} else if (mDialogTitleType.equals("W")) {
+		if (mDialogTitleType.equalsIgnoreCase(CATEGORY_WARN)) {
 			title_icon.setImageResource(R.drawable.dialog_warning);
 			title.setTextColor(Color.YELLOW);
-//            mCustomTextView.setTextColor(Color.YELLOW);
-		} else if (mDialogTitleType.equals("E")) {
+            mCustomTextView.setTextColor(mThemeColorList.text_color_warning);
+		} else if (mDialogTitleType.equalsIgnoreCase(CATEGORY_ERROR)) {
 			title_icon.setImageResource(R.drawable.dialog_error);
             title.setTextColor(Color.RED);
-//            mCustomTextView.setTextColor(Color.RED);
-		}
+            mCustomTextView.setTextColor(mThemeColorList.text_color_error);
+        } else if (mDialogTitleType.equalsIgnoreCase(CATEGORY_DANGER)) {
+            title_icon.setImageResource(R.drawable.dialog_error);
+            title.setTextColor(Color.RED);
+            msg_view.setBackgroundColor(mThemeColorList.title_background_color);
+            btn_view.setBackgroundColor(mThemeColorList.title_background_color);
+            msg_text.setTextColor(mThemeColorList.text_color_error);
+            mCustomTextView.setTextColor(mThemeColorList.text_color_error);
+		} else {
+            title_icon.setImageResource(R.drawable.dialog_information);
+            title.setTextColor(Color.WHITE);
+        }
 		title.setText(mDialogTitle);
 //		title.setDebugEnable(true);
         if (mMessageTextColor!=-1) mCustomTextView.setTextColor(mMessageTextColor);
