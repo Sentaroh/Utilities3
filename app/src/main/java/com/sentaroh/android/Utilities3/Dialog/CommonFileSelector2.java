@@ -1330,8 +1330,8 @@ public class CommonFileSelector2 extends DialogFragment {
                                                 (isAndroidVersion30orUp() && canAccessDirectory(ff[i].getPath()))) {
                                             tfl.add(tfi);
                                         }
-                                    } else {
-                                        tfl.add(tfi);
+//                                    } else {
+//                                        tfl.add(tfi);
                                     }
                                 } else {
                                     if (ff[i].isDirectory()) {
