@@ -297,8 +297,9 @@ public class MessageDialogFragment extends DialogFragment {
 //        mCustomTextView.setTextColor(Color.LTGRAY);
 		if (mDialogTitleType.equalsIgnoreCase(CATEGORY_WARN)) {
 			title_icon.setImageResource(R.drawable.dialog_warning);
-			title.setTextColor(Color.YELLOW);
-            mCustomTextView.setTextColor(mThemeColorList.text_color_warning);
+            title.setTextColor(Color.WHITE);
+//			title.setTextColor(Color.YELLOW);
+            mCustomTextView.setTextColor(mThemeColorList.text_color_primary);
 		} else if (mDialogTitleType.equalsIgnoreCase(CATEGORY_ERROR)) {
 			title_icon.setImageResource(R.drawable.dialog_error);
             title.setTextColor(Color.RED);
