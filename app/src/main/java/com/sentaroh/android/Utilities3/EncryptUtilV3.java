@@ -82,28 +82,28 @@ public class EncryptUtilV3 {
 		public SecretKey key=null;
 	}
 
-	public static CipherParms initEncryptEnv(String passwd) {
+//	public static CipherParms initEncryptEnv(String passwd) {
+//		CipherParms ep=new CipherParms();
+//		ep.iv=generateInitializationVector(passwd);
+//		ep.key=generateKey(passwd);
+//		return ep;
+//	}
+//
+//    public static CipherParms initEncryptEnv(SecretKey skey, String seed) {
+//        CipherParms ep=new CipherParms();
+//        ep.iv=generateInitializationVector(seed);
+//        ep.key=skey;
+//        return ep;
+//    }
+//
+    public static CipherParms initCipherEnv(String passwd) {
 		CipherParms ep=new CipherParms();
 		ep.iv=generateInitializationVector(passwd);
 		ep.key=generateKey(passwd);
 		return ep;
 	}
 
-    public static CipherParms initEncryptEnv(SecretKey skey, String seed) {
-        CipherParms ep=new CipherParms();
-        ep.iv=generateInitializationVector(seed);
-        ep.key=skey;
-        return ep;
-    }
-
-    public static CipherParms initDecryptEnv(String passwd) {
-		CipherParms ep=new CipherParms();
-		ep.iv=generateInitializationVector(passwd);
-		ep.key=generateKey(passwd);
-		return ep;
-	}
-
-    public static CipherParms initDecryptEnv(SecretKey skey, String seed) {
+    public static CipherParms initCipherEnv(SecretKey skey, String seed) {
         CipherParms ep=new CipherParms();
         ep.iv=generateInitializationVector(seed);
         ep.key=skey;
