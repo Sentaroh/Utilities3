@@ -75,6 +75,7 @@ public class CommonLogWriter {
         if (action!=null) {
             if (!mLogWriterStopped) {
                 if (logThread==null) {
+//                    Thread.dumpStack();
                     logThread=new Thread(){
                         @Override
                         public void run() {
@@ -192,7 +193,7 @@ public class CommonLogWriter {
         } else if (msg_action.equals(mCgp.getLogIntentRotate())) {
             rotateLogFileForce(c);
         } else if (msg_action.equals(mCgp.getLogIntentFlush())) {
-            Log.v(mCgp.getApplicationTag(), "flush log file entered. printWriter="+printWriter+", enabled="+log_enabled);
+//            Log.v(mCgp.getApplicationTag(), "flush log file entered. enabled="+log_enabled);
             if (printWriter!=null) {
                 printWriter.flush();
             }

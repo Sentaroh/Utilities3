@@ -171,15 +171,9 @@ public class EncryptUtilV3 {
 		byte[] encrypted=null;
 		if (inStr!=null && ep!=null) {
 			try {
-//		        MessageDigest md = MessageDigest.getInstance("MD5");
-//		        md.reset();
 		        String time= String.valueOf(System.currentTimeMillis()).concat("12345678");
-//		        byte[] buffer = time.getBytes();
-//		        md.update(buffer);
-//		        byte[] digest = md.digest();
-		        String md_str=time.substring(0, 8)+inStr;
-
-				Cipher cipher= Cipher.getInstance(ALGORITM);
+		        String md_str=time.substring(0, 8).concat(inStr);
+                Cipher cipher= Cipher.getInstance(ALGORITM);
 				cipher.init(Cipher.ENCRYPT_MODE, ep.key,ep.iv);
 				encrypted = cipher.doFinal(md_str.getBytes());
 			} catch (Exception e) {
