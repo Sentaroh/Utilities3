@@ -210,6 +210,11 @@ public class SafManager3 {
         return mStorageVolumeInfoList;
     }
 
+    public boolean isAllFileAccessMode() {
+        if (Build.VERSION.SDK_INT>=30) return true;
+        else return false;
+    }
+
     private ArrayList<SafStorage3> buildSafFileList() {
         ArrayList<SafStorage3> saf_list=new ArrayList<SafStorage3>();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -249,7 +254,8 @@ public class SafManager3 {
                                 sli.uuid=item_svi.uuid;
                                 sli.saf_file=rt;
                                 sli.appMountpoint=rt.getPath();
-                                sli.isSafFile=true;
+                                if (isAllFileAccessMode()) sli.isSafFile=false;
+                                else sli.isSafFile=true;
                                 sli.appDirectory=getAppSpecificDirectory(mContext,  item_svi.uuid);
                                 saf_list.add(sli);
                             }
