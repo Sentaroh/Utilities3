@@ -547,16 +547,8 @@ public class CommonLogManagementFragment extends DialogFragment {
 		btn_preview.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
-				Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 try {
-                    if (Build.VERSION.SDK_INT>=24) {
-                        Uri uri= FileProvider.getUriForFile(mContext, mClog.getLogFileProviderAuth(), new File(getTempLogFilePath()));
-                        intent.setDataAndType(uri, "text/plain");
-                    } else {
-                        intent.setDataAndType(Uri.parse("file://"+getTempLogFilePath()), "text/plain");
-                    }
-                    startActivity(intent);
+                    startLogfileViewerIntent(mContext, getTempLogFilePath());
                 } catch (ActivityNotFoundException e) {
                     CommonDialog mCommonDlg=new CommonDialog(getActivity(), getActivity().getSupportFragmentManager());
                     mCommonDlg.showCommonDialog(false, "E",
@@ -597,6 +589,18 @@ public class CommonLogManagementFragment extends DialogFragment {
 		dialog.show();
 
 	};
+
+	public void startLogfileViewerIntent(Context c, String fpath) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        if (Build.VERSION.SDK_INT>=24) {
+            Uri uri= FileProvider.getUriForFile(mContext, mClog.getLogFileProviderAuth(), new File(getTempLogFilePath()));
+            intent.setDataAndType(uri, "text/plain");
+        } else {
+            intent.setDataAndType(Uri.parse("file://"+getTempLogFilePath()), "text/plain");
+        }
+        startActivity(intent);
+    }
 
     private void getProblemDescription(final String fp) {
         final Dialog dialog = new Dialog(getActivity());
@@ -997,12 +1001,7 @@ public class CommonLogManagementFragment extends DialogFragment {
 //				    intent.setType("message/rfc822");  
 //				    intent.setType("text/plain");
 				    intent.setType("application/zip");
-                    Uri uri=null;
-                    if (Build.VERSION.SDK_INT>=24) {
-                        uri= FileProvider.getUriForFile(mContext, mClog.getLogFileProviderAuth(), new File(mClog.getLogDirName()+"/"+mClog.getLogFileName()+".txt"));
-                    } else {
-                        uri=Uri.parse("file://"+mClog.getLogDirName()+"/"+mClog.getLogFileName()+".txt");
-                    }
+                    Uri uri=createLogFileUri(mContext, mClog.getLogDirName()+"/"+mClog.getLogFileName()+".txt");
 				    intent.putExtra(Intent.EXTRA_STREAM, uri);
 				    mFragment.getActivity().startActivity(intent);
 
@@ -1029,7 +1028,17 @@ public class CommonLogManagementFragment extends DialogFragment {
 		};
 		th.start();
     };
-    
+
+    public Uri createLogFileUri(Context c, String fpath) {
+        Uri uri=null;
+        if (Build.VERSION.SDK_INT>=24) {
+            uri= FileProvider.getUriForFile(mContext, mClog.getLogFileProviderAuth(), new File(fpath));
+        } else {
+            uri=Uri.parse("file://"+fpath);
+        }
+        return uri;
+    }
+
     private void confirmDeleteLogFile() {
     	String delete_list="",sep="";
     	final ArrayList<String> file_path_list=new ArrayList<String>();
