@@ -219,6 +219,11 @@ public class SafFile3 {
         }
     }
 
+    public InputStream getInputStreamByUri() throws Exception {
+        if (isBuildError()) throw new Exception("Build error detected");
+        return mContext.getContentResolver().openInputStream(getUri());
+    }
+
     public OutputStream getOutputStream() throws Exception {
         if (isBuildError()) throw new Exception("Build error detected");
         if (mSafFile) {
