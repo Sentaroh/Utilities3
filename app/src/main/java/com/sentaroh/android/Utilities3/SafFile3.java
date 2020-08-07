@@ -47,8 +47,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
-import static com.sentaroh.android.Utilities3.SafManager3.SCOPED_STORAGE_SDK;
-
 public class SafFile3 {
     private Context mContext;
     private Uri mUri;
@@ -109,48 +107,31 @@ public class SafFile3 {
         }
         String user_path_seg="";
         String rebuild_path="";
-        if (Build.VERSION.SDK_INT>=SCOPED_STORAGE_SDK) {
+        if (all_file_access) {
             if (reformed_fp.startsWith(SAF_FILE_PRIMARY_STORAGE_PREFIX)) {
-                user_path_seg = reformed_fp.replace(SAF_FILE_PRIMARY_STORAGE_PREFIX, "");
+                user_path_seg=reformed_fp.replace(SAF_FILE_PRIMARY_STORAGE_PREFIX,"");
                 rebuild_path=reformed_fp;
+                buildOsFile(rebuild_path, user_path_seg);
             } else {
-                if (reformed_fp.startsWith(SAF_FILE_EXTERNAL_STORAGE_PREFIX)) {
-                    String[] path_array=reformed_fp.split("/");
-                    String t_uuid=path_array.length>=3?path_array[2]:"";
-                    String t_user_path_seg=reformed_fp.replace("/"+path_array[1]+"/"+t_uuid,"");
-                    user_path_seg=t_user_path_seg.startsWith("/")?t_user_path_seg.substring(1):t_user_path_seg;
-                    rebuild_path=reformed_fp;
-                }
+                String[] path_array=reformed_fp.split("/");
+                String t_uuid=path_array.length>=3?path_array[2]:"";
+                String t_user_path_seg=reformed_fp.replace("/"+path_array[1]+"/"+t_uuid,"");
+                user_path_seg=t_user_path_seg.startsWith("/")?t_user_path_seg.substring(1):t_user_path_seg;
+                rebuild_path=reformed_fp;
+                buildOsFile(rebuild_path, user_path_seg);
             }
-
-            buildSafStorage(rebuild_path, user_path_seg);
         } else {
-            if (all_file_access) {
-                if (reformed_fp.startsWith(SAF_FILE_PRIMARY_STORAGE_PREFIX)) {
-                    user_path_seg=reformed_fp.replace(SAF_FILE_PRIMARY_STORAGE_PREFIX,"");
-                    rebuild_path=reformed_fp;
-                    buildOsFile(rebuild_path, user_path_seg);
-                } else {
-                    String[] path_array=reformed_fp.split("/");
-                    String t_uuid=path_array.length>=3?path_array[2]:"";
-                    String t_user_path_seg=reformed_fp.replace("/"+path_array[1]+"/"+t_uuid,"");
-                    user_path_seg=t_user_path_seg.startsWith("/")?t_user_path_seg.substring(1):t_user_path_seg;
-                    rebuild_path=reformed_fp;
-                    buildOsFile(rebuild_path, user_path_seg);
-                }
+            if (reformed_fp.startsWith(SAF_FILE_PRIMARY_STORAGE_PREFIX)) {
+                user_path_seg=reformed_fp.replace(SAF_FILE_PRIMARY_STORAGE_PREFIX,"");
+                rebuild_path=reformed_fp;
+                buildOsFile(rebuild_path, user_path_seg);
             } else {
-                if (reformed_fp.startsWith(SAF_FILE_PRIMARY_STORAGE_PREFIX)) {
-                    user_path_seg=reformed_fp.replace(SAF_FILE_PRIMARY_STORAGE_PREFIX,"");
-                    rebuild_path=reformed_fp;
-                    buildOsFile(rebuild_path, user_path_seg);
-                } else {
-                    String[] path_array=reformed_fp.split("/");
-                    String t_uuid=path_array.length>=3?path_array[2]:"";
-                    String t_user_path_seg=reformed_fp.replace("/"+path_array[1]+"/"+t_uuid,"");
-                    user_path_seg=t_user_path_seg.startsWith("/")?t_user_path_seg.substring(1):t_user_path_seg;
-                    rebuild_path=reformed_fp;
-                    buildSafStorage(rebuild_path, user_path_seg);
-                }
+                String[] path_array=reformed_fp.split("/");
+                String t_uuid=path_array.length>=3?path_array[2]:"";
+                String t_user_path_seg=reformed_fp.replace("/"+path_array[1]+"/"+t_uuid,"");
+                user_path_seg=t_user_path_seg.startsWith("/")?t_user_path_seg.substring(1):t_user_path_seg;
+                rebuild_path=reformed_fp;
+                buildSafStorage(rebuild_path, user_path_seg);
             }
         }
     }
@@ -271,14 +252,13 @@ public class SafFile3 {
             mBuildError=true;
             return;
         }
-        boolean all_file_access=false;
-        if (Build.VERSION.SDK_INT>=30) all_file_access=true;
+
+        boolean all_file_access=isAllFileAccessAvailable();
 
         if (all_file_access) {
             buildSafFileLegacyStorage(c, uri, null, all_file_access);
         } else {
-            if (Build.VERSION.SDK_INT>=SCOPED_STORAGE_SDK) buildSafFileScopedStorage(c, uri, null);
-            else buildSafFileLegacyStorage(c, uri, null, all_file_access);
+            buildSafFileLegacyStorage(c, uri, null, all_file_access);
         }
     }
 
@@ -293,14 +273,12 @@ public class SafFile3 {
             mBuildError=true;
             return;
         }
-        boolean all_file_access=false;
-        if (Build.VERSION.SDK_INT>=30) all_file_access=true;
+        boolean all_file_access=isAllFileAccessAvailable();
 
         if (all_file_access) {
             buildSafFileLegacyStorage(c, uri, null, all_file_access);
         } else {
-            if (Build.VERSION.SDK_INT>=SCOPED_STORAGE_SDK) buildSafFileScopedStorage(c, uri, name);
-            else buildSafFileLegacyStorage(c, uri, name, all_file_access);
+            buildSafFileLegacyStorage(c, uri, name, all_file_access);
         }
     }
 

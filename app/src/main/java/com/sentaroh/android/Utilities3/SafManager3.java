@@ -89,12 +89,12 @@ public class SafManager3 {
         //NOP
     }
 
-    public static final int SCOPED_STORAGE_SDK=99;
+    public static final int SCOPED_STORAGE_SDKX=99;
     public SafManager3(Context c) {
         mContext=c;
         baseMp= Environment.getExternalStorageDirectory().getPath();
 
-        if (Build.VERSION.SDK_INT>=SCOPED_STORAGE_SDK) {
+        if (Build.VERSION.SDK_INT>=SCOPED_STORAGE_SDKX) {
             mScopedStorageMode=true;//!Environment.isExternalStorageLegacy();
 //            Log.v("Utilities2","mScopedStorageMode="+mScopedStorageMode+", env="+Environment.isExternalStorageLegacy());
         }
@@ -157,7 +157,7 @@ public class SafManager3 {
         SafFile3 rt=null;
         boolean result=false;
         if (uuid.equals(SafFile3.SAF_FILE_PRIMARY_UUID)) {
-            if ( Build.VERSION.SDK_INT>=SafManager3.SCOPED_STORAGE_SDK) {
+            if ( Build.VERSION.SDK_INT>=SafManager3.SCOPED_STORAGE_SDKX) {
                 rt=SafFile3.fromTreeUri(c, Uri.parse(SAF_FILE_DOCUMENT_TREE_URI_PREFIX+uuid+"%3A"));
                 result=rt.exists();
             } else {
