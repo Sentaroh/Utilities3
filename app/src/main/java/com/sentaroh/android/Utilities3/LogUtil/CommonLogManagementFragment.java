@@ -63,6 +63,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.sentaroh.android.Utilities3.BuildConfig;
 import com.sentaroh.android.Utilities3.ContextButton.ContextButtonUtil;
 import com.sentaroh.android.Utilities3.Dialog.CommonDialog;
 import com.sentaroh.android.Utilities3.Dialog.MessageDialogFragment;
@@ -681,7 +682,9 @@ public class CommonLogManagementFragment extends DialogFragment {
 
     private String getTempLogFilePath() {
         if (mClog!=null) {
-            return mContext.getExternalCacheDirs()[0].getPath()+"/"+mClog.getApplicationTag()+"_temp_log.txt";
+//            log.info("path="+mClog.getLogFileCacheDirectory());
+            return mClog.getLogFileCacheDirectory()+"/"+mClog.getApplicationTag()+"_temp_log.txt";
+//            return mContext.getExternalCacheDirs()[0].getPath()+"/"+mClog.getApplicationTag()+"_temp_log.txt";
         }
         return null;
     }
@@ -692,7 +695,9 @@ public class CommonLogManagementFragment extends DialogFragment {
     }
 
     private String getZipLogFilePath() {
-        return mContext.getExternalCacheDirs()[0].getPath()+"/"+mClog.getApplicationTag()+"_log.zip";
+//        log.info("path="+mClog.getLogFileCacheDirectory());
+        return mClog.getLogFileCacheDirectory()+"/"+mClog.getApplicationTag()+"_log.zip";
+//        return mContext.getExternalCacheDirs()[0].getPath()+"/"+mClog.getApplicationTag()+"_log.zip";
     }
 
     private void createTempLogFile() {

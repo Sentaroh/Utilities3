@@ -29,6 +29,7 @@ import android.preference.PreferenceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.PrintWriter;
 
 public class CommonLogParameters {
@@ -40,6 +41,10 @@ public class CommonLogParameters {
     static private String log_file_name="log_file";
 
     static private String log_file_provider_auth="";
+
+    static private String log_file_package_name ="";
+
+    static private String log_file_cache_dir ="";
 
     static public PrintWriter logWriter=null;
 
@@ -54,7 +59,12 @@ public class CommonLogParameters {
             edit.putBoolean(LOG_OPTION_KEY_LOG_ENABLE, false);
             edit.apply();
         }
-        log_dir_name=c.getExternalFilesDirs(null)[0].getPath()+"/log";
+        File files_dir=c.getExternalFilesDirs(null)[0];
+        log_dir_name=files_dir.getPath()+"/log";
+        log_file_package_name =c.getPackageName();
+        log_file_cache_dir=files_dir.getParent()+"/cache";
+        File lf=new File(log_file_cache_dir);
+        if (!lf.exists()) lf.mkdirs();
         log_file_provider_auth=c.getPackageName()+".provider";
         appl_tag=c.getPackageName().substring(c.getPackageName().lastIndexOf(".")+1);
 //        Log.v("CommonLogParameters","App tag="+appl_tag);
@@ -98,6 +108,10 @@ public class CommonLogParameters {
         }
         slf4jLog.setLogOption(debug, error, info, trace, warn);
     }
+
+    static public String getLogFilePackageName() {return log_file_package_name;}
+
+    static public String getLogFileCacheDirectory() {return log_file_cache_dir;}
 
     static public void setLogFileProviderAuth(String auth) {log_file_provider_auth=auth;}
     static public String getLogFileProviderAuth() {return log_file_provider_auth;}
