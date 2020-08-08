@@ -1599,7 +1599,7 @@ public class CommonFileSelector2 extends DialogFragment {
                 if (s.length()>0) {
                     String create_dir=removeRedundantDirectorySeparator(dir+"/"+s.toString());
                     if (isAndroidVersion30orUp()) {
-                        if (canAccessDirectory(create_dir)) {
+                        if (!canAccessDirectory(create_dir)) {
                             dlg_msg.setText(context.getString(R.string.msgs_single_item_input_dlg_prohibit_access_directory, s.toString()));
                             return;
                         }
