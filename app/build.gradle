@@ -35,8 +35,8 @@ android {
 
 dependencies {
 //    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-//    implementation 'com.google.android.material:material:1.0.0-rc01'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.0'
 
     implementation files('libs/ImageViewTouch-1.0.1-Mod.jar')
     implementation files('libs/juniversalchardet-1.0.3.jar')
@@ -44,5 +44,4 @@ dependencies {
     implementation files('libs/zip4j_2.2.3_20191102_04.jar')
     implementation files('libs/WrapperForSlf4j-1.0.2.jar')
 
-    implementation 'com.google.android.material:material:1.2.0-alpha05'
 }
