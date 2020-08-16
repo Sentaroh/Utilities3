@@ -88,6 +88,7 @@
         <string name="msgs_log_file_list_manage_logfile">Manage log files</string>
         <string name="msgs_log_file_browse_app_can_not_found">Application that displays the text file was not found.</string>
         <string name="msgs_log_file_browse_app_error">No application was found to send the log.</string>
+        <string name="msgs_log_can_not_start_log_mgmt">Log management cannot be activated because the log is disabled.</string>
         <string name="msgs_log_file_log_level_title">Log level</string>
         <string name="msgs_log_file_log_level_no_debug">0:No debug info</string>
         <string name="msgs_log_file_log_level_minimum_level">1:Minimum debug info</string>

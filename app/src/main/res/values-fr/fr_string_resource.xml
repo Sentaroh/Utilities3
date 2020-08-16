@@ -88,6 +88,7 @@
         <string name="msgs_log_file_list_manage_logfile">Gestion des fichiers journaux</string>
         <string name="msgs_log_file_browse_app_can_not_found">Aucune application n\'a pu être trouvée pour afficher le fichier texte.</string>
         <string name="msgs_log_file_browse_app_error">Aucune application n\'a été trouvée pour envoyer le journal.</string>
+        <string name="msgs_log_can_not_start_log_mgmt">La gestion du journal ne peut pas être activée car le journal est désactivé.</string>
         <string name="msgs_log_file_log_level_title">Niveau du journal</string>
         <string name="msgs_log_file_log_level_no_debug">0:Pas d\'informations de débogage</string>
         <string name="msgs_log_file_log_level_minimum_level">1:Informations minimales de débogage</string>

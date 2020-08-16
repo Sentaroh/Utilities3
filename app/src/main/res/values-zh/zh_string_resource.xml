@@ -88,6 +88,7 @@
         <string name="msgs_log_file_list_manage_logfile">管理日志文件</string>
         <string name="msgs_log_file_browse_app_can_not_found">未找到显示文本文件的应用程序。</string>
         <string name="msgs_log_file_browse_app_error">应用程序调用时发生错误。</string>
+        <string name="msgs_log_can_not_start_log_mgmt">由于日志被禁用，所以无法激活日志管理。</string>
         <string name="msgs_log_file_log_level_title">日志级别</string>
         <string name="msgs_log_file_log_level_no_debug">0:没有调试信息</string>
         <string name="msgs_log_file_log_level_minimum_level">1:最小调试信息</string>

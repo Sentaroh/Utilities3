@@ -91,6 +91,7 @@
         <string name="msgs_log_file_list_manage_logfile">ログファイル管理</string>
         <string name="msgs_log_file_browse_app_can_not_found">テキストファイルを表示するアプリケーションが見つかりませんでした。</string>
         <string name="msgs_log_file_browse_app_error">ログを表示するアプリを呼び出す際にエラーが発生しました。</string>
+        <string name="msgs_log_can_not_start_log_mgmt">ログが無効なためログ管理を起動できません。</string>
         <string name="msgs_log_file_log_level_title">ログ レベル</string>
         <string name="msgs_log_file_log_level_no_debug">0:デバッグ情報なし</string>
         <string name="msgs_log_file_log_level_minimum_level">1:最小デバッグ情報</string>

@@ -88,6 +88,7 @@
         <string name="msgs_log_file_list_manage_logfile">Protokolldatei verwalten</string>
         <string name="msgs_log_file_browse_app_can_not_found">Die Anwendung, die die Textdatei anzeigt, wurde nicht gefunden.</string>
         <string name="msgs_log_file_browse_app_error">Fehler trat auf, als die Anwendung aufgerufen wurde.</string>
+        <string name="msgs_log_can_not_start_log_mgmt">Die Protokollverwaltung kann nicht aktiviert werden, da das Protokoll deaktiviert ist.</string>
         <string name="msgs_log_file_log_level_title">Protokoll-Ebene</string>
         <string name="msgs_log_file_log_level_no_debug">0:Keine Debug-Informationen</string>
         <string name="msgs_log_file_log_level_minimum_level">1:Minimale Debug-Informationen</string>

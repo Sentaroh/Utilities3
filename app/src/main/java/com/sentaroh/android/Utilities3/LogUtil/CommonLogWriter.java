@@ -67,6 +67,9 @@ public class CommonLogWriter {
     private static boolean mThreadIsActive=false;
 
     static public void enqueue(final CommonLogParameters cgp, final Context c, final String action, String msg, boolean force_notify) {
+        if (!cgp.isLogActivated()) {
+            return;
+        }
         mCgp=cgp;
         debug_level=cgp.getLogLevel();
         log_enabled=cgp.isLogEnabled();

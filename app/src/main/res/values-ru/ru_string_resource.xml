@@ -88,6 +88,7 @@
         <string name="msgs_log_file_list_manage_logfile">Управлять лог-файлом</string>
         <string name="msgs_log_file_browse_app_can_not_found">Приложение, отображающее текстовый файл, не найдено.</string>
         <string name="msgs_log_file_browse_app_error">Не найдено приложение для отправки журнала.</string>
+        <string name="msgs_log_can_not_start_log_mgmt">Управление журналом не может быть активировано, так как журнал отключен.</string>
         <string name="msgs_log_file_log_level_title">Уровень журнала</string>
         <string name="msgs_log_file_log_level_no_debug">0:Нет отладочной информации</string>
         <string name="msgs_log_file_log_level_minimum_level">1:Минимальная информация об отладке</string>

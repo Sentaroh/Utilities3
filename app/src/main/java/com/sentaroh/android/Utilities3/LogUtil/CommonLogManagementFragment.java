@@ -1135,12 +1135,20 @@ public class CommonLogManagementFragment extends DialogFragment {
     	},200);
     };
 
-    public void showDialog(FragmentManager fm, Fragment frag, NotifyEvent ntfy) {
-    	mTerminateRequired=false;
-	    FragmentTransaction ft = fm.beginTransaction();
-	    ft.add(frag,null);
-	    ft.commitAllowingStateLoss();
-	    mNotifyUpdateLogOption=ntfy;
+    public void showDialog(Context c, FragmentManager fm, Fragment frag, NotifyEvent ntfy) {
+        CommonLogParameters clog= CommonLogParametersFactory.getLogParms(c);
+        if (clog.isLogActivated()) {
+            mTerminateRequired=false;
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.add(frag,null);
+            ft.commitAllowingStateLoss();
+            mNotifyUpdateLogOption=ntfy;
+        } else {
+            File lf=c.getExternalFilesDirs(null)[0];
+            MessageDialogFragment mdf=MessageDialogFragment.newInstance(false, "E",
+                    c.getString(R.string.msgs_log_can_not_start_log_mgmt), "file="+lf);
+            mdf.showDialog(false, fm, mdf, null);
+        }
     };
 
 

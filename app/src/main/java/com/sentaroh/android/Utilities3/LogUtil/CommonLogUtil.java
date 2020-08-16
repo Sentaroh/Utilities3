@@ -71,7 +71,7 @@ public class CommonLogUtil {
 
 	final public static void closeLog(Context c) {
         CommonLogParameters clog= CommonLogParametersFactory.getLogParms(c);
-        CommonLogWriter.enqueue(clog, c, clog.getLogIntentClose(), "", true);
+        if (clog.isLogActivated()) CommonLogWriter.enqueue(clog, c, clog.getLogIntentClose(), "", true);
 	};
 
 	final public void resetLogReceiver() {
@@ -80,46 +80,46 @@ public class CommonLogUtil {
 
 	final public static void resetLogReceiver(Context c) {
         CommonLogParameters clog= CommonLogParametersFactory.getLogParms(c);
-        CommonLogWriter.enqueue(clog, c, clog.getLogIntentReset(), "",  true);
+        if (clog.isLogActivated()) CommonLogWriter.enqueue(clog, c, clog.getLogIntentReset(), "",  true);
 	};
 
 	final public void flushLog() {
-		flushLog(mContext);
+        if (mClog.isLogActivated()) flushLog(mContext);
 	};
 
 	final public static void flushLog(Context c) {
         CommonLogParameters clog= CommonLogParametersFactory.getLogParms(c);
-        CommonLogWriter.enqueue(clog, c, clog.getLogIntentFlush(), "", true);
+        if (clog.isLogActivated()) CommonLogWriter.enqueue(clog, c, clog.getLogIntentFlush(), "", true);
 	};
 
 	final public void rotateLogFile() {
-		rotateLogFile(mContext);
+        if (mClog.isLogActivated()) rotateLogFile(mContext);
 	};
 
 	final public static void rotateLogFile(Context c) {
         CommonLogParameters clog= CommonLogParametersFactory.getLogParms(c);
-        CommonLogWriter.enqueue(clog, c, clog.getLogIntentRotate(), "", true);
+        if (clog.isLogActivated()) CommonLogWriter.enqueue(clog, c, clog.getLogIntentRotate(), "", true);
 	};
 
     final public void deleteLogFile() {
-        deleteLogFile(mContext);
+        if (mClog.isLogActivated()) deleteLogFile(mContext);
 	};
 
     final public static void deleteLogFile(Context c) {
         CommonLogParameters clog= CommonLogParametersFactory.getLogParms(c);
-        CommonLogWriter.enqueue(clog, c, clog.getLogIntentDelete(), "", true);
+        if (clog.isLogActivated()) CommonLogWriter.enqueue(clog, c, clog.getLogIntentDelete(), "", true);
     };
 
     final public void addLogMsg(String cat, String... msg) {
 //		Log.v("","lvl="+mClog.getDebugLevel()+", ena="+mClog.isLogEnabled());
 		if (mClog.getLogLevel()>0 || mClog.isLogEnabled() || cat.equals("E")) {
-			addLogMsg(mClog, mContext, mLogIdent, cat, msg);
+            if (mClog.isLogActivated()) addLogMsg(mClog, mContext, mLogIdent, cat, msg);
 		}
 	};
 
 	final public void addDebugMsg(int lvl, String cat, String... msg) {
 		if (mClog.isLogEnabled() && mClog.getLogLevel()>=lvl ) {
-			addDebugMsg(mClog, mContext, mLogIdent, lvl, cat, msg);
+            if (mClog.isLogActivated()) addDebugMsg(mClog, mContext, mLogIdent, lvl, cat, msg);
 		}
 	};
 
@@ -191,7 +191,9 @@ public class CommonLogUtil {
 	};
 
 	final static public boolean isLogFileExists(Context c) {
-		boolean result = false;
+        CommonLogParameters clog= CommonLogParametersFactory.getLogParms(c);
+        if (!clog.isLogActivated()) return false;
+        boolean result = false;
 		File lf = new File(getLogFilePath(c));
 		result=lf.exists();
 		return result;

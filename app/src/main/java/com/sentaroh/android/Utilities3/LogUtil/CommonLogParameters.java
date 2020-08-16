@@ -35,6 +35,8 @@ import java.io.PrintWriter;
 public class CommonLogParameters {
     static private Logger slf4jLog= LoggerFactory.getLogger(CommonLogParameters.class);
 
+    static private boolean log_active=false;
+
     static private int debug_level=1;
     static private boolean log_enabled=true;
     static private String log_dir_name="";
@@ -60,14 +62,16 @@ public class CommonLogParameters {
             edit.apply();
         }
         File files_dir=c.getExternalFilesDirs(null)[0];
-        log_dir_name=files_dir.getPath()+"/log";
-        log_file_package_name =c.getPackageName();
-        log_file_cache_dir=files_dir.getParent()+"/cache";
-        File lf=new File(log_file_cache_dir);
-        if (!lf.exists()) lf.mkdirs();
-        log_file_provider_auth=c.getPackageName()+".provider";
-        appl_tag=c.getPackageName().substring(c.getPackageName().lastIndexOf(".")+1);
-//        Log.v("CommonLogParameters","App tag="+appl_tag);
+        if (files_dir!=null) {
+            log_dir_name=files_dir.getPath()+"/log";
+            log_file_package_name =c.getPackageName();
+            log_file_cache_dir=files_dir.getParent()+"/cache";
+            File lf=new File(log_file_cache_dir);
+            if (!lf.exists()) lf.mkdirs();
+            log_file_provider_auth=c.getPackageName()+".provider";
+            appl_tag=c.getPackageName().substring(c.getPackageName().lastIndexOf(".")+1);
+            log_active=true;
+        }
     }
 
     static public void loadLogParameters(Context c) {
@@ -107,6 +111,10 @@ public class CommonLogParameters {
             debug=error=warn=info=trace=true;
         }
         slf4jLog.setLogOption(debug, error, info, trace, warn);
+    }
+
+    static public boolean isLogActivated() {
+        return log_active;
     }
 
     static public String getLogFilePackageName() {return log_file_package_name;}
