@@ -291,22 +291,54 @@ public class CommonDialog {
     }
 
     static public void showPopupMessageAsUpAnchorView(Activity a, View anchor, String msg, int duration) {
-        showPopupDropDownMessage(false, a, anchor, msg, duration, 0);
+        showPopupDropDownMessage(false, a, anchor, duration, msg,  0);
     }
 
     static public void showPopupMessageAsUpAnchorView(Activity a, View anchor, String msg, int duration, int yOffset) {
-        showPopupDropDownMessage(false, a, anchor, msg, duration, -yOffset);
+        showPopupDropDownMessage(false, a, anchor, duration, msg, -yOffset);
     }
 
     static public void showPopupMessageAsDownAnchorView(Activity a, View anchor, String msg, int duration) {
-        showPopupDropDownMessage(true, a, anchor, msg, duration, 0);
+        showPopupDropDownMessage(true, a, anchor, duration, msg, 0);
     }
 
     static public void showPopupMessageAsDownAnchorView(Activity a, View anchor, String msg, int duration, int yOffset) {
-        showPopupDropDownMessage(true, a, anchor, msg, duration, yOffset);
+        showPopupDropDownMessage(true, a, anchor, duration, msg, yOffset);
     }
 
-    static public void showPopupDropDownMessage(final boolean down_direction, Activity a, View anchor, String msg, int duration, int yOffset) {
+    static public void showPopupMessageAsUpAnchorViewShort(Activity a, View anchor, String msg) {
+        showPopupDropDownMessage(false, a, anchor, 2, msg, 0);
+    }
+
+    static public void showPopupMessageAsUpAnchorViewShort(Activity a, View anchor, String msg, int yOffset) {
+        showPopupDropDownMessage(false, a, anchor, 2, msg, -yOffset);
+    }
+
+    static public void showPopupMessageAsDownAnchorViewShort(Activity a, View anchor, String msg) {
+        showPopupDropDownMessage(true, a, anchor, 2, msg, 0);
+    }
+
+    static public void showPopupMessageAsDownAnchorViewShort(Activity a, View anchor, String msg, int yOffset) {
+        showPopupDropDownMessage(true, a, anchor, 2, msg, yOffset);
+    }
+
+    static public void showPopupMessageAsUpAnchorViewLong(Activity a, View anchor, String msg) {
+        showPopupDropDownMessage(false, a, anchor, 4, msg, 0);
+    }
+
+    static public void showPopupMessageAsUpAnchorViewLong(Activity a, View anchor, String msg, int yOffset) {
+        showPopupDropDownMessage(false, a, anchor, 4, msg, -yOffset);
+    }
+
+    static public void showPopupMessageAsDownAnchorViewLong(Activity a, View anchor, String msg) {
+        showPopupDropDownMessage(true, a, anchor, 4, msg, 0);
+    }
+
+    static public void showPopupMessageAsDownAnchorViewLong(Activity a, View anchor, String msg, int yOffset) {
+        showPopupDropDownMessage(true, a, anchor, 4, msg, yOffset);
+    }
+
+    static public void showPopupDropDownMessage(final boolean down_direction, Activity a, View anchor, int duration, String msg, int yOffset) {
         LayoutInflater inflater = a.getLayoutInflater();
         LinearLayout custom_toast_view=(LinearLayout)inflater.inflate( R.layout.custom_toast_view, null);
         TextView toast_message = (TextView)custom_toast_view.findViewById(R.id.custom_toast_message);

@@ -249,4 +249,63 @@ public class StringUtil {
 		return str;
 	};
 
+    public static String trimTrailingBlank(String s) {
+        if (s == null) return null;
+
+        char[] val = s.toCharArray();
+        int len = val.length;
+        int st = 0;
+
+        while ((st < len) && (val[len - 1] <= ' ' || val[len - 1] == '　')) {
+            len--;
+        }
+
+        return ((st>0) || (len<val.length)) ? s.substring(st,len):s;
+    }
+
+    public static String removeRedundantDirectorySeparator(String in_str) {
+        String[] dir_array=in_str.split("/");
+        String out ="";
+        for(String item:dir_array) {
+            if (item!=null && item.length()>0) {
+                out+="/"+item;
+            }
+        }
+        return out;
+    }
+
+    static public String removeRedundantSeparator(String input, String separator, boolean remove_start, boolean remove_end) {
+        return removeRedundantSeparator(input, new String[]{separator}, remove_start, remove_end);
+    }
+
+    static public String removeRedundantSeparator(String input, String[] separator, boolean remove_start, boolean remove_end) {
+        String out=input;
+        for(String sep_item:separator) {
+            String sep_redundant=sep_item+sep_item;
+            if (out.contains(sep_redundant)) {
+                out=replaceAllCharacter(out, sep_redundant, sep_item);
+//                while(out.indexOf(sep_item+sep_item)>=0) {
+//                    out=out.replaceAll(sep_redundant, sep_item);
+//                }
+            }
+            if (remove_start) {
+                out=out.startsWith(sep_item)?out.substring(1):out;
+            }
+            if (remove_end) {
+                out=out.endsWith(sep_item)?out.substring(0, out.length()-1):out;
+            }
+        }
+        return out;
+    }
+
+    static public String replaceAllCharacter(String in, String from_char, String to_char) {
+        String out=in;
+        if (!from_char.equals(to_char)) {
+            while(out.contains(from_char)) {
+                out=out.replace(from_char, to_char);
+            }
+        }
+        return out;
+    }
+
 }

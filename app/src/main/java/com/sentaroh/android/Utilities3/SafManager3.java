@@ -354,7 +354,11 @@ public class SafManager3 {
                         if (log.isDebugEnabled()) log.debug("Duplicate UUID detected, UUID="+svi.uuid+", Description="+svi.description);
                         svi.isDuplicate=true;
                     }
-                    svl.add(svi);
+                    if (svi.uuid.equals("")) {
+                        if (log.isDebugEnabled()) log.debug("Invalid UUID detected, UUID="+svi.uuid+", Description="+svi.description);
+                    } else {
+                        svl.add(svi);
+                    }
                 }
             } else {
                 Method getVolumeList = sm.getClass().getDeclaredMethod("getVolumeList");
