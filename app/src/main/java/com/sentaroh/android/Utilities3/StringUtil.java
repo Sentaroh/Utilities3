@@ -213,7 +213,6 @@ public class StringUtil {
     	return sb.toString();
     };
 
-	@SuppressWarnings("unused")
 	final static public boolean isNumericString(String str) {
 		boolean result=true;
 		try {
@@ -223,9 +222,16 @@ public class StringUtil {
 		}
 		return result;
 	};
-    
 
-	final public static String getDumpFormatHexString(byte[]in, int offset, int count) {
+
+    /**
+     * Dump specified byte array
+     *
+     * @param in     byte array
+     * @param offset Start position
+     * @param count  Number of byte
+    */
+    final public static String getDumpFormatHexString(byte[]in, int offset, int count) {
 		String str = "";
 		for(int i=offset; i<offset+count; i++) {
 			if ((i%16)==0) {
@@ -241,7 +247,14 @@ public class StringUtil {
 		return str;
 	};
 
-	final public static String getHexString(byte[]in, int offset, int count) {
+    /**
+     * Convert hex string from byte array
+     *
+     * @param in     byte array
+     * @param offset Start position
+     * @param count  Number of byte
+     */
+    final public static String getHexString(byte[]in, int offset, int count) {
 		String str = "";
 		for(int i=offset; i<offset+count; i++) {
 			str += String.format("%02x", in[i]);
@@ -274,13 +287,29 @@ public class StringUtil {
         return out;
     }
 
-    static public String removeRedundantSeparator(String input, String separator, boolean remove_start, boolean remove_end) {
-        return removeRedundantSeparator(input, new String[]{separator}, remove_start, remove_end);
+    /**
+     * Remove redundant string
+     *
+     * @param in           Input string
+     * @param separetor    Remove string
+     * @param remove_start True : Remove start position
+     * @param remove_end   True : Remove end position
+     */
+    static public String removeRedundantCharacter(String input, String remove_string, boolean remove_start, boolean remove_end) {
+        return removeRedundantCharacter(input, new String[]{remove_string}, remove_start, remove_end);
     }
 
-    static public String removeRedundantSeparator(String input, String[] separator, boolean remove_start, boolean remove_end) {
+    /**
+     * Remove redundant string
+     *
+     * @param in           Input string
+     * @param separetor    Remove string array
+     * @param remove_start True : Remove start position
+     * @param remove_end   True : Remove end position
+     */
+    static public String removeRedundantCharacter(String input, String[] remove_string, boolean remove_start, boolean remove_end) {
         String out=input;
-        for(String sep_item:separator) {
+        for(String sep_item:remove_string) {
             String sep_redundant=sep_item+sep_item;
             if (out.contains(sep_redundant)) {
                 out=replaceAllCharacter(out, sep_redundant, sep_item);
@@ -298,6 +327,13 @@ public class StringUtil {
         return out;
     }
 
+    /**
+     * Remove redundant string
+     *
+     * @param in           Input string
+     * @param from_char    from character
+     * @param to_char      to character
+     */
     static public String replaceAllCharacter(String in, String from_char, String to_char) {
         String out=in;
         if (!from_char.equals(to_char)) {
