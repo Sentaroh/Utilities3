@@ -3,30 +3,42 @@ package com.sentaroh.android.Utilities3.Widget;
 import android.content.Context;
 import android.text.Layout;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.tabs.TabLayout;
+import com.sentaroh.android.Utilities3.Dialog.CommonDialog;
+import com.sentaroh.android.Utilities3.R;
 
 public class CustomTabLayout extends TabLayout {
+    private Context c=null;
     public CustomTabLayout(@NonNull Context context) {
         super(context);
+        c=context;
     }
 
     public CustomTabLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        c=context;
     }
 
     public CustomTabLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        c=context;
     }
 
     public void addTab(String tab_name) {
         addTab(this.newTab().setText(tab_name).setTag(tab_name));
+//        TextView tabOne = (TextView) LayoutInflater.from(c).inflate(R.layout.custom_tab_layout_tab_item, null);
+//        tabOne.setText(tab_name);
+////        tabOne.setTextSize(CommonDialog.toPixel(c.getResources(), 18));
+//        this.getTabAt(this.getTabCount()-1).setCustomView(tabOne);
     }
 
     public void adjustTabWidth() {
