@@ -25,6 +25,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 import android.util.Log;
 
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 public class ThreadCtrl {
 
 	final private static boolean DEBUG =false; 
@@ -67,8 +69,28 @@ public class ThreadCtrl {
 	final public void setActivityForeGround(boolean p) {activityForeGround=p;}
 	
 	final public boolean isActivityForeGround() {return activityForeGround;}
-	
-	final public boolean setThreadMessage(String msg) { // set OK
+
+	private ReentrantReadWriteLock writeLock=new ReentrantReadWriteLock();
+	final public ReentrantReadWriteLock getWriteLock() {
+	    return writeLock;
+    }
+
+    public void writeLockWait() {
+	    if (writeLock.isWriteLocked()) {
+            writeLock.writeLock().lock();
+            writeLock.writeLock().unlock();
+        }
+    }
+
+    public void writeLockAcuire() {
+        writeLock.writeLock().lock();
+    }
+
+    public void writeLockRelease() {
+        if (writeLock.isWriteLocked()) writeLock.writeLock().unlock();
+    }
+
+    final public boolean setThreadMessage(String msg) { // set OK
 		synchronized(threadMessage) {
 			if(DEBUG) Log.v("threadCtrl","setThreadMessage entered. msg="+msg);
 			if (msg!=null) threadMessage = msg;
