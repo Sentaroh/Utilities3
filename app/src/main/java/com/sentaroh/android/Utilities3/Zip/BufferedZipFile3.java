@@ -539,6 +539,7 @@ public class BufferedZipFile3 {
                     if (out_dir.equals(add_dir)) {
                         mOutputSafFile.deleteIfExists();
                         boolean rc=mAddSafFile.renameTo(mOutputSafFile);
+                        if (!rc && !mAddSafFile.exists() && mOutputSafFile.exists()) rc=true;
                         if (!rc) throw new ZipException("Rename failed at closeAddOnly()");
                     } else {
                         mOutputSafFile.deleteIfExists();
