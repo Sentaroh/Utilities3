@@ -1467,16 +1467,16 @@ public class SafFile3 {
             try {
                 result = DocumentsContract.renameDocument(mContext.getContentResolver(), mUri, new_name.getName());
                 return true;
-            } catch (FileNotFoundException e) {
-//                log.info("result="+result);
-                if (!exists(mUri) && new_name.exists()) {
-                    return true;
-                } else {
-                    putErrorMessage("renameTo rename failed, msg="+e.getMessage());
-                    return false;
-                }
+            } catch (Exception e) {
+                putErrorMessage("renameTo rename failed, msg="+e.getMessage()+"\n"+MiscUtil.getStackTraceString(e));
+                return false;
+//                if (!exists(mUri) && new_name.exists()) {
+//                    return true;
+//                } else {
+//                    putErrorMessage("renameTo rename failed, msg="+e.getMessage());
+//                    return false;
+//                }
             }
-//            return renameTo(new_name.getName());
         } else {
             return this.mFile.renameTo(new_name.getFile());
         }
@@ -1523,11 +1523,13 @@ public class SafFile3 {
                             this.renameTo(to_file);
                             return true;
                         } catch(Exception e) {
-                            if (!to_file.exists()) {
-                                putErrorMessage("moveTo rename failed, to="+to_file+", error="+e.getMessage());
-                                return false;
-                            }
-                            return true;
+                            putErrorMessage("moveTo rename failed, to="+to_file+", error="+e.getMessage()+"\n"+MiscUtil.getStackTraceString(e));
+                            return false;
+//                            if (!to_file.exists()) {
+//                                putErrorMessage("moveTo rename failed, to="+to_file+", error="+e.getMessage());
+//                                return false;
+//                            }
+//                            return true;
                         }
                     } else {
                         return true;
@@ -1536,7 +1538,7 @@ public class SafFile3 {
                     putErrorMessage("moveTo move failed, to="+to_file);
                     return false;
                 }
-            } catch (FileNotFoundException e) {
+            } catch (Exception e) {
                 putErrorMessage("moveTo move failed, msg="+e.getMessage());
                 return false;
             }
