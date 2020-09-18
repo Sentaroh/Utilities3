@@ -70,24 +70,24 @@ public class ThreadCtrl {
 	
 	final public boolean isActivityForeGround() {return activityForeGround;}
 
-	private ReentrantReadWriteLock writeLock=new ReentrantReadWriteLock();
-	final public ReentrantReadWriteLock getWriteLock() {
-	    return writeLock;
+	private ReentrantReadWriteLock taskLock =new ReentrantReadWriteLock();
+	final public ReentrantReadWriteLock getTaskLock() {
+	    return taskLock;
     }
 
     public void writeLockWait() {
-	    if (writeLock.isWriteLocked()) {
-            writeLock.writeLock().lock();
-            writeLock.writeLock().unlock();
+	    if (taskLock.isWriteLocked()) {
+            taskLock.writeLock().lock();
+            taskLock.writeLock().unlock();
         }
     }
 
-    public void writeLockAcuire() {
-        writeLock.writeLock().lock();
+    public void acuireWriteLock() {
+        taskLock.writeLock().lock();
     }
 
-    public void writeLockRelease() {
-        if (writeLock.isWriteLocked()) writeLock.writeLock().unlock();
+    public void releaseWriteLock() {
+        if (taskLock.isWriteLocked()) taskLock.writeLock().unlock();
     }
 
     final public boolean setThreadMessage(String msg) { // set OK
