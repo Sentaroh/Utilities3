@@ -74,6 +74,8 @@ public class SafFile3 {
 
     public final static String SAF_FILE_PRIMARY_STORAGE_PREFIX="/storage/emulated/0";
     public final static String SAF_FILE_EXTERNAL_STORAGE_PREFIX="/storage/";
+    public final static String SAF_FILE_PRIMARY_STORAGE_ANDROID_APP_DIRECTORY="/storage/emulated/0/Android/data/%s";
+    public final static String SAF_FILE_EXTERNAL_STORAGE_ANDROID_APP_DIRECTORY="/storage/%s/Android/data/%s";
     public final static String SAF_FILE_DOCUMENT_TREE_URI_PREFIX="content://com.android.externalstorage.documents/tree/";
 
     static public boolean isAllFileAccessAvailable() {
