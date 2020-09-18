@@ -49,8 +49,11 @@ import com.sentaroh.android.Utilities3.R;
 import com.sentaroh.android.Utilities3.ThemeColorList;
 import com.sentaroh.android.Utilities3.ThemeUtil;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ProgressBarDialogFragment extends DialogFragment {
-	private final static boolean DEBUG_ENABLE=false;
+    final private static Logger log= LoggerFactory.getLogger(ProgressSpinDialogFragment.class);
 	private final static String APPLICATION_TAG="ProgressBarDialogFragment";
 
 	private Dialog mDialog=null;
@@ -69,7 +72,7 @@ public class ProgressBarDialogFragment extends DialogFragment {
 	
 	public static ProgressBarDialogFragment newInstance(
             String title, String msgtext, String cancelTitleInit, String cancelTitlePressed) {
-		if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"newInstance");
+		log.info("newInstance");
         ProgressBarDialogFragment frag = new ProgressBarDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putString("title", title);
@@ -82,13 +85,13 @@ public class ProgressBarDialogFragment extends DialogFragment {
 	public void setNotifyEvent(NotifyEvent ntfy) {mNotifyEvent=ntfy;}
 
 	public ProgressBarDialogFragment() {
-		if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"Constructor(Default)");
+		log.info("Constructor(Default)");
 	};
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"onSaveInstanceState");
+		log.info("onSaveInstanceState");
 		if(outState.isEmpty()){
 	        outState.putBoolean("WORKAROUND_FOR_BUG_19917_KEY", true);
 	    }
@@ -98,14 +101,14 @@ public class ProgressBarDialogFragment extends DialogFragment {
 	final public void onConfigurationChanged(final Configuration newConfig) {
 	    // Ignore orientation change to keep activity from restarting
 	    super.onConfigurationChanged(newConfig);
-	    if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"onConfigurationChanged");
+	    log.info("onConfigurationChanged");
 
 //	    reInitViewWidget();
 	};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    	if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"onCreateView");
+    	log.info("onCreateView");
     	View view=super.onCreateView(inflater, container, savedInstanceState);
     	CommonDialog.setDlgBoxSizeCompact(mDialog);
     	return view;
@@ -114,7 +117,7 @@ public class ProgressBarDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
-        if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"onCreate");
+        log.info("onCreate");
 
     	mFragment=this;
         if (!mTerminateRequired) {
@@ -130,41 +133,41 @@ public class ProgressBarDialogFragment extends DialogFragment {
 	@Override
 	final public void onActivityCreated(Bundle savedInstanceState) {
 	    super.onActivityCreated(savedInstanceState);
-	    if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"onActivityCreated");
+	    log.info("onActivityCreated");
 	};
 	@Override
 	final public void onAttach(Activity activity) {
 	    super.onAttach(activity);
-	    if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"onAttach");
+	    log.info("onAttach");
 	};
 	@Override
 	final public void onDetach() {
 	    super.onDetach();
-	    if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"onDetach");
+	    log.info("onDetach");
 	};
 	@Override
 	final public void onStart() {
 //    	CommonDialog.setDlgBoxSizeCompact(mDialog);
 	    super.onStart();
-	    if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"onStart");
+	    log.info("onStart");
 	    if (mTerminateRequired) mDialog.cancel();
 	};
 	@Override
 	final public void onStop() {
 	    super.onStop();
-	    if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"onStop");
+	    log.info("onStop");
 	};
 
 	@Override
 	public void onDestroyView() {
-		if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"onDestroyView");
+		log.info("onDestroyView");
 	    if (getDialog() != null && getRetainInstance())
 	        getDialog().setDismissMessage(null);
 	    super.onDestroyView();
 	}
 	@Override
 	public void onCancel(DialogInterface di) {
-		if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"onCancel");
+		log.info("onCancel");
 //	    super.onCancel(di);
 		if (!mTerminateRequired) {
 			Button btnCancel = (Button) mDialog.findViewById(R.id.progress_bar_dlg_fragment_btn_cancel);
@@ -174,13 +177,13 @@ public class ProgressBarDialogFragment extends DialogFragment {
 	}
 	@Override
 	public void onDismiss(DialogInterface di) {
-		if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"onDismiss");
+		log.info("onDismiss");
 		super.onDismiss(di);
 	}
 
 	@Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-    	if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"onCreateDialog");
+    	log.info("onCreateDialog");
     	mDialog=new Dialog(getActivity());//, ThemeUtil.getAppTheme(getActivity()));//, MiscUtil.getAppTheme(getActivity()));
 		mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		mDialog.setCancelable(mDialogCancellable);
@@ -194,7 +197,7 @@ public class ProgressBarDialogFragment extends DialogFragment {
 
     @SuppressWarnings("unused")
 	private void reInitViewWidget() {
-    	if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"reInitViewWidget");
+    	log.info("reInitViewWidget");
     	if (!mTerminateRequired) {
     		Handler hndl=new Handler();
     		hndl.post(new Runnable(){
@@ -215,7 +218,7 @@ public class ProgressBarDialogFragment extends DialogFragment {
     
     private ThemeColorList mThemeColorList;
     private void initViewWidget() {
-    	if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"initViewWidget");
+    	log.info("initViewWidget");
         mThemeColorList=ThemeUtil.getThemeColorList(getActivity());
 		mDialog.setContentView(R.layout.progress_bar_dlg_fragment);
 
@@ -249,21 +252,21 @@ public class ProgressBarDialogFragment extends DialogFragment {
 				mDialogCancelBtnEnabled=false;
 				btnCancel.setEnabled(false);
 				btnCancel.setText(mDialogCanTitlePressed);
-				if (mNotifyEvent!=null) 
+				if (mNotifyEvent!=null)
 					mNotifyEvent.notifyToListener(false,new Object[]{mFragment});
 			}
 		});
     }
     
 //    public void showDialog(FragmentManager fm, NotifyEvent ntfy) {
-//    	if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"showDialog");
+//    	log.info("showDialog");
 //    	mNotifyEvent=ntfy;
 //    	FragmentTransaction ft=fm.beginTransaction();
 //        show(ft, "ProgressBarDialogFragment");
 //    };
 
     public void showDialog(FragmentManager fm, Fragment frag, NotifyEvent ntfy, boolean cancellable) {
-    	if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"showDialog");
+    	log.info("showDialog");
     	mTerminateRequired=false;
     	mNotifyEvent=ntfy;
     	
