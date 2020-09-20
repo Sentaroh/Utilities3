@@ -82,6 +82,16 @@
         <string name="msgs_log_file_list_no_log_files">没有日志文件</string>
         <string name="msgs_log_file_list_confirm_send_log_title">请将日志文件发送给开发者。</string>
         <string name="msgs_log_file_list_confirm_send_log_description">请描述应用程序的问题或问题</string>
+        <string name="msgs_log_file_list_confirm_send_log_use_password">密码保护您的ZIP文件</string>
+        <string name="msgs_log_file_list_confirm_send_log_password">密码</string>
+        <string name="msgs_log_file_list_confirm_send_log_confirm_password">确认密码</string>
+        <string name="msgs_log_file_list_confirm_send_log_password_desc">当你用密码保护你的日志文件时，请将密码单独发邮件给开发者。</string>
+        <string name="msgs_log_file_list_confirm_send_log_password_not_specified">没有输入密码。</string>
+        <string name="msgs_log_file_list_confirm_send_log_confirm_password_not_specified">没有输入确认密码。</string>
+        <string name="msgs_log_file_list_confirm_send_log_password_length_error">您的密码必须在6到20个字符之间。</string>
+        <string name="msgs_log_file_list_confirm_send_log_password_and_confirm_password_not_matched">密码和验证密码不匹配。</string>
+        <string name="msgs_log_file_list_confirm_send_log_send_password_title">发送日志文件密码</string>
+        <string name="msgs_log_file_list_confirm_send_log_send_password_message">你想把日志文件的密码发给开发者吗？</string>
         <string name="msgs_log_file_list_confirm_send_log_send">发送</string>
         <string name="msgs_log_file_list_confirm_send_log_preview">预览</string>
         <string name="msgs_log_file_list_confirm_send_log_msg">用E-Mail发送日志文件给开发者.\n1.按预览按钮查看temp_log.txt，然后请检查内容(如果显示的是应用程序的选择界面，然后选择FAVORIT应用程序显示文本文件).\n2.当您阅读完要发送的文件后，在E-Mail选择对话框中选择E-Mail.\n3.请在E-Mail的正文中输入您的应用问题/问题，然后发送E-Mail给我们。 (该日志已被压缩并附上)。</string>

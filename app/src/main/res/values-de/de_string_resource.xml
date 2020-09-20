@@ -82,6 +82,16 @@
         <string name="msgs_log_file_list_no_log_files">Keine Log-Dateien</string>
         <string name="msgs_log_file_list_confirm_send_log_title">Protokolldatei an den Entwickler senden.</string>
         <string name="msgs_log_file_list_confirm_send_log_description">Bitte beschreiben Sie das Problem oder die Frage der App</string>
+        <string name="msgs_log_file_list_confirm_send_log_use_password">Schützen Sie Ihre ZIP-Dateien mit einem Passwort</string>
+        <string name="msgs_log_file_list_confirm_send_log_password">Kennwort</string>
+        <string name="msgs_log_file_list_confirm_send_log_confirm_password">Bestätigungs-Passwort</string>
+        <string name="msgs_log_file_list_confirm_send_log_password_desc">Wenn Sie Ihre Log-Dateien mit einem Passwort schützen, senden Sie das Passwort bitte in einer separaten E-Mail an den Entwickler.</string>
+        <string name="msgs_log_file_list_confirm_send_log_password_not_specified">Es wurde kein Passwort eingegeben.</string>
+        <string name="msgs_log_file_list_confirm_send_log_confirm_password_not_specified">Es wurde kein Bestätigungspasswort eingegeben.</string>
+        <string name="msgs_log_file_list_confirm_send_log_password_length_error">Ihr Passwort muss zwischen 6 und 20 Zeichen lang sein.</string>
+        <string name="msgs_log_file_list_confirm_send_log_password_and_confirm_password_not_matched">Kennwort und Verifizierungskennwort stimmen nicht überein.</string>
+        <string name="msgs_log_file_list_confirm_send_log_send_password_title">Senden von Protokolldatei-Passwörtern</string>
+        <string name="msgs_log_file_list_confirm_send_log_send_password_message">Möchten Sie das Passwort für die Protokolldatei an den Entwickler senden?</string>
         <string name="msgs_log_file_list_confirm_send_log_send">Senden Sie</string>
         <string name="msgs_log_file_list_confirm_send_log_preview">Vorschau</string>
         <string name="msgs_log_file_list_confirm_send_log_msg">Senden Sie die Protokolldatei per E-Mail an den Entwickler.\n1.Drücken Sie die Schaltfläche Vorschau, um die temp_log.txt zu sehen, dann überprüfen Sie bitte den Inhalt (Wenn der Auswahlbildschirm der Anwendung angezeigt wird, und wählen Sie dann die Anwendung FAVORIT, um die Textdatei anzuzeigen).\n2.Wenn Sie mit dem Lesen der zu sendenden Datei fertig sind, dann wählen Sie die E-Mail im EMail-Auswahldialog aus.\n3.Bitte tragen Sie Ihr Anwendungsproblem/Ihre Frage in den Hauptteil der E-Mail ein und senden Sie die E-Mail an uns. (Das Protokoll ist gezippt und angehängt).</string>
