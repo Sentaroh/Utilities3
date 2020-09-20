@@ -286,6 +286,7 @@ public class ProgressSpinDialogFragment extends DialogFragment {
                     TextView tv_msg=(TextView)mDialog.findViewById(R.id.progress_spin_dlg_fragment_msg);
                     tv_msg.setVisibility(TextView.VISIBLE);
                     tv_msg.setText(mDialogMsgText);
+                    tv_msg.requestLayout();
                 }
             });
         }

@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
     
-		<TextView
+		<com.sentaroh.android.Utilities3.Widget.NonWordwrapTextView
 		    android:id="@+id/progress_spin_dlg_fragment_title"
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
@@ -43,8 +43,8 @@
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"
 	        android:orientation="vertical" >
-        
-	        <TextView
+
+            <com.sentaroh.android.Utilities3.Widget.NonWordwrapTextView
 	            android:id="@+id/progress_spin_dlg_fragment_msg"
 	            android:layout_width="fill_parent"
 	            android:layout_height="wrap_content"
