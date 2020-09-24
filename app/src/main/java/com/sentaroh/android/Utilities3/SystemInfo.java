@@ -108,27 +108,6 @@ public class SystemInfo {
             out.add("Battery optimization=false");
         }
 
-        try {
-            ContentResolver contentResolver = c.getContentResolver();
-            int policy = Settings.System.getInt(contentResolver, Settings.Global.WIFI_SLEEP_POLICY);
-            switch (policy) {
-                case Settings.Global.WIFI_SLEEP_POLICY_DEFAULT:
-                    // スリープ中のWiFi接続を維持しない
-                    out.add("WIFI_SLEEP_POLICY_DEFAULT");
-                    break;
-                case Settings.Global.WIFI_SLEEP_POLICY_NEVER_WHILE_PLUGGED:
-                    // スリープ中のWiFi接続を電源接続時にのみ維持する
-                    out.add("WIFI_SLEEP_POLICY_NEVER_WHILE_PLUGGED");
-                    break;
-                case Settings.Global.WIFI_SLEEP_POLICY_NEVER:
-                    // スリープ中のWiFi接続を常に維持する
-                    out.add("WIFI_SLEEP_POLICY_NEVER");
-                    break;
-            }
-        } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-        }
-
         return out;
     }
 

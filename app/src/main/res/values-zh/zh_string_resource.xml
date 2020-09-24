@@ -81,7 +81,7 @@
         <string name="msgs_log_file_list_empty_can_not_send">日志文件为空，无法发送至开发人员。在执行操作和记录错误后，点击 "发送日志给开发者"。</string>
         <string name="msgs_log_file_list_no_log_files">没有日志文件</string>
         <string name="msgs_log_file_list_confirm_send_log_title">请将日志文件发送给开发者。</string>
-        <string name="msgs_log_file_list_confirm_send_log_description">请描述应用程序的问题或问题</string>
+        <string name="msgs_log_file_list_confirm_send_log_description">描述申请的问题/疑问。</string>
         <string name="msgs_log_file_list_confirm_send_log_use_password">密码保护您的ZIP文件</string>
         <string name="msgs_log_file_list_confirm_send_log_password">密码</string>
         <string name="msgs_log_file_list_confirm_send_log_confirm_password">确认密码</string>

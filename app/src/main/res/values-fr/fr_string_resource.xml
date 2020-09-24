@@ -81,7 +81,7 @@
         <string name="msgs_log_file_list_empty_can_not_send">Le fichier journal est vide et ne peut pas être envoyé au développeur. Appuyez sur \"Envoyer le journal au développeur\" après avoir utilisé l\'application et enregistré les erreurs.</string>
         <string name="msgs_log_file_list_no_log_files">Aucun fichier journal</string>
         <string name="msgs_log_file_list_confirm_send_log_title">Envoyer le fichier journal au développeur</string>
-        <string name="msgs_log_file_list_confirm_send_log_description">Décrivez tous les problèmes/questions que vous rencontrez avec l\'application.</string>
+        <string name="msgs_log_file_list_confirm_send_log_description">Décrivez le problème/la question de la demande.</string>
         <string name="msgs_log_file_list_confirm_send_log_use_password">Protégez vos fichiers ZIP par un mot de passe</string>
         <string name="msgs_log_file_list_confirm_send_log_password">mot de passe</string>
         <string name="msgs_log_file_list_confirm_send_log_confirm_password">Mot de passe de confirmation</string>

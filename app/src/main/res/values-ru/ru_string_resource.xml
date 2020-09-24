@@ -81,7 +81,7 @@
         <string name="msgs_log_file_list_empty_can_not_send">Журнал пустой и не может быть отправлен разработчику. После выполнения операций и записи ошибок нажмите "Отправить лог разработчикам".</string>
         <string name="msgs_log_file_list_no_log_files">Нет лог-файлов</string>
         <string name="msgs_log_file_list_confirm_send_log_title">Отправьте лог-файл разработчику.</string>
-        <string name="msgs_log_file_list_confirm_send_log_description">Пожалуйста, опишите вашу проблему или вопрос ниже.\n\n\n.</string>
+        <string name="msgs_log_file_list_confirm_send_log_description">Опишите проблему/вопросы приложения.</string>
         <string name="msgs_log_file_list_confirm_send_log_use_password">Пароль защитит ваши ZIP-файлы</string>
         <string name="msgs_log_file_list_confirm_send_log_password">пароль</string>
         <string name="msgs_log_file_list_confirm_send_log_confirm_password">Подтверждение Пароль</string>

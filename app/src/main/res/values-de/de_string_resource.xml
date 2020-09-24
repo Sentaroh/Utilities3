@@ -81,7 +81,7 @@
         <string name="msgs_log_file_list_empty_can_not_send">Die Protokolldatei ist leer und kann nicht an den Entwickler gesendet werden. Tippen Sie auf \"Protokolle an die Entwickler senden\", nachdem Sie Operationen durchgeführt und Fehler aufgezeichnet haben.</string>
         <string name="msgs_log_file_list_no_log_files">Keine Log-Dateien</string>
         <string name="msgs_log_file_list_confirm_send_log_title">Protokolldatei an den Entwickler senden.</string>
-        <string name="msgs_log_file_list_confirm_send_log_description">Bitte beschreiben Sie das Problem oder die Frage der App</string>
+        <string name="msgs_log_file_list_confirm_send_log_description">Beschreiben Sie das Problem/die Frage des Antrags.</string>
         <string name="msgs_log_file_list_confirm_send_log_use_password">Schützen Sie Ihre ZIP-Dateien mit einem Passwort</string>
         <string name="msgs_log_file_list_confirm_send_log_password">Kennwort</string>
         <string name="msgs_log_file_list_confirm_send_log_confirm_password">Bestätigungs-Passwort</string>
