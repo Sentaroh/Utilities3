@@ -289,6 +289,26 @@ public class SafFile3 {
         }
     }
 
+    public SafFile3(Context c, boolean force_saf, Uri uri, String name) {
+        if (uri==null) {
+            putErrorMessage("SafFile3 build error, uri was empty");
+            mBuildError=true;
+            return;
+        }
+        if (c==null) {
+            putErrorMessage("SafFile3 build error, context was empty");
+            mBuildError=true;
+            return;
+        }
+        boolean all_file_access=isAllFileAccessAvailable();
+
+        if (!force_saf && all_file_access) {
+            buildSafFileLegacyStorage(c, uri, null, all_file_access);
+        } else {
+            buildSafFileLegacyStorage(c, uri, name, false);
+        }
+    }
+
     private boolean isBuildError() {
         return mBuildError;
     }
