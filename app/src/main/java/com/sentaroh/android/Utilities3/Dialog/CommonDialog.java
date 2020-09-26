@@ -207,6 +207,8 @@ public class CommonDialog {
                     else cv.setAlpha((enabled?mEnableAlpha:mDisableAlphaSpinner));
                 }
             }
+            if (isLight) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaLight));
+            else v.setAlpha((enabled?mEnableAlpha:mDisableAlphaSpinner));
             v.setEnabled(enabled);
         } else if (v instanceof EditText) {
             if (isLight) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaEditTextLight));
