@@ -92,7 +92,7 @@ public class NonWordwrapCheckedTextView extends CheckedTextView {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         if (mDebugEnabled) log.info("onLayout changed="+changed+", left="+left+", top="+top+", right="+right+", bottom="+bottom);
-        if (!isWordWrapEnabled() && getEllipsize()==null) {
+        if (!isWordWrapEnabled() && (getMaxLines() > 1 || getMaxLines() < 0)) {
             super.setText(mSpannableSplitText, mOrgBufferType);
             if (mDebugEnabled) log.info("onLayout setText issued");
         }
@@ -101,7 +101,7 @@ public class NonWordwrapCheckedTextView extends CheckedTextView {
     @Override
     final protected void onMeasure(int w, int h) {
         if (mDebugEnabled) log.info("onMeasure w="+MeasureSpec.getSize(w)+", h="+MeasureSpec.getSize(h));
-        if (!isWordWrapEnabled() && getEllipsize()==null) {
+        if (!isWordWrapEnabled() && (getMaxLines() > 1 || getMaxLines() < 0)) {
             mSpannableSplitText=buildSplitText(MeasureSpec.getSize(w), MeasureSpec.getSize(h));
             super.setText(mSpannableSplitText, mOrgBufferType);
             super.onMeasure(w, h);
