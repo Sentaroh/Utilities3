@@ -541,7 +541,7 @@ public class CommonLogManagementFragment extends DialogFragment {
 //		msg.setTextColor(mThemeColorList.text_color_primary);
 //		msg.setBackgroundColor(mThemeColorList.dialog_msg_background_color);
 		msg.setText(mSendMessage);
-
+        final Button btn_send_password=(Button)dialog.findViewById(R.id.confirm_send_log_dlg_send_password);
 		final Button btn_ok=(Button)dialog.findViewById(R.id.confirm_send_log_dlg_ok_btn);
 		final Button btn_cancel=(Button)dialog.findViewById(R.id.confirm_send_log_dlg_cancel_btn);
 		final Button btn_preview=(Button)dialog.findViewById(R.id.confirm_send_log_dlg_preview);
@@ -566,12 +566,23 @@ public class CommonLogManagementFragment extends DialogFragment {
             }
 		});
 
+        btn_send_password.setVisibility(Button.GONE);
+        CommonDialog.setViewEnabled(getActivity(), btn_send_password, true);
+        btn_send_password.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mZipFilePassword!=null && !mZipFilePassword.equals("")) {
+                    confirmSendPassword(mZipFilePassword);
+                }
+            }
+        });
+
         btn_ok.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
-                getProblemDescription(getTempLogFilePath());
+                getProblemDescription(getTempLogFilePath(), btn_send_password);
 //				sendLogFileToDeveloper(getTempLogFilePath());
-				dialog.dismiss();
+//                dialog.dismiss();
 			}
 		});
 
@@ -606,7 +617,8 @@ public class CommonLogManagementFragment extends DialogFragment {
         startActivity(intent);
     }
 
-    private void getProblemDescription(final String fp) {
+    private String mZipFilePassword=null;
+    private void getProblemDescription(final String fp, final Button btn_send_password) {
         final Dialog dialog = new Dialog(getActivity(), ThemeUtil.getAppTheme(getActivity()));
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.confirm_send_log_option_dlg);
@@ -635,7 +647,8 @@ public class CommonLogManagementFragment extends DialogFragment {
 
         CommonDialog.setDlgBoxSizeLimit(dialog,true);
 
-        ct_use_password.setChecked(true);
+        ct_use_password.setChecked(false);
+        ll_password_view.setVisibility(LinearLayout.GONE);
         ct_use_password.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -683,7 +696,8 @@ public class CommonLogManagementFragment extends DialogFragment {
             public void onClick(View view) {
                 sendLogFileToDeveloper(getTempLogFilePath(), et_prob.getText().toString(), et_password.getText().toString());
                 if (ct_use_password.isChecked() && !et_password.getText().toString().equals("")) {
-                    confirmSendPassword(et_password.getText().toString());
+                    mZipFilePassword=et_password.getText().toString();
+                    btn_send_password.setVisibility(Button.VISIBLE);
                 }
                 dialog.dismiss();
             }

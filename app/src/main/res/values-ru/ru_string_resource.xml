@@ -92,9 +92,16 @@
         <string name="msgs_log_file_list_confirm_send_log_password_and_confirm_password_not_matched">Пароль и пароль проверки не совпадают.</string>
         <string name="msgs_log_file_list_confirm_send_log_send_password_title">Отправка паролей к лог-файлам</string>
         <string name="msgs_log_file_list_confirm_send_log_send_password_message">Вы хотите отправить разработчику пароль к лог-файлу?</string>
+        <string name="msgs_log_file_list_confirm_send_log_send_password_button_title">Отправить пароль к файлу ZIP</string>
         <string name="msgs_log_file_list_confirm_send_log_send">Отправить</string>
         <string name="msgs_log_file_list_confirm_send_log_preview">Предварительный просмотр</string>
-        <string name="msgs_log_file_list_confirm_send_log_msg">Отправить лог-файл по электронной почте разработчику.\n1.Нажмите кнопку Предварительный просмотр, чтобы увидеть temp_log.txt, а затем, пожалуйста, проверьте содержание. (Если отображается экран выбора приложения, а затем выберите FAVORIT приложение для отображения текстового файла) \n2.Когда вы закончите читать файл для отправки, а затем выберите электронную почту в EMail диалог выбора.\n3.Пожалуйста, введите проблему / вопросы в электронную почту тела и отправить электронную почту. (лог-файл прилагается с сжатыми в zip и ).</string>
+        <string name="msgs_log_file_list_confirm_send_log_msg">Отправьте лог разработчику по электронной почте.
+1.Нажмите кнопку \"Предварительный просмотр\" для просмотра файла temp_log.txt и просмотра его содержимого (если вам предложено выбрать приложение для просмотра текстового файла, покажите приложение).
+2.После подтверждения отправки нажмите кнопку \"Отправить\", чтобы описать свой вопрос или проблему.
+3.Если вы хотите защитить ZIP-файл паролем, введите пароль и пароль подтверждения.
+4.Нажмите кнопку \"Отправить\" и в диалоговом окне \"Выбор электронной почты\" выберите пункт \"E-Mail\".
+5.Отправьте электронное письмо.
+6.Если вы защитили ZIP-файл паролем, нажмите кнопку Send ZIP File Password (Отправить ZIP-файл) и отправьте его по электронной почте.</string>
         <string name="msgs_log_file_list_manage_logfile">Управлять лог-файлом</string>
         <string name="msgs_log_file_browse_app_can_not_found">Приложение, отображающее текстовый файл, не найдено.</string>
         <string name="msgs_log_file_browse_app_error">Не найдено приложение для отправки журнала.</string>

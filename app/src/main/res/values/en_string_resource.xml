@@ -92,9 +92,16 @@
         <string name="msgs_log_file_list_confirm_send_log_password_and_confirm_password_not_matched">Password and verification password do not match.</string>
         <string name="msgs_log_file_list_confirm_send_log_send_password_title">Sending log file passwords</string>
         <string name="msgs_log_file_list_confirm_send_log_send_password_message">Do you want to send the log file password to the developer?</string>
+        <string name="msgs_log_file_list_confirm_send_log_send_password_button_title">Send ZIP file password</string>
         <string name="msgs_log_file_list_confirm_send_log_send">Send</string>
         <string name="msgs_log_file_list_confirm_send_log_preview">Preview</string>
-        <string name="msgs_log_file_list_confirm_send_log_msg">Send log file to the developer by E-Mail.\n1.Press the Preview button to see the temp_log.txt, then please check the contents.(If the selection screen of the application is displayed, select the FAVORIT application to display the text file.)\n2.If you agree to the file contents to be sent, select the E-Mail in EMail selection dialog.\n3.Please enter a problem/question in the E-Mail body and send an E-Mail (the log file is compressed into zip and sent as an attachement).</string>
+        <string name="msgs_log_file_list_confirm_send_log_msg">To send the log to the developer via email.\n
+1.Press the Show Contents button to display temp_log.txt and review the contents (if you are prompted to select an application to view the text file, view the application).\n
+2.Once you have confirmed what you are submitting, press the \"Send\" button to describe your question or problem.\n
+3.If you want to password protect the ZIP file, enter the password and confirmation password.\n
+4.Press the Send button and select E-Mail in the E-Mail Selection dialog.\n
+5.Please send the e-mail.\n
+6.If you password-protected the ZIP file, tap the Send ZIP File Password button to send it by e-mail.</string>
         <string name="msgs_log_file_list_manage_logfile">Manage log files</string>
         <string name="msgs_log_file_browse_app_can_not_found">Application that displays the text file was not found.</string>
         <string name="msgs_log_file_browse_app_error">No application was found to send the log.</string>

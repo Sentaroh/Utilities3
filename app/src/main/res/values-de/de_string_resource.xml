@@ -92,9 +92,16 @@
         <string name="msgs_log_file_list_confirm_send_log_password_and_confirm_password_not_matched">Kennwort und Verifizierungskennwort stimmen nicht überein.</string>
         <string name="msgs_log_file_list_confirm_send_log_send_password_title">Senden von Protokolldatei-Passwörtern</string>
         <string name="msgs_log_file_list_confirm_send_log_send_password_message">Möchten Sie das Passwort für die Protokolldatei an den Entwickler senden?</string>
+        <string name="msgs_log_file_list_confirm_send_log_send_password_button_title">Passwort für ZIP-Datei senden</string>
         <string name="msgs_log_file_list_confirm_send_log_send">Senden Sie</string>
         <string name="msgs_log_file_list_confirm_send_log_preview">Vorschau</string>
-        <string name="msgs_log_file_list_confirm_send_log_msg">Senden Sie die Protokolldatei per E-Mail an den Entwickler.\n1.Drücken Sie die Schaltfläche Vorschau, um die temp_log.txt zu sehen, dann überprüfen Sie bitte den Inhalt (Wenn der Auswahlbildschirm der Anwendung angezeigt wird, und wählen Sie dann die Anwendung FAVORIT, um die Textdatei anzuzeigen).\n2.Wenn Sie mit dem Lesen der zu sendenden Datei fertig sind, dann wählen Sie die E-Mail im EMail-Auswahldialog aus.\n3.Bitte tragen Sie Ihr Anwendungsproblem/Ihre Frage in den Hauptteil der E-Mail ein und senden Sie die E-Mail an uns. (Das Protokoll ist gezippt und angehängt).</string>
+        <string name="msgs_log_file_list_confirm_send_log_msg">Senden Sie das Protokoll per E-Mail an den Entwickler.
+1.Drücken Sie die Schaltfläche \"Vorschau\", um die Datei temp_log.txt anzusehen und ihren Inhalt zu überprüfen (wenn Sie aufgefordert werden, eine Anwendung auszuwählen, um die Textdatei anzuzeigen, zeigen Sie die Anwendung an).
+2.Wenn Sie bestätigt haben, was Sie einreichen, drücken Sie die Schaltfläche \"Senden\", um Ihre Frage oder Ihr Problem zu beschreiben.
+3.Wenn Sie die ZIP-Datei mit einem Passwort schützen möchten, geben Sie das Passwort und das Bestätigungspasswort ein.
+4.Drücken Sie die Schaltfläche \"Senden\" und wählen Sie E-Mail im Dialog E-Mail-Auswahl.
+5.Bitte senden Sie die E-Mail.
+6.Wenn Sie die ZIP-Datei mit einem Passwort geschützt haben, tippen Sie auf die Schaltfläche \"Passwort für ZIP-Datei senden\", um sie per E-Mail zu versenden.</string>
         <string name="msgs_log_file_list_manage_logfile">Protokolldatei verwalten</string>
         <string name="msgs_log_file_browse_app_can_not_found">Die Anwendung, die die Textdatei anzeigt, wurde nicht gefunden.</string>
         <string name="msgs_log_file_browse_app_error">Fehler trat auf, als die Anwendung aufgerufen wurde.</string>

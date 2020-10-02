@@ -92,12 +92,16 @@
         <string name="msgs_log_file_list_confirm_send_log_password_and_confirm_password_not_matched">パスワードと確認パスワードが一致していません。</string>
         <string name="msgs_log_file_list_confirm_send_log_send_password_title">ログファイルのパスワード送信</string>
         <string name="msgs_log_file_list_confirm_send_log_send_password_message">ログファイルのパスワードを開発者に送りますか？</string>
+        <string name="msgs_log_file_list_confirm_send_log_send_password_button_title">ZIPファイルパスワードを送信</string>
         <string name="msgs_log_file_list_confirm_send_log_send">送信</string>
         <string name="msgs_log_file_list_confirm_send_log_preview">内容表示</string>
         <string name="msgs_log_file_list_confirm_send_log_msg">ログを開発者にE-Mailを使用して送信します。\n
-１．内容表示ボタンを押しtemp_log.txtを表示し、内容を確認してください（テキストファイルを表示するためのアプリケーション選択の画面が表示されたら、アプリケーションを表示してください）\n
-２．送信する内容を確認したら、送信ボタンを押しE-Mail選択ダイアログでE-Mailを選択\n
-３. E-Mail本文にアプリの問題/疑問を入力し、E-Mailを送信してください。（ログはzipに圧縮し、添付ファイルになっています）</string>
+1. 内容表示ボタンを押しtemp_log.txtを表示し、内容を確認してください（テキストファイルを表示するためのアプリケーション選択の画面が表示されたら、アプリケーションを表示してください）\n
+2. 送信する内容を確認したら、送信ボタンを押して質問または問題を記述してください。\n
+3. ZIPファイルをパスワード保護する場合はパスワードと確認パスワード入力する。\n
+4. 「送信」ボタンを押してE-Mail選択ダイアログでE-Mailを選択\n
+5. E-Mailを送信してください。\n
+6. ZIPファイルをパスワード保護した場合は、「ZIPファイルのパスワードを送信」ボタンをタップしてE-Mailで送信してください。</string>
         <string name="msgs_log_file_list_manage_logfile">ログファイル管理</string>
         <string name="msgs_log_file_browse_app_can_not_found">テキストファイルを表示するアプリケーションが見つかりませんでした。</string>
         <string name="msgs_log_file_browse_app_error">ログを表示するアプリを呼び出す際にエラーが発生しました。</string>
