@@ -386,7 +386,7 @@ public class BufferedZipFile3 {
                 long fsz=inputStream.available();
                 long read_count=0L;
                 int progress=0;
-                if (p_cbl!=null) p_cbl.onCallBack(mContext, progress, null);
+                if (p_cbl!=null) p_cbl.onCallBack(mContext, true, new Object[]{progress});
                 while ((readLen = inputStream.read(readBuff)) != -1) {
                     if (isAborted()) break;
                     mAddZipOutputStream.write(readBuff, 0, readLen);
@@ -513,7 +513,7 @@ public class BufferedZipFile3 {
 //        closeFull();
         log.debug("close entered, added="+mAddZipFileItemAdded+", removed="+mInpuZipFileItemRemoved);
         if (mAddZipFileItemAdded || mInpuZipFileItemRemoved) {
-            if (cbl!=null) cbl.onCallBack(mContext, 0, null);
+            if (cbl!=null) cbl.onCallBack(mContext, true, new Object[]{0});
 //            if (getInputFileSize()>0) closeUpdate(cbl);
             if (!mEmptyInputZipFile) closeUpdate(cbl);
             else closeAddOnly(cbl);
@@ -576,7 +576,7 @@ public class BufferedZipFile3 {
     private void notifyProgress(CallBackListener cbl, long read_byte, long file_size) {
         if (cbl!=null && file_size>0) {
             int progress=(int)((read_byte*100)/file_size);
-            cbl.onCallBack(mContext, progress>100?100:progress, null);
+            cbl.onCallBack(mContext, true, new Object[]{progress>100?100:progress});
 //            log.info("progress="+progress);
         }
     }

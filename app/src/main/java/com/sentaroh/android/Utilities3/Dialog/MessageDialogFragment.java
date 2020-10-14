@@ -25,6 +25,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -47,6 +48,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.sentaroh.android.Utilities3.CallBackListener;
 import com.sentaroh.android.Utilities3.NotifyEvent;
 import com.sentaroh.android.Utilities3.R;
 import com.sentaroh.android.Utilities3.ThemeColorList;
@@ -404,13 +406,23 @@ public class MessageDialogFragment extends DialogFragment {
 
     public void showDialog(FragmentManager fm, Fragment frag, NotifyEvent ntfy) {
         mDebugEnabled=false;
-        if (mDebugEnabled) log.debug("showDialog");
+        showDialog(false, fm, frag, ntfy);
+    };
 
-    	terminateRequired=false;
-    	mNotifyEvent=ntfy;
-	    FragmentTransaction ft = fm.beginTransaction();
-	    ft.add(frag,null);
-	    ft.commitAllowingStateLoss();
-//    	show(fm, APPLICATION_TAG);
+    public void showDialog(Context c, FragmentManager fm, Fragment frag, final CallBackListener cbl) {
+        mDebugEnabled=false;
+        NotifyEvent ntfy=new NotifyEvent(c);
+        ntfy.setListener(new NotifyEvent.NotifyEventListener() {
+            @Override
+            public void positiveResponse(Context c, Object[] o) {
+                if (cbl!=null) cbl.onCallBack(c, true, o);
+            }
+
+            @Override
+            public void negativeResponse(Context c, Object[] o) {
+                if (cbl!=null) cbl.onCallBack(c, false, o);
+            }
+        });
+        showDialog(false, fm, frag, ntfy);
     };
 }

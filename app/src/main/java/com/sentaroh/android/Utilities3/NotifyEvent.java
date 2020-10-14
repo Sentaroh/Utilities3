@@ -50,6 +50,8 @@ public class NotifyEvent {
 		else listener.negativeResponse(context,o);
 	}
 
+	public Context getContext() {return context;}
+
 	/**
 	 * リスナーを追加する
 	 * 

@@ -54,29 +54,35 @@ import android.widget.Toast;
 
 import androidx.fragment.app.FragmentManager;
 
+import com.sentaroh.android.Utilities3.CallBackListener;
 import com.sentaroh.android.Utilities3.NotifyEvent;
 import com.sentaroh.android.Utilities3.R;
 import com.sentaroh.android.Utilities3.ThemeUtil;
 
 public class CommonDialog {
 	private FragmentManager mFragMgr =null;
-	
+
 	public CommonDialog(Context c, FragmentManager fm) {
 		mFragMgr =fm;
 	};
 	
-	public void showCommonDialog(
-            final boolean negative, String type, String title, String msgtext,
-            final NotifyEvent ntfy) {
+	public void showCommonDialog(boolean negative, String type, String title, String msgtext, NotifyEvent ntfy) {
         MessageDialogFragment cdf =MessageDialogFragment.newInstance(negative, type, title, msgtext);
         cdf.showDialog(mFragMgr,cdf,ntfy);
 	};
 
-    static public void showCommonDialog(FragmentManager fm,
-            final boolean negative, String type, String title, String msgtext,
-            final NotifyEvent ntfy) {
+    static public void showCommonDialog(FragmentManager fm, boolean negative, String type, String title, String msgtext, NotifyEvent ntfy) {
         MessageDialogFragment cdf =MessageDialogFragment.newInstance(negative, type, title, msgtext);
         cdf.showDialog(fm,cdf,ntfy);
+    };
+
+    public void showCommonDialog(Context c, boolean negative, String type, String title, String msgtext, CallBackListener cbl) {
+        MessageDialogFragment cdf =MessageDialogFragment.newInstance(negative, type, title, msgtext);
+        cdf.showDialog(c, mFragMgr, cdf, cbl);
+    };
+    static public void showCommonDialog(Context c, FragmentManager fm, final boolean negative, String type, String title, String msgtext, CallBackListener cbl) {
+        MessageDialogFragment cdf =MessageDialogFragment.newInstance(negative, type, title, msgtext);
+        cdf.showDialog(c, fm, cdf, cbl);
     };
 
     static public Dialog showProgressSpinIndicator(Activity a) {
