@@ -25,6 +25,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -39,11 +40,13 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.sentaroh.android.Utilities3.CallBackListener;
 import com.sentaroh.android.Utilities3.NotifyEvent;
 import com.sentaroh.android.Utilities3.R;
 import com.sentaroh.android.Utilities3.ThemeColorList;
@@ -265,7 +268,7 @@ public class ProgressSpinDialogFragment extends DialogFragment {
 //        show(ft, "ProgressSpinDialogFragment");
 //    };
 
-    public void showDialog(FragmentManager fm, Fragment frag, NotifyEvent ntfy, boolean cancellable) {
+    public void showDialog(FragmentManager fm, Fragment frag, @Nullable NotifyEvent ntfy, boolean cancellable) {
         log.info("showDialog");
         mTerminateRequired=false;
         mNotifyEvent=ntfy;
@@ -275,6 +278,22 @@ public class ProgressSpinDialogFragment extends DialogFragment {
         ft.add(frag,null);
         ft.commitAllowingStateLoss();
 //    	show(fm, APPLICATION_TAG);
+    };
+
+    public void showDialog(Context c, FragmentManager fm, Fragment frag, boolean cancellable, @Nullable final CallBackListener cbl) {
+        NotifyEvent ntfy=new NotifyEvent(c);
+        ntfy.setListener(new NotifyEvent.NotifyEventListener() {
+            @Override
+            public void positiveResponse(Context c, Object[] o) {
+                cbl.onCallBack(c, true, o);
+            }
+
+            @Override
+            public void negativeResponse(Context c, Object[] o) {
+                cbl.onCallBack(c, false, o);
+            }
+        });
+        showDialog(fm, frag, ntfy, cancellable);
     };
 
     public void updateMsgText(final String msgtext) {
