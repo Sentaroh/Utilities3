@@ -22,6 +22,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
+import android.os.Build;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -148,8 +150,8 @@ public class EncryptUtilV3 {
                 }
                 KeySpec keySpec = null;
                 keySpec = new PBEKeySpec(password, salt, 1024, 256);
-//				factory = SecretKeyFactory.getInstance("PBEWITHSHAAND256BITAES-CBC-BC");
-                factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+				if ( Build.VERSION.SDK_INT<=25) factory = SecretKeyFactory.getInstance("PBEWITHSHAAND256BITAES-CBC-BC");
+                else factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
 				secretKey = factory.generateSecret(keySpec);
 			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
