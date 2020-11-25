@@ -1,9 +1,11 @@
 # Utilities3
 
-- This software includes the work that is distributed in the Apache License 2.0.
-- This software includes the work that is distributed in the GNU Lesser General Public License v2.1.
-- This software includes the work that is distributed in the MOZILLA PUBLIC LICENSE 1.1.
-- This software includes the work that is distributed in the MIT License.
+- This software includes the work that is distributed in the Apache License 2.0.  
+  (zip4j_2.2.3)  
+- This software includes the work that is distributed in the MOZILLA PUBLIC LICENSE 1.1.  
+  (juniversalchardet-1.0.3)  
+- This software includes the work that is distributed in the MIT License.  
+  (ImageViewTouch)
 
 # How to Build
 
