@@ -1,8 +1,7 @@
 ### How to Build  
 - Clone or download from Github.
 - Open Android Studio.
-- Build->Select build variant->select "relase"
-- Rebuild project
+- Build(Build->Rebuild project)
 
 ### License information
 
