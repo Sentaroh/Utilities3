@@ -17,15 +17,12 @@ android {
             libraryVariants.all { variant ->
                 if (variant.buildType.name.equals("release")) {
                     variant.outputs.all {
-//                        def mod_name = variant.getPackageLibrary().baseName
                         def mod_name = "${rootProject.name}"
                         println("name="+mod_name)
-//                        def newName = "${mod_name}_${verName}_${verCode}.${fileExtension}"
                         def newName = "${mod_name}-${defaultConfig.versionName}.aar"
                         println(outputFileName)
                         println(newName)
                         outputFileName = "../../../../release/"+newName
-////                        println(newName)
                     }
                 }
             }
@@ -34,14 +31,11 @@ android {
 }
 
 dependencies {
-//    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.0'
 
-//    implementation files('libs/ImageViewTouch-1.0.1-Mod.jar')
     implementation files('libs/juniversalchardet-1.0.3.jar')
-//    implementation files('libs/zip4j_2.2.3_20191102_01.jar')
+
     implementation files('libs/zip4j_2.2.3_20191102_04.jar')
     implementation files('libs/WrapperForSlf4j-1.0.3.jar')
-
 }
