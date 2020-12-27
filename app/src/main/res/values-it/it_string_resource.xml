@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    <!-- file_select_edit -->
+        <string name="msgs_file_select_edit_dlg_create">Crea</string>
+        <string name="msgs_file_select_edit_dlg_home_dir">Home</string>
+        <string name="msgs_file_select_edit_dlg_refresh">Aggiorna</string>
+        <string name="msgs_file_select_edit_dlg_ok">OK</string>
+        <string name="msgs_file_select_edit_dlg_cancel">Annulla</string>
+        <string name="msgs_file_select_edit_dlg_filename">Nome del file</string>
+        <string name="msgs_file_select_edit_dlg_dir_name">Nome dell\'elenco</string>
+        <string name="msgs_file_select_edit_dlg_dir_created">%s è stato creato</string>
+        <string name="msgs_file_select_edit_dlg_dir_not_created">non è riuscito a creare %s</string>
+        <string name="msgs_file_select_edit_dlg_dir_create_file">Creare un nuovo file</string>
+        <string name="msgs_file_select_edit_dlg_filename_not_specified">Il nome del file non è stato specificato</string>
+        <string name="msgs_file_select_edit_dlg_directory_not_specified">L\'elenco non è stato specificato</string>
+        <string name="msgs_file_select_edit_dlg_directory_not_selected">L\'elenco non è stato selezionato</string>
+        <string name="msgs_single_item_input_dlg_title">Creare un elenco</string>
+        <string name="msgs_single_item_input_dlg_duplicate_dir">Il nome specificato esiste già.</string>
+        <string name="msgs_single_item_input_dlg_prohibit_access_directory">Non è consentito l\'accesso all\'elenco. Directory=%s</string>
+        <string name="msgs_file_select_edit_dir_empty">--- L\'elenco è vuoto ---</string>
+        <string name="msgs_file_select_edit_local_mount_point">Punto di montaggio</string>
+        <string name="msgs_file_select_edit_parent_directory">Elenco dei genitori</string>
+        <string name="msgs_file_select_edit_confirm_create_directory">Volete creare un elenco?</string>
+        <string name="msgs_file_select_edit_confirm_create_file">Volete creare un file?</string>
+        <string name="msgs_file_select_edit_remove_invalid_character_for_file_name">I caratteri non validi(/, \", :, \, *, &lt;, &gt;, \|) sono stati rimossi dal nome del file.</string>
+        <string name="msgs_file_select_select_this_entry">Selezionare questo Dir/File</string>
+        <string name="msgs_file_select_unselect_this_entry">Deselezionare questo Dir/File</string>
+    <!-- msgs_common_dialog -->
+        <string name="msgs_common_dialog_information">Informazioni</string>
+        <string name="msgs_common_dialog_warning">Avvertimento</string>
+        <string name="msgs_common_dialog_error">Errore</string>
+        <string name="msgs_common_dialog_danger">Pericolo</string>
+        <string name="msgs_common_dialog_ok">OK</string>
+        <string name="msgs_common_dialog_cancel">Annulla</string>
+        <string name="msgs_common_dialog_canceling">Cancellazione</string>
+        <string name="msgs_common_dialog_save">Salva</string>
+        <string name="msgs_common_dialog_confirm">Confermare</string>
+        <string name="msgs_common_dialog_add">Aggiungi</string>
+        <string name="msgs_common_dialog_search">Ricerca</string>
+        <string name="msgs_common_dialog_close">Chiudere</string>
+        <string name="msgs_common_dialog_select">Selezionare</string>
+        <string name="msgs_progress_spin_dlg_processing">Elaborazione... per favore, aspettate.</string>
+        <string name="msgs_dlg_hardkey_back_button">&#8220;Tasto Indietro&#8220; non può essere utilizzato, premere il tasto sullo schermo.</string>
+    <!-- msgs_common_file_selector -->
+        <string name="msgs_common_file_selector_up_btn">Su</string>
+        <string name="msgs_common_file_selector_top_btn">Top</string>
+        <string name="msgs_common_file_selector_create_btn">Crea</string>
+        <string name="msgs_common_file_selector_refresh_btn">Aggiorna</string>
+        <string name="msgs_common_file_selector_empty_directory">Elenco vuoto</string>
+    <!-- msgs_crash_report -->
+        <string name="msgs_crash_report_share_btn">Condividi</string>
+        <string name="msgs_crash_report_copy_to_clipboard_btn">Copia su Clipboad</string>
+    <!-- msgs_list_edit_preference -->
+        <string name="msgs_list_edit_preference_delete">Cancellare</string>
+        <string name="msgs_list_edit_preference_list_was_deleted">Cancellato</string>
+        <string name="msgs_list_edit_preference_list_edit_list_specify_new_value">Specificare il nuovo valore.</string>
+        <string name="msgs_list_edit_preference_list_edit_list_value_was_already_registerd">Il valore è già stato registrato.</string>
+        <string name="msgs_list_edit_preference_list_edit_list_specify_list_value">Specificare il valore della lista.</string>
+    <!-- msgs_log_management -->
+        <string name="msgs_log_file_list_title">Gestione dei log</string>
+        <string name="msgs_log_file_list_label_delete">Cancellare la voce di registro</string>
+        <string name="msgs_log_file_list_label_share">Voce di registro delle azioni</string>
+        <string name="msgs_log_file_list_label_select_all">Selezionare tutte le voci del registro</string>
+        <string name="msgs_log_file_list_label_unselect_all">Deselezionare tutti gli elementi del registro</string>
+        <string name="msgs_log_file_list_delete_confirm_msg">Cancellare i seguenti file di log ?</string>
+        <string name="msgs_log_file_list_dlg_send_zip_file_creating">Creare il file zip</string>
+        <string name="msgs_log_file_list_dlg_send_zip_file_cancelled">La creazione di file zip è stata annullata</string>
+        <string name="msgs_log_file_list_log_save">Salva</string>
+        <string name="msgs_log_file_list_log_browse_active_log">Sfoglia il registro</string>
+        <string name="msgs_log_file_list_log_send_dev">Inviare allo sviluppatore</string>
+        <string name="msgs_log_file_list_log_title">Diario degli eventi</string>
+        <string name="msgs_log_file_list_log_enable_title">Attivare la registrazione</string>
+        <string name="msgs_log_file_list_log_toggle_enabled">Registrazione abilitata</string>
+        <string name="msgs_log_file_list_log_toggle_disabled">Disabilitazione della registrazione</string>
+        <string name="msgs_log_file_list_log_archive_title">File di log archiviati</string>
+        <string name="msgs_log_file_list_confirm_log_save">Volete salvare il registro su file?</string>
+        <string name="msgs_log_file_list_confirm_log_delete">Volete cancellare il registro?</string>
+        <string name="msgs_log_file_list_confirm_log_disable">Volete disabilitare il log?</string>
+        <string name="msgs_log_file_list_confirm_log_enable">Volete attivare il log?</string>
+        <string name="msgs_log_file_list_confirm_log_enable_msg">Abilitando questa opzione, il registro dell\'applicazione verrà registrato. Toccare \"Send logs to developers\" dopo aver eseguito le operazioni e gli errori di registrazione.</string>
+        <string name="msgs_log_file_list_empty_can_not_send">Il file di log è vuoto e non può essere inviato allo sviluppatore. Toccare "Invia i log agli sviluppatori" dopo aver eseguito le operazioni e gli errori di registrazione.</string>
+        <string name="msgs_log_file_list_no_log_files">Nessun file di log</string>
+        <string name="msgs_log_file_list_confirm_send_log_title">Inviare il file di log allo sviluppatore.</string>
+        <string name="msgs_log_file_list_confirm_send_log_description">Descrivere il problema/domanda dell\'applicazione.</string>
+        <string name="msgs_log_file_list_confirm_send_log_use_password">Proteggi con password i tuoi file ZIP</string>
+        <string name="msgs_log_file_list_confirm_send_log_password">password</string>
+        <string name="msgs_log_file_list_confirm_send_log_confirm_password">Conferma password</string>
+        <string name="msgs_log_file_list_confirm_send_log_password_desc">Quando si proteggono i file di log con una password, si prega di inviare la password allo sviluppatore in una e-mail separata.</string>
+        <string name="msgs_log_file_list_confirm_send_log_password_not_specified">Non è stata inserita alcuna password.</string>
+        <string name="msgs_log_file_list_confirm_send_log_confirm_password_not_specified">Non è stata inserita alcuna password di conferma.</string>
+        <string name="msgs_log_file_list_confirm_send_log_password_length_error">La password deve avere una lunghezza compresa tra 6 e 20 caratteri.</string>
+        <string name="msgs_log_file_list_confirm_send_log_password_and_confirm_password_not_matched">La password e la password di verifica non corrispondono.</string>
+        <string name="msgs_log_file_list_confirm_send_log_send_password_title">Invio delle password dei file di log</string>
+        <string name="msgs_log_file_list_confirm_send_log_send_password_message">Volete inviare la password del file di log allo sviluppatore?</string>
+        <string name="msgs_log_file_list_confirm_send_log_send_password_button_title">Inviare la password del file ZIP</string>
+        <string name="msgs_log_file_list_confirm_send_log_send">Invia a</string>
+        <string name="msgs_log_file_list_confirm_send_log_preview">Anteprima</string>
+        <string name="msgs_log_file_list_confirm_send_log_msg">Per inviare il log allo sviluppatore via e-mail.\n
+1.Premere il pulsante Show Contents (Mostra contenuti) per visualizzare temp_log.txt e rivedere il contenuto (se viene richiesto di selezionare un\'applicazione per visualizzare il file di testo, visualizzare l\'applicazione).\n
+2.Una volta confermato ciò che si sta inviando, premere il pulsante \"Invia" per descrivere la domanda o il problema.\n
+3.Se volete proteggere il file ZIP con una password, inserite la password e la password di conferma.\n
+4.Premere il pulsante \"Invia\" e selezionare \"E-mail\" nella finestra di dialogo \"Selezione e-mail\".\n
+5.Inviare l\'e-mail.\n
+6.Se il file ZIP è protetto da password, toccare il pulsante Invia file ZIP Password per inviarlo via e-mail.</string>
+        <string name="msgs_log_file_list_manage_logfile">Gestire i file di log</string>
+        <string name="msgs_log_file_browse_app_can_not_found">L\'applicazione che visualizza il file di testo non è stata trovata.</string>
+        <string name="msgs_log_file_browse_app_error">Non è stata trovata nessuna applicazione per l\'invio del log.</string>
+        <string name="msgs_log_can_not_start_log_mgmt">La gestione dei log non può essere attivata perché il log è disabilitato.</string>
+        <string name="msgs_log_file_log_level_title">Livello di log</string>
+        <string name="msgs_log_file_log_level_no_debug">0:No debug info</string>
+        <string name="msgs_log_file_log_level_minimum_level">1:Informazioni minime di debug</string>
+        <string name="msgs_log_file_log_level_verbose_level">2: Informazioni dettagliate sul debug</string>
+        <string name="msgs_log_file_log_level_trace_level">3:Trace debug info</string>
+        <string name="msgs_log_file_prob_question_desc_title">App Problema o domanda</string>
+        <string name="msgs_log_file_prob_question_desc_hint">Si prega di descrivere il problema o la domanda dell\'applicazione</string>
+        <string name="msgs_log_file_prob_question_desc_no_desc">App Problema/domanda non è descritto. Se il problema/domanda dell\'applicazione non è descritto, non si può rispondere.</string>
+    <!-- msgs_password_input_preference -->
+        <string name="msgs_password_input_preference_hint_new_password">Nuova password</string>
+        <string name="msgs_password_input_preference_hint_confirm_password">Conferma la password</string>
+        <string name="msgs_password_input_preference_specify_new_password">Specificare la nuova password</string>
+        <string name="msgs_password_input_preference_unmatch">Le password inserite non corrispondono</string>
+        <string name="msgs_password_input_preference_match">La password inserita è valida</string>
+        <string name="msgs_password_input_preference_new_not_specified">Nuova password non specificata</string>
+        <string name="msgs_password_input_preference_conf_not_specified">Password di conferma non specificata</string>
+        <string name="msgs_password_input_preference_less_than_min_length">Si prega di specificare almeno una password di %s caratteri.</string>
+    <!-- nt_status -->
+        <string name="msgs_ntstatus_common_info" formatted="false">User=%s, NT Status=0x%x, Remote server=%s, Network name=%s, File path=%s</string>
+        <string name="msgs_ntstatus_unsuccesful">Un dispositivo collegato al sistema non funziona.</string>
+        <string name="msgs_ntstatus_access_denied">L\'accesso è negato.</string>
+        <string name="msgs_ntstatus_logon_failure_unknown_user_name_or_bad_password">Errore di accesso: nome utente sconosciuto o password errata.</string>
+        <string name="msgs_ntstatus_logon_failure_user_account_restriction">Errore di accesso : restrizione dell\'account utente.</string>
+        <string name="msgs_ntstatus_logon_failure_account_logon_time_restriction_violation">Errore di accesso: violazione della restrizione del tempo di accesso dell\'account.</string>
+        <string name="msgs_ntstatus_logon_failure_user_not_allowed_to_log_on_to_this_computer">Errore di accesso : l\'utente non può accedere a questo computer.</string>
+        <string name="msgs_ntstatus_logon_failure_the_specified_account_password_has_expired">Errore di accesso : la password dell\'account specificata è scaduta.</string>
+        <string name="msgs_ntstatus_logon_failure_account_currently_disabled">Errore di accesso : account attualmente disabilitato.</string>
+        <string name="msgs_ntstatus_bad_network_name">Il nome della rete non può essere trovato.</string>
+    <!-- color_picker -->
+        <string name="msgs_color_picker_preference_color_current_title">Colore corrente</string>
+        <string name="msgs_color_picker_preference_color_sample_title">Nuovo colore</string>
+        <string name="msgs_color_picker_preference_color_alpha_seekbar_title">Alpha</string>
+        <string name="msgs_color_picker_preference_color_red_seekbar_title">Rosso</string>
+        <string name="msgs_color_picker_preference_color_green_seekbar_title">Verde</string>
+        <string name="msgs_color_picker_preference_color_blue_seekbar_title">Blu</string>
+        <string name="msgs_color_picker_preference_color_argb_title">ARGB</string>
+</resources>

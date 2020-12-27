@@ -22,7 +22,7 @@
         <string name="msgs_file_select_edit_parent_directory">家长目录</string>
         <string name="msgs_file_select_edit_confirm_create_directory">你想创建一个目录吗？</string>
         <string name="msgs_file_select_edit_confirm_create_file">你想创建一个文件吗？</string>
-        <string name="msgs_file_select_edit_remove_invalid_character_for_file_name">文件名中的无效字符（/, \", :, \, *, &lt;, &gt;|）已被删除。</string>
+        <string name="msgs_file_select_edit_remove_invalid_character_for_file_name">文件名中的无效字符（/, \", :, \, *, &lt;, &gt;, |）已被删除。</string>
         <string name="msgs_file_select_select_this_entry">选择这个目录/文件</string>
         <string name="msgs_file_select_unselect_this_entry">取消选择此目录/文件</string>
     <!-- msgs_common_dialog -->

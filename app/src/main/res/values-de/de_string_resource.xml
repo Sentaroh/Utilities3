@@ -22,7 +22,7 @@
         <string name="msgs_file_select_edit_parent_directory">Übergeordnetes Verzeichnis</string>
         <string name="msgs_file_select_edit_confirm_create_directory">Möchten Sie ein Verzeichnis erstellen?</string>
         <string name="msgs_file_select_edit_confirm_create_file">Wollen Sie eine Datei erstellen?</string>
-        <string name="msgs_file_select_edit_remove_invalid_character_for_file_name">Ungültige Zeichen (/, \", :, \\, *, &lt;, &gt; \|) wurden aus dem Dateinamen entfernt.</string>
+        <string name="msgs_file_select_edit_remove_invalid_character_for_file_name">Ungültige Zeichen (/, \", :, \, *, &lt;, &gt;, \|) wurden aus dem Dateinamen entfernt.</string>
         <string name="msgs_file_select_select_this_entry">Wählen Sie dieses Dir/File</string>
         <string name="msgs_file_select_unselect_this_entry">Diese Dir/Datei abwählen</string>
     <!-- msgs_common_dialog -->

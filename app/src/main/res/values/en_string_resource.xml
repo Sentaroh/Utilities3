@@ -22,7 +22,7 @@
         <string name="msgs_file_select_edit_parent_directory">Parent directory</string>
         <string name="msgs_file_select_edit_confirm_create_directory">Do you want to create a directory?</string>
         <string name="msgs_file_select_edit_confirm_create_file">Do you want to create a file?</string>
-        <string name="msgs_file_select_edit_remove_invalid_character_for_file_name">Invalid characters (/, \", :, \\, *, &lt;, &gt; \|) have been removed from the file name.</string>
+        <string name="msgs_file_select_edit_remove_invalid_character_for_file_name">Invalid characters (/, \", :, \, *, &lt;, &gt;, \|) have been removed from the file name.</string>
         <string name="msgs_file_select_select_this_entry">Select this Dir/File</string>
         <string name="msgs_file_select_unselect_this_entry">Unselect this Dir/File</string>
     <!-- msgs_common_dialog -->
