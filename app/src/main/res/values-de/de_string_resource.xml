@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
     <!-- file_select_edit -->
-        <string name="msgs_file_select_edit_dlg_create">erstellen</string>
+        <string name="msgs_file_select_edit_dlg_create">Erstellen</string>
         <string name="msgs_file_select_edit_dlg_home_dir">Startseite</string>
         <string name="msgs_file_select_edit_dlg_refresh">Aktualisieren Sie</string>
         <string name="msgs_file_select_edit_dlg_ok">OK</string>
@@ -35,23 +35,23 @@
         <string name="msgs_common_dialog_canceling">Stornierung von</string>
         <string name="msgs_common_dialog_save">Speichern</string>
         <string name="msgs_common_dialog_confirm">Bestätigen Sie</string>
-        <string name="msgs_common_dialog_add">hinzufugen</string>
+        <string name="msgs_common_dialog_add">Hinzufugen</string>
         <string name="msgs_common_dialog_search">Suche</string>
-        <string name="msgs_common_dialog_close">schliesen</string>
+        <string name="msgs_common_dialog_close">Schliesen</string>
         <string name="msgs_common_dialog_select">Wahlen Sie</string>
         <string name="msgs_progress_spin_dlg_processing">In Bearbeitung, bitte warten.</string>
         <string name="msgs_dlg_hardkey_back_button">&#8220;Zuruck-Taste&#8220; kann nicht verwendet werden, drucken Sie die Taste auf dem Bildschirm.</string>
     <!-- msgs_common_file_selector -->
         <string name="msgs_common_file_selector_up_btn">Nach oben</string>
         <string name="msgs_common_file_selector_top_btn">Nach oben</string>
-        <string name="msgs_common_file_selector_create_btn">erstellen</string>
+        <string name="msgs_common_file_selector_create_btn">Erstellen</string>
         <string name="msgs_common_file_selector_refresh_btn">Leeres Verzeichnis</string>
         <string name="msgs_common_file_selector_empty_directory">Aktualisieren Sie</string>
     <!-- msgs_crash_report -->
-        <string name="msgs_crash_report_share_btn">teilen</string>
+        <string name="msgs_crash_report_share_btn">Teilen</string>
         <string name="msgs_crash_report_copy_to_clipboard_btn">In Zwischenablage kopieren</string>
     <!-- msgs_list_edit_preference -->
-        <string name="msgs_list_edit_preference_delete">löschen</string>
+        <string name="msgs_list_edit_preference_delete">Löschen</string>
         <string name="msgs_list_edit_preference_list_was_deleted">Gelöscht</string>
         <string name="msgs_list_edit_preference_list_edit_list_specify_new_value">Geben Sie einen neuen Wert an.</string>
         <string name="msgs_list_edit_preference_list_edit_list_value_was_already_registerd">Wert wurde bereits registriert.</string>
@@ -130,8 +130,8 @@
         <string name="msgs_ntstatus_logon_failure_unknown_user_name_or_bad_password">Logon_failure : unbekannter Benutzername oder schlechtes Passwort.</string>
         <string name="msgs_ntstatus_logon_failure_user_account_restriction">Anmeldungsfehler : Einschränkung des Benutzerkontos.</string>
         <string name="msgs_ntstatus_logon_failure_account_logon_time_restriction_violation">Anmeldungsfehler: Verletzung der Zeitbeschränkung für die Kontoanmeldung.</string>
-        <string name="msgs_ntstatus_logon_failure_user_not_allowed_to_log_on_to_this_computer">fehlgeschlagene Anmeldung: Benutzer darf sich nicht an diesem Computer anmelden.</string>
-        <string name="msgs_ntstatus_logon_failure_the_specified_account_password_has_expired">fehlgeschlagene Anmeldung: Das angegebene Kontopasswort ist abgelaufen.</string>
+        <string name="msgs_ntstatus_logon_failure_user_not_allowed_to_log_on_to_this_computer">Fehlgeschlagene Anmeldung: Benutzer darf sich nicht an diesem Computer anmelden.</string>
+        <string name="msgs_ntstatus_logon_failure_the_specified_account_password_has_expired">Fehlgeschlagene Anmeldung: Das angegebene Kontopasswort ist abgelaufen.</string>
         <string name="msgs_ntstatus_logon_failure_account_currently_disabled">Fehlgeschlagene Anmeldung: Konto derzeit deaktiviert.</string>
         <string name="msgs_ntstatus_bad_network_name">Der Netzwerkname kann nicht gefunden werden.</string>
     <!-- color_picker -->
