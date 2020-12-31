@@ -49,13 +49,13 @@
         <string name="msgs_common_file_selector_empty_directory">Empty directory</string>
     <!-- msgs_crash_report -->
         <string name="msgs_crash_report_share_btn">Share</string>
-        <string name="msgs_crash_report_copy_to_clipboard_btn">Copy to Clipboad</string>
+        <string name="msgs_crash_report_copy_to_clipboard_btn">Copy to Clipboard</string>
     <!-- msgs_list_edit_preference -->
         <string name="msgs_list_edit_preference_delete">Delete</string>
         <string name="msgs_list_edit_preference_list_was_deleted">Deleted</string>
-        <string name="msgs_list_edit_preference_list_edit_list_specify_new_value">Specify new value.</string>
-        <string name="msgs_list_edit_preference_list_edit_list_value_was_already_registerd">Value was already registered.</string>
-        <string name="msgs_list_edit_preference_list_edit_list_specify_list_value">Specify list value.</string>
+        <string name="msgs_list_edit_preference_list_edit_list_specify_new_value">Specify new value</string>
+        <string name="msgs_list_edit_preference_list_edit_list_value_was_already_registerd">Value was already registered</string>
+        <string name="msgs_list_edit_preference_list_edit_list_specify_list_value">Specify list value</string>
     <!-- msgs_log_management -->
         <string name="msgs_log_file_list_title">Log management</string>
         <string name="msgs_log_file_list_label_delete">Delete log item</string>

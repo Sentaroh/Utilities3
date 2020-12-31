@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
     <!-- file_select_edit -->
-        <string name="msgs_file_select_edit_dlg_create">创建</string>
+        <string name="msgs_file_select_edit_dlg_create">创作</string>
         <string name="msgs_file_select_edit_dlg_home_dir">首页</string>
-        <string name="msgs_file_select_edit_dlg_refresh">刷新</string>
-        <string name="msgs_file_select_edit_dlg_ok">好的</string>
+        <string name="msgs_file_select_edit_dlg_refresh">重载列表</string>
+        <string name="msgs_file_select_edit_dlg_ok">收到</string>
         <string name="msgs_file_select_edit_dlg_cancel">取消</string>
-        <string name="msgs_file_select_edit_dlg_filename">文件名</string>
+        <string name="msgs_file_select_edit_dlg_filename">档案名</string>
         <string name="msgs_file_select_edit_dlg_dir_name">目录名称</string>
-        <string name="msgs_file_select_edit_dlg_dir_created">%s已经创建</string>
-        <string name="msgs_file_select_edit_dlg_dir_not_created">%s未能创建</string>
-        <string name="msgs_file_select_edit_dlg_dir_create_file">创建新文件</string>
-        <string name="msgs_file_select_edit_dlg_filename_not_specified">文件名未注明</string>
-        <string name="msgs_file_select_edit_dlg_directory_not_specified">未指定目录</string>
-        <string name="msgs_file_select_edit_dlg_directory_not_selected">目录未被选中</string>
-        <string name="msgs_single_item_input_dlg_title">创建目录</string>
-        <string name="msgs_single_item_input_dlg_duplicate_dir">指定的名称已被删除。</string>
+        <string name="msgs_file_select_edit_dlg_dir_created">%s创建</string>
+        <string name="msgs_file_select_edit_dlg_dir_not_created">创建%s失败</string>
+        <string name="msgs_file_select_edit_dlg_dir_create_file">创建一个文件</string>
+        <string name="msgs_file_select_edit_dlg_filename_not_specified">没有指定文件名</string>
+        <string name="msgs_file_select_edit_dlg_directory_not_specified">您没有选择目录</string>
+        <string name="msgs_file_select_edit_dlg_directory_not_selected">您没有选择目录</string>
+        <string name="msgs_single_item_input_dlg_title">目录创建</string>
+        <string name="msgs_single_item_input_dlg_duplicate_dir">它已经存在了</string>
         <string name="msgs_single_item_input_dlg_prohibit_access_directory">目录是不允许访问的。 目录=%s</string>
         <string name="msgs_file_select_edit_dir_empty">----目录是空的 ---</string>
         <string name="msgs_file_select_edit_local_mount_point">选择存储设备</string>
@@ -23,62 +23,62 @@
         <string name="msgs_file_select_edit_confirm_create_directory">你想创建一个目录吗？</string>
         <string name="msgs_file_select_edit_confirm_create_file">你想创建一个文件吗？</string>
         <string name="msgs_file_select_edit_remove_invalid_character_for_file_name">文件名中的无效字符（/, \", :, \, *, &lt;, &gt;, |）已被删除。</string>
-        <string name="msgs_file_select_select_this_entry">选择这个目录/文件</string>
-        <string name="msgs_file_select_unselect_this_entry">取消选择此目录/文件</string>
+        <string name="msgs_file_select_select_this_entry">选择</string>
+        <string name="msgs_file_select_unselect_this_entry">取消选择</string>
     <!-- msgs_common_dialog -->
-        <string name="msgs_common_dialog_information">信息</string>
-        <string name="msgs_common_dialog_warning">Warnning</string>
+        <string name="msgs_common_dialog_information">资料</string>
+        <string name="msgs_common_dialog_warning">警告</string>
         <string name="msgs_common_dialog_error">错误</string>
         <string name="msgs_common_dialog_danger">危险</string>
-        <string name="msgs_common_dialog_ok">好的</string>
+        <string name="msgs_common_dialog_ok">收到</string>
         <string name="msgs_common_dialog_cancel">取消</string>
-        <string name="msgs_common_dialog_canceling">取消</string>
-        <string name="msgs_common_dialog_save">拯救</string>
-        <string name="msgs_common_dialog_confirm">確認</string>
-        <string name="msgs_common_dialog_add">添加</string>
+        <string name="msgs_common_dialog_canceling">我取消了</string>
+        <string name="msgs_common_dialog_save">保存</string>
+        <string name="msgs_common_dialog_confirm">证实</string>
+        <string name="msgs_common_dialog_add">加法</string>
         <string name="msgs_common_dialog_search">搜索</string>
-        <string name="msgs_common_dialog_close">关闭</string>
+        <string name="msgs_common_dialog_close">合上</string>
         <string name="msgs_common_dialog_select">选择</string>
-        <string name="msgs_progress_spin_dlg_processing">正在处理中，请稍候。</string>
-        <string name="msgs_dlg_hardkey_back_button">无法使用返回键，请按屏幕上的按钮。</string>
+        <string name="msgs_progress_spin_dlg_processing">正在处理中，请等待</string>
+        <string name="msgs_dlg_hardkey_back_button">后退键 无法使用，请按屏幕上的按钮。</string>
     <!-- msgs_common_file_selector -->
-        <string name="msgs_common_file_selector_up_btn">上图</string>
-        <string name="msgs_common_file_selector_top_btn">頂層</string>
-        <string name="msgs_common_file_selector_create_btn">创建</string>
-        <string name="msgs_common_file_selector_refresh_btn">空目录</string>
-        <string name="msgs_common_file_selector_empty_directory">刷新</string>
+        <string name="msgs_common_file_selector_up_btn">涨</string>
+        <string name="msgs_common_file_selector_top_btn">最上面</string>
+        <string name="msgs_common_file_selector_create_btn">创作</string>
+        <string name="msgs_common_file_selector_refresh_btn">重装</string>
+        <string name="msgs_common_file_selector_empty_directory">空目录</string>
     <!-- msgs_crash_report -->
         <string name="msgs_crash_report_share_btn">分享到</string>
-        <string name="msgs_crash_report_copy_to_clipboard_btn">Copy to Clipboad</string>
+        <string name="msgs_crash_report_copy_to_clipboard_btn">复制到剪贴板</string>
     <!-- msgs_list_edit_preference -->
         <string name="msgs_list_edit_preference_delete">删除</string>
         <string name="msgs_list_edit_preference_list_was_deleted">已删除的</string>
-        <string name="msgs_list_edit_preference_list_edit_list_specify_new_value">指定新值。</string>
-        <string name="msgs_list_edit_preference_list_edit_list_value_was_already_registerd">已注册的值。</string>
-        <string name="msgs_list_edit_preference_list_edit_list_specify_list_value">指定列表值。</string>
+        <string name="msgs_list_edit_preference_list_edit_list_specify_new_value">指定新值</string>
+        <string name="msgs_list_edit_preference_list_edit_list_value_was_already_registerd">已注册的值</string>
+        <string name="msgs_list_edit_preference_list_edit_list_specify_list_value">指定列表值</string>
     <!-- msgs_log_management -->
         <string name="msgs_log_file_list_title">日志管理</string>
-        <string name="msgs_log_file_list_label_delete">刪除記錄項目</string>
-        <string name="msgs_log_file_list_label_share">分享日志项目</string>
-        <string name="msgs_log_file_list_label_select_all">选择所有日志项目</string>
-        <string name="msgs_log_file_list_label_unselect_all">取消选择所有日志项目</string>
-        <string name="msgs_log_file_list_delete_confirm_msg">删除下面的日志文件。</string>
+        <string name="msgs_log_file_list_label_delete">删除日志</string>
+        <string name="msgs_log_file_list_label_share">日志共享</string>
+        <string name="msgs_log_file_list_label_select_all">选择全部</string>
+        <string name="msgs_log_file_list_label_unselect_all">取消所有选择</string>
+        <string name="msgs_log_file_list_delete_confirm_msg">你想删除以下日志文件吗？</string>
         <string name="msgs_log_file_list_dlg_send_zip_file_creating">创建zip文件</string>
         <string name="msgs_log_file_list_dlg_send_zip_file_cancelled">Zip文件的创建已被取消</string>
         <string name="msgs_log_file_list_log_save">拯救</string>
         <string name="msgs_log_file_list_log_browse_active_log">浏览日志</string>
         <string name="msgs_log_file_list_log_send_dev">发送给开发者</string>
         <string name="msgs_log_file_list_log_title">活动日志</string>
-        <string name="msgs_log_file_list_log_enable_title">启用日志记录</string>
-        <string name="msgs_log_file_list_log_toggle_enabled">要启用日志</string>
-        <string name="msgs_log_file_list_log_toggle_disabled">要禁用日志</string>
-        <string name="msgs_log_file_list_log_archive_title">归档的日志文件</string>
-        <string name="msgs_log_file_list_confirm_log_save">你想把日志保存到文件中吗？</string>
-        <string name="msgs_log_file_list_confirm_log_delete">你想删除日志吗？</string>
-        <string name="msgs_log_file_list_confirm_log_disable">您想禁用日志吗？</string>
+        <string name="msgs_log_file_list_log_enable_title">伐木</string>
+        <string name="msgs_log_file_list_log_toggle_enabled">启用日志记录</string>
+        <string name="msgs_log_file_list_log_toggle_disabled">禁用记录</string>
+        <string name="msgs_log_file_list_log_archive_title">我可以保存日志文件吗？</string>
+        <string name="msgs_log_file_list_confirm_log_save">你确定要删除日志文件吗？</string>
+        <string name="msgs_log_file_list_confirm_log_delete">你确定你要禁用标志跟踪吗？</string>
+        <string name="msgs_log_file_list_confirm_log_disable">你确定要启用日志记录吗？</string>
         <string name="msgs_log_file_list_confirm_log_enable">要不要启用日志？</string>
         <string name="msgs_log_file_list_confirm_log_enable_msg">启用后，将记录应用日志。执行操作和记录错误后，点击 "将日志发送给开发人员"。</string>
-        <string name="msgs_log_file_list_empty_can_not_send">日志文件为空，无法发送至开发人员。在执行操作和记录错误后，点击 "发送日志给开发者"。</string>
+        <string name="msgs_log_file_list_empty_can_not_send">日志文件是空的，不能发给开发者。 请操作应用，记录错误，然后点 "发送日志给开发者"。</string>
         <string name="msgs_log_file_list_no_log_files">没有日志文件</string>
         <string name="msgs_log_file_list_confirm_send_log_title">请将日志文件发送给开发者。</string>
         <string name="msgs_log_file_list_confirm_send_log_description">描述申请的问题/疑问。</string>
@@ -117,23 +117,23 @@
     <!-- msgs_password_input_preference -->
         <string name="msgs_password_input_preference_hint_new_password">新密码</string>
         <string name="msgs_password_input_preference_hint_confirm_password">确认密码</string>
-        <string name="msgs_password_input_preference_specify_new_password">指定新密码</string>
-        <string name="msgs_password_input_preference_unmatch">新密码和确认密码不匹配</string>
-        <string name="msgs_password_input_preference_match">新密码和确认密码匹配</string>
-        <string name="msgs_password_input_preference_new_not_specified">未指定新密码</string>
-        <string name="msgs_password_input_preference_conf_not_specified">未指定密码</string>
-        <string name="msgs_password_input_preference_less_than_min_length">请指定至少%s字符的密码。</string>
+        <string name="msgs_password_input_preference_specify_new_password">请输入您的新密码。</string>
+        <string name="msgs_password_input_preference_unmatch">新密码与确认密码不一致</string>
+        <string name="msgs_password_input_preference_match">您的新密码和您的确认密码一致。</string>
+        <string name="msgs_password_input_preference_new_not_specified">新密码尚未输入。</string>
+        <string name="msgs_password_input_preference_conf_not_specified">你没有输入确认密码。</string>
+        <string name="msgs_password_input_preference_less_than_min_length">密码必须至少有%s个字符</string>
     <!-- nt_status -->
-        <string name="msgs_ntstatus_common_info" formatted="false">User=%s, NT Status=0x%x, Remote server=%s, Network name=%s, File path=%s</string>
-        <string name="msgs_ntstatus_unsuccesful">连接到系统的设备无法运行。</string>
-        <string name="msgs_ntstatus_access_denied">访问被拒绝。</string>
-        <string name="msgs_ntstatus_logon_failure_unknown_user_name_or_bad_password">Logon_failure：用户名或密码错误。</string>
-        <string name="msgs_ntstatus_logon_failure_user_account_restriction">登录失败：用户账户限制。</string>
-        <string name="msgs_ntstatus_logon_failure_account_logon_time_restriction_violation">登录失败：违反了账户登录时间限制。</string>
-        <string name="msgs_ntstatus_logon_failure_user_not_allowed_to_log_on_to_this_computer">登录失败：不允许用户登录此电脑。</string>
-        <string name="msgs_ntstatus_logon_failure_the_specified_account_password_has_expired">登录失败：指定的账户密码已过期。</string>
-        <string name="msgs_ntstatus_logon_failure_account_currently_disabled">登录失败：账户当前已被禁用。</string>
-        <string name="msgs_ntstatus_bad_network_name">找不到网络名称。</string>
+        <string name="msgs_ntstatus_common_info" formatted="false">用户=%1$s，NT状态=0x%2$x，远程=%3$s，共享名=%4$s，文件路径=%5$s。</string>
+        <string name="msgs_ntstatus_unsuccesful">连接到系统的设备不工作。</string>
+        <string name="msgs_ntstatus_access_denied">拒绝进入。</string>
+        <string name="msgs_ntstatus_logon_failure_unknown_user_name_or_bad_password">由于用户名或密码不正确，无法登录。</string>
+        <string name="msgs_ntstatus_logon_failure_user_account_restriction">由于您的账户受到限制，无法登录。</string>
+        <string name="msgs_ntstatus_logon_failure_account_logon_time_restriction_violation">由于账号登录时间有限，无法登录。</string>
+        <string name="msgs_ntstatus_logon_failure_user_not_allowed_to_log_on_to_this_computer">无法登录，因为账户被限制登录。</string>
+        <string name="msgs_ntstatus_logon_failure_the_specified_account_password_has_expired">由于密码过期，无法登录。</string>
+        <string name="msgs_ntstatus_logon_failure_account_currently_disabled">因为账号被禁用，无法登录。</string>
+        <string name="msgs_ntstatus_bad_network_name">股名不正确。</string>
     <!-- color_picker -->
         <string name="msgs_color_picker_preference_color_current_title">当前颜色</string>
         <string name="msgs_color_picker_preference_color_sample_title">新的颜色</string>

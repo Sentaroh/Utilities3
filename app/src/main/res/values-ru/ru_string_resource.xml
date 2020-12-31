@@ -49,13 +49,13 @@
         <string name="msgs_common_file_selector_empty_directory">Пустой каталог</string>
     <!-- msgs_crash_report -->
         <string name="msgs_crash_report_share_btn">Поделиться</string>
-        <string name="msgs_crash_report_copy_to_clipboard_btn">Скопировать в Clipboad</string>
+        <string name="msgs_crash_report_copy_to_clipboard_btn">Скопировать в буфер обмена</string>
     <!-- msgs_list_edit_preference -->
         <string name="msgs_list_edit_preference_delete">Удалить</string>
         <string name="msgs_list_edit_preference_list_was_deleted">Удалено</string>
-        <string name="msgs_list_edit_preference_list_edit_list_specify_new_value">Укажите новое значение.</string>
-        <string name="msgs_list_edit_preference_list_edit_list_value_was_already_registerd">Значение уже зарегистрировано.</string>
-        <string name="msgs_list_edit_preference_list_edit_list_specify_list_value">Укажите значение списка.</string>
+        <string name="msgs_list_edit_preference_list_edit_list_specify_new_value">Укажите новое значение</string>
+        <string name="msgs_list_edit_preference_list_edit_list_value_was_already_registerd">Значение уже зарегистрировано</string>
+        <string name="msgs_list_edit_preference_list_edit_list_specify_list_value">Укажите значение списка</string>
     <!-- msgs_log_management -->
         <string name="msgs_log_file_list_title">Управление журналами</string>
         <string name="msgs_log_file_list_label_delete">Удалить элемент журнала</string>

@@ -49,13 +49,13 @@
         <string name="msgs_common_file_selector_empty_directory">Elenco vuoto</string>
     <!-- msgs_crash_report -->
         <string name="msgs_crash_report_share_btn">Condividi</string>
-        <string name="msgs_crash_report_copy_to_clipboard_btn">Copia su Clipboad</string>
+        <string name="msgs_crash_report_copy_to_clipboard_btn">Copia negli Appunti</string>
     <!-- msgs_list_edit_preference -->
         <string name="msgs_list_edit_preference_delete">Cancellare</string>
         <string name="msgs_list_edit_preference_list_was_deleted">Cancellato</string>
-        <string name="msgs_list_edit_preference_list_edit_list_specify_new_value">Specificare il nuovo valore.</string>
-        <string name="msgs_list_edit_preference_list_edit_list_value_was_already_registerd">Il valore è già stato registrato.</string>
-        <string name="msgs_list_edit_preference_list_edit_list_specify_list_value">Specificare il valore della lista.</string>
+        <string name="msgs_list_edit_preference_list_edit_list_specify_new_value">Specificare il nuovo valore</string>
+        <string name="msgs_list_edit_preference_list_edit_list_value_was_already_registerd">Il valore è già stato registrato</string>
+        <string name="msgs_list_edit_preference_list_edit_list_specify_list_value">Specificare il valore della lista</string>
     <!-- msgs_log_management -->
         <string name="msgs_log_file_list_title">Gestione dei log</string>
         <string name="msgs_log_file_list_label_delete">Cancellare la voce di registro</string>

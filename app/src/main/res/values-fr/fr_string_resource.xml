@@ -49,13 +49,13 @@
         <string name="msgs_common_file_selector_empty_directory">Dossier vide</string>
     <!-- msgs_crash_report -->
         <string name="msgs_crash_report_share_btn">Partager</string>
-        <string name="msgs_crash_report_copy_to_clipboard_btn">Copie dans le Clipboad</string>
+        <string name="msgs_crash_report_copy_to_clipboard_btn">Copie dans le presse-papiers</string>
     <!-- msgs_list_edit_preference -->
         <string name="msgs_list_edit_preference_delete">Supprimer</string>
         <string name="msgs_list_edit_preference_list_was_deleted">Supprimé</string>
-        <string name="msgs_list_edit_preference_list_edit_list_specify_new_value">Précisez la nouvelle valeur.</string>
-        <string name="msgs_list_edit_preference_list_edit_list_value_was_already_registerd">La valeur était déjà enregistrée.</string>
-        <string name="msgs_list_edit_preference_list_edit_list_specify_list_value">Précisez la valeur de la liste.</string>
+        <string name="msgs_list_edit_preference_list_edit_list_specify_new_value">Précisez la nouvelle valeur</string>
+        <string name="msgs_list_edit_preference_list_edit_list_value_was_already_registerd">La valeur était déjà enregistrée</string>
+        <string name="msgs_list_edit_preference_list_edit_list_specify_list_value">Précisez la valeur de la liste</string>
     <!-- msgs_log_management -->
         <string name="msgs_log_file_list_title">Gestion des journaux</string>
         <string name="msgs_log_file_list_label_delete">Suppression du journal</string>
