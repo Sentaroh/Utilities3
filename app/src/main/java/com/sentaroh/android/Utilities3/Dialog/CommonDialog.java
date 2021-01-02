@@ -46,6 +46,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
@@ -196,6 +197,7 @@ public class CommonDialog {
     private final static float mDisableAlphaSpinner=0.4f;
     private final static float mDisableAlpha=0.7f;
     private final static float mDisableAlphaButton=0.4f;
+    private final static float mDisableAlphaImageButton=0.3f;
     private final static float mDisableAlphaEditTextLight=1.0f;
     private final static float mDisableAlphaEditText=0.6f;
     public static void setButtonEnabled(Activity a, Button btn, boolean enabled) {
@@ -223,6 +225,10 @@ public class CommonDialog {
         } else if (v instanceof Button) {
             if (isLight) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaButton));
             else v.setAlpha((enabled?mEnableAlpha:mDisableAlpha));
+            v.setEnabled(enabled);
+        } else if (v instanceof ImageButton) {
+            if (isLight) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaButton));
+            else v.setAlpha((enabled?mEnableAlpha:mDisableAlphaImageButton));
             v.setEnabled(enabled);
         } else {
             if (isLight) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaLight));
