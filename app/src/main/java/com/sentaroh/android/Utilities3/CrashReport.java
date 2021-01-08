@@ -84,7 +84,7 @@ public class CrashReport extends AppCompatActivity {
                     intent.setType("message/rfc822");
 //                    intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"gm.developer.fhoshino@gmail.com"});
                     intent.putExtra(Intent.EXTRA_SUBJECT, "Crash Report");
-                    intent.putExtra(Intent.EXTRA_TEXT, tv_info.getText().toString());
+                    intent.putExtra(Intent.EXTRA_TEXT, tv_info.getOriginalText().toString());
                     mContext.startActivity(intent);
                 } catch(Exception e) {
                     CommonDialog cd=new CommonDialog(mContext, getSupportFragmentManager());
@@ -98,7 +98,7 @@ public class CrashReport extends AppCompatActivity {
             public void onClick(View view) {
                 android.content.ClipboardManager cm=(android.content.ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData cd=cm.getPrimaryClip();
-                cm.setPrimaryClip(ClipData.newPlainText("CrashReport", tv_info.getText().toString()));
+                cm.setPrimaryClip(ClipData.newPlainText("CrashReport", tv_info.getOriginalText().toString()));
                 Toast.makeText(mContext, "Copy to clipboard", Toast.LENGTH_LONG).show();
             }
         });

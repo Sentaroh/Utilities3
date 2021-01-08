@@ -380,7 +380,7 @@ public class CommonFileSelector2 extends DialogFragment {
         mSavedViewContentsValue.mainDialogFilenameTextSelEnd=file_name.getSelectionEnd();
 
         final NonWordwrapTextView dir_name = (NonWordwrapTextView) mDialog.findViewById(R.id.common_file_selector_filepath);
-        mSavedViewContentsValue.mainDialogDirName=dir_name.getText().toString();
+        mSavedViewContentsValue.mainDialogDirName=dir_name.getOriginalText().toString();
 
         mSavedViewContentsValue.mainDailogListViewPos[0]=mTreeFileListView.getFirstVisiblePosition();
         if (mTreeFileListView.getChildAt(0)!=null)
@@ -916,7 +916,7 @@ public class CommonFileSelector2 extends DialogFragment {
                 String stg_name=mStorageSelectorSpinner.getSelectedItem().toString();
                 SafStorage3 ss= getSafStorageFromName(stg_name);
                 String mp=ss.saf_file.getPath();
-                String w_dir=dir_path.getText().toString().replace(mp,"");
+                String w_dir=dir_path.getOriginalText().toString().replace(mp,"");
                 String c_dir=w_dir.startsWith("/")?w_dir.substring(1):w_dir;
                 String new_dir="";
                 if (c_dir.lastIndexOf("/")>=0) {

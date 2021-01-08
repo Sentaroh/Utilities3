@@ -129,8 +129,7 @@ public class NonWordwrapCheckedTextView extends CheckedTextView {
         return mSpannableSplitText;
     }
 
-    @Override
-    public CharSequence getText() {
+    public CharSequence getOriginalText() {
         return mOrgText;
     }
 

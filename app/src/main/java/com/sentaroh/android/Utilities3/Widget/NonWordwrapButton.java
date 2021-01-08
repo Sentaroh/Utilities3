@@ -36,7 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class NonWordwrapButton extends Button {
-    private static Logger log= LoggerFactory.getLogger(com.sentaroh.android.Utilities3.Widget.NonWordwrapTextView.class);
+    private static Logger log= LoggerFactory.getLogger(com.sentaroh.android.Utilities3.Widget.NonWordwrapButton.class);
     private CharSequence mOrgText = "";
     private BufferType mOrgBufferType = BufferType.NORMAL;
     private int mSplitTextLineCount=0;
@@ -113,8 +113,7 @@ public class NonWordwrapButton extends Button {
         if (mDebugEnabled) log.info("setText length="+text.length()+", type="+type.toString()+", text="+text);
     }
 
-    @Override
-    public CharSequence getText() {
+    public CharSequence getOriginalText() {
         return mOrgText;
     }
 
