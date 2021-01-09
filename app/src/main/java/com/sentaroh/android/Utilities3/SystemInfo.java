@@ -46,7 +46,7 @@ public class SystemInfo {
             String packegeName = c.getPackageName();
             PackageInfo packageInfo = c.getPackageManager().getPackageInfo(packegeName, PackageManager.GET_META_DATA);
             vn = packageInfo.versionName;
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (Exception e) {
             //
         }
         return vn;
@@ -59,7 +59,7 @@ public class SystemInfo {
             PackageInfo packageInfo = c.getPackageManager().getPackageInfo(packegeName, PackageManager.GET_META_DATA);
             vn = packageInfo.versionName;
             vc = packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (Exception e) {
             //
         }
         return vn+"("+vc+")";
