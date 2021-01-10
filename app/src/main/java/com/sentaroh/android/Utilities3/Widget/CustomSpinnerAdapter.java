@@ -88,7 +88,7 @@ public class CustomSpinnerAdapter extends ArrayAdapter<String> {
         return view;
     }
 
-    private boolean mDropDownTextWordwrapEnabled=false;
+    private boolean mDropDownTextWordwrapEnabled=true;
 
     public void setDropDownTextWordwrapEnabled(boolean enabled) {
         mDropDownTextWordwrapEnabled=enabled;
