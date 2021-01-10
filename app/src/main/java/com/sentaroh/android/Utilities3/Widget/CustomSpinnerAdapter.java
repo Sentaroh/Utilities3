@@ -88,6 +88,16 @@ public class CustomSpinnerAdapter extends ArrayAdapter<String> {
         return view;
     }
 
+    private boolean mDropDownTextWordwrapEnabled=false;
+
+    public void setDropDownTextWordwrapEnabled(boolean enabled) {
+        mDropDownTextWordwrapEnabled=enabled;
+    }
+
+    public boolean isDropDownTextWordwrapEnabled() {
+        return mDropDownTextWordwrapEnabled;
+    }
+
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         if(convertView == null) {
@@ -97,6 +107,7 @@ public class CustomSpinnerAdapter extends ArrayAdapter<String> {
         String text = getItem(position);
         final NonWordwrapCheckedTextView text_view=(NonWordwrapCheckedTextView)convertView.findViewById(R.id.text1);
 //        text_view.setWordWrapByFilter(false);
+        text_view.setWordWrapEnabled(isDropDownTextWordwrapEnabled());
         text_view.setText(text);
         if (mSpinner!=null) {
             if (position==mSpinner.getSelectedItemPosition()) text_view.setChecked(true);
