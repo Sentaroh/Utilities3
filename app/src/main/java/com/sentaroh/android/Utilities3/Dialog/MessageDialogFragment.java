@@ -262,7 +262,7 @@ public class MessageDialogFragment extends DialogFragment {
 
     private NonWordwrapTextView mCustomTextView=null;
     private int mMessageTextColor=-1;
-    private boolean mWordWrap =false;
+    private boolean mWordWrap =true;
 
     final static public String CATEGORY_INFO="I";
     final static public String CATEGORY_WARN="W";
