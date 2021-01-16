@@ -247,7 +247,12 @@ public class SafManager3 {
                             sli.saf_file=new SafFile3(mContext, fp.substring(0, fp.indexOf("/Android/data")));
                             saf_list.add(sli);
                         } else {//SDCARD or USB
-                            rt=new SafFile3(mContext, SAF_FILE_EXTERNAL_STORAGE_PREFIX+ item_svi.uuid);
+                            File lf=new File(SafFile3.SAF_FILE_EXTERNAL_STORAGE_PREFIX+ item_svi.uuid);
+                            if (lf.exists()) {
+                                rt=new SafFile3(mContext, SAF_FILE_EXTERNAL_STORAGE_PREFIX+ item_svi.uuid);
+                            } else {
+                                rt=SafFile3.fromTreeUri(mContext, Uri.parse(SAF_FILE_DOCUMENT_TREE_URI_PREFIX+item_svi.uuid+"%3A"));
+                            }
                             if (rt.exists()) {
                                 SafStorage3 sli=new SafStorage3();
                                 sli.description=item_svi.description;

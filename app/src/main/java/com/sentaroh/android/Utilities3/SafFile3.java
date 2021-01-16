@@ -109,7 +109,10 @@ public class SafFile3 {
         }
         String user_path_seg="";
         String rebuild_path="";
-        if (all_file_access) {
+
+        boolean saf_mp_exists=isSafFileMountPointExists(reformed_fp);
+
+        if (all_file_access && saf_mp_exists) {
             if (reformed_fp.startsWith(SAF_FILE_PRIMARY_STORAGE_PREFIX)) {
                 user_path_seg=reformed_fp.replace(SAF_FILE_PRIMARY_STORAGE_PREFIX,"");
                 rebuild_path=reformed_fp;
@@ -136,6 +139,17 @@ public class SafFile3 {
                 buildSafStorage(rebuild_path, user_path_seg);
             }
         }
+    }
+
+    private boolean isSafFileMountPointExists(String fp) {
+        boolean saf_mp_exists=true;
+        if (!fp.startsWith(SAF_FILE_PRIMARY_STORAGE_PREFIX)) {
+            String[] path_array=fp.split("/");
+            String mp_path="/"+path_array[1]+"/"+path_array[2];
+            File lf=new File(mp_path);
+            saf_mp_exists=lf.exists();
+        }
+        return saf_mp_exists;
     }
 
     private void buildOsFile(String reduced_fpath, String user_path_seg) {
@@ -401,9 +415,16 @@ public class SafFile3 {
                 mAppDirectoryCache=p_path+"/cache";
             }
         } else {
-            if (all_file_access) {
+            mUuid= getUuidFromTreeUriPath(mUri);
+            boolean saf_mp_exists=false;
+            if (!mUuid.equals(SafFile3.SAF_FILE_PRIMARY_UUID)) {
+                File lf=new File(SafFile3.SAF_FILE_EXTERNAL_STORAGE_PREFIX+mUuid);
+                if (lf.exists()) saf_mp_exists=true;
+            } else {
+                saf_mp_exists=true;
+            }
+            if (all_file_access && saf_mp_exists) {
                 mSafFile =false;
-                mUuid= getUuidFromTreeUriPath(mUri);
                 if (name!=null) mDocName=name;
                 else mDocName=queryForString(mContext, mUri, DocumentsContract.Document.COLUMN_DISPLAY_NAME, null);
 
@@ -426,7 +447,6 @@ public class SafFile3 {
                 }
             } else {
                 mSafFile =true;
-                mUuid= getUuidFromTreeUriPath(mUri);
                 if (name!=null) mDocName=name;
                 else mDocName=queryForString(mContext, mUri, DocumentsContract.Document.COLUMN_DISPLAY_NAME, null);
 

@@ -112,7 +112,7 @@ public class CommonFileSelector2 extends DialogFragment {
 
     private NotifyEvent mNotifyEvent=null;
 
-    private SafManager3 mSafFileMgr2 =null;
+    private SafManager3 mSafFileMgr3 =null;
     private int mRestartStatus=0;
 
     private Activity mActivity=null;
@@ -236,8 +236,8 @@ public class CommonFileSelector2 extends DialogFragment {
 
         if (savedInstanceState!=null) mRestartStatus=2;
 
-        mSafFileMgr2 =new SafManager3(getActivity().getApplicationContext());
-        mSafStorageList =mSafFileMgr2.getSafStorageList();
+        mSafFileMgr3 =new SafManager3(getActivity().getApplicationContext());
+        mSafStorageList = mSafFileMgr3.getSafStorageList();
 
         mFragment=this;
         if (!mTerminateRequired) {
