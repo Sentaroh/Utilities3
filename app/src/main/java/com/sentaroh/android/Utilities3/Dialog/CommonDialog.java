@@ -169,7 +169,11 @@ public class CommonDialog {
 	};
 
     static public void setMenuItemEnabled(Activity a, Menu menu, MenuItem menu_item, boolean enabled) {
-        if (ThemeUtil.isLightThemeUsed(a)) {
+        setMenuItemEnabled(ThemeUtil.isLightThemeUsed(a), menu, menu_item, enabled);
+    }
+
+    static public void setMenuItemEnabled(boolean isLight, Menu menu, MenuItem menu_item, boolean enabled) {
+        if (isLight) {
             menu_item.setEnabled(enabled);
             SpannableString s = new SpannableString(menu_item.getTitle());
             if (enabled) s.setSpan(new ForegroundColorSpan(Color.BLACK), 0, s.length(), 0);
@@ -206,32 +210,36 @@ public class CommonDialog {
 
     public static void setViewEnabled(Activity a, View v, boolean enabled) {
         boolean isLight=ThemeUtil.isLightThemeUsed(a);
+        setViewEnabled(isLight, v, enabled);
+    }
+
+    public static void setViewEnabled(boolean theme_is_light, View v, boolean enabled) {
         if (v instanceof Spinner) {
             int cc=((Spinner)v).getChildCount();
             for(int i=0;i<cc;i++) {
                 View cv=(View)((Spinner)v).getChildAt(i);
                 if (cv!=null) {
-                    if (isLight) cv.setAlpha((enabled?mEnableAlpha:mDisableAlphaLight));
+                    if (theme_is_light) cv.setAlpha((enabled?mEnableAlpha:mDisableAlphaLight));
                     else cv.setAlpha((enabled?mEnableAlpha:mDisableAlphaSpinner));
                 }
             }
-            if (isLight) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaLight));
+            if (theme_is_light) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaLight));
             else v.setAlpha((enabled?mEnableAlpha:mDisableAlphaSpinner));
             v.setEnabled(enabled);
         } else if (v instanceof EditText) {
-            if (isLight) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaEditTextLight));
+            if (theme_is_light) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaEditTextLight));
             else v.setAlpha((enabled?mEnableAlpha:mDisableAlphaEditText));
             v.setEnabled(enabled);
         } else if (v instanceof Button) {
-            if (isLight) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaButton));
+            if (theme_is_light) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaButton));
             else v.setAlpha((enabled?mEnableAlpha:mDisableAlpha));
             v.setEnabled(enabled);
         } else if (v instanceof ImageButton) {
-            if (isLight) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaButton));
+            if (theme_is_light) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaButton));
             else v.setAlpha((enabled?mEnableAlpha:mDisableAlphaImageButton));
             v.setEnabled(enabled);
         } else {
-            if (isLight) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaLight));
+            if (theme_is_light) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaLight));
             else v.setAlpha((enabled?mEnableAlpha:mDisableAlpha));
             v.setEnabled(enabled);
         }
@@ -239,29 +247,7 @@ public class CommonDialog {
 
     public static void setViewEnabled(Context a, View v, boolean enabled) {
         boolean isLight=ThemeUtil.isLightThemeUsed(a);
-        if (v instanceof Spinner) {
-            int cc=((Spinner)v).getChildCount();
-            for(int i=0;i<cc;i++) {
-                View cv=(View)((Spinner)v).getChildAt(i);
-                if (cv!=null) {
-                    if (isLight) cv.setAlpha((enabled?mEnableAlpha:mDisableAlphaLight));
-                    else cv.setAlpha((enabled?mEnableAlpha:mDisableAlphaSpinner));
-                }
-            }
-            v.setEnabled(enabled);
-        } else if (v instanceof EditText) {
-            if (isLight) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaEditTextLight));
-            else v.setAlpha((enabled?mEnableAlpha:mDisableAlphaEditText));
-            v.setEnabled(enabled);
-        } else if (v instanceof Button) {
-            if (isLight) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaButton));
-            else v.setAlpha((enabled?mEnableAlpha:mDisableAlpha));
-            v.setEnabled(enabled);
-        } else {
-            if (isLight) v.setAlpha((enabled?mEnableAlpha:mDisableAlphaLight));
-            else v.setAlpha((enabled?mEnableAlpha:mDisableAlpha));
-            v.setEnabled(enabled);
-        }
+        setViewEnabled(isLight, v, enabled);
     }
 
     public static void setSpinnerBackground(Activity a, Spinner spinner) {
