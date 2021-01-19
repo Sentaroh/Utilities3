@@ -126,7 +126,7 @@ public class CommonLogUtil {
 	final public String buildLogCatMsg(String log_id, String cat, String... msg) {
 		StringBuilder log_msg=new StringBuilder(512);
 		for (int i=0;i<msg.length;i++) log_msg.append(msg[i]);
-		return cat+" "+log_id+log_msg.toString();
+		return cat.concat(" ").concat(log_id).concat(log_msg.toString());
 	};
 
 	final public String buildPrintLogMsg(String cat, String... msg) {
@@ -163,7 +163,7 @@ public class CommonLogUtil {
 			.append(log_msg.toString());
             CommonLogWriter.enqueue(clog, context, clog.getLogIntentSend(), print_msg.toString(), false);
 		}
-		Log.v(clog.getApplicationTag(), cat+" "+log_id+log_msg.toString());
+		Log.v(clog.getApplicationTag(), cat.concat(" ").concat(log_id).concat(log_msg.toString()));
 	};
 
 	final static private void addDebugMsg(CommonLogParameters clog, Context context, String log_id, int lvl, String cat, String... msg) {
@@ -180,7 +180,7 @@ public class CommonLogUtil {
 			.append(log_msg.toString());
             CommonLogWriter.enqueue(clog, context, clog.getLogIntentSend(), print_msg.toString(), false);
 		}
-		Log.v(clog.getApplicationTag(), cat+" "+log_id+log_msg.toString());
+		Log.v(clog.getApplicationTag(), cat.concat(" ").concat(log_id).concat(log_msg.toString()));
 	};
 
 	final public boolean isLogFileExists() {
