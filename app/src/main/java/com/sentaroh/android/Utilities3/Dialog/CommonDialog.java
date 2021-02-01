@@ -245,11 +245,6 @@ public class CommonDialog {
         }
     }
 
-    public static void setViewEnabled(Context a, View v, boolean enabled) {
-        boolean isLight=ThemeUtil.isLightThemeUsed(a);
-        setViewEnabled(isLight, v, enabled);
-    }
-
     public static void setSpinnerBackground(Activity a, Spinner spinner) {
         if (ThemeUtil.isLightThemeUsed(a)) spinner.setBackground(a.getApplicationContext().getDrawable(R.drawable.spinner_color_background_light));
         else spinner.setBackground(a.getApplicationContext().getDrawable(R.drawable.spinner_color_background));

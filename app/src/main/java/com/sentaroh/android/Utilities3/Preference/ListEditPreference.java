@@ -207,7 +207,7 @@ public class ListEditPreference extends DialogPreference {
         mDialogOkButton.setText(R.string.msgs_common_dialog_save);
         mDialogCancelButton=ad.getButton(AlertDialog.BUTTON_NEGATIVE);
 
-        CommonDialog.setViewEnabled(getContext(), mDialogOkButton, false);
+        setViewEnabled(getContext(), mDialogOkButton, false);
     };
 
     private Button mDialogOkButton=null;
@@ -252,7 +252,7 @@ public class ListEditPreference extends DialogPreference {
         });
 
         final Button add_btn=(Button) mListEditView.findViewById(R.id.list_edit_preference_add_btn);
-        CommonDialog.setViewEnabled(mContext, add_btn, false);
+        setViewEnabled(mContext, add_btn, false);
         final EditText et_list_value=(EditText) mListEditView.findViewById(R.id.list_edit_preference_add_item);
         et_list_value.setHint(mHint);
 
@@ -267,11 +267,11 @@ public class ListEditPreference extends DialogPreference {
             public void afterTextChanged(Editable editable) {
                 if (editable.length()>0) {
                     for(ListValueItem item: mValueList) {
-                        if (item.getListValue().equals(editable.toString())) CommonDialog.setViewEnabled(mContext, add_btn, false);
-                        else CommonDialog.setViewEnabled(mContext, add_btn, true);
+                        if (item.getListValue().equals(editable.toString())) setViewEnabled(mContext, add_btn, false);
+                        else setViewEnabled(mContext, add_btn, true);
                     }
                 } else {
-                    CommonDialog.setViewEnabled(mContext, add_btn, false);
+                    setViewEnabled(mContext, add_btn, false);
                 }
             }
         });
@@ -283,7 +283,7 @@ public class ListEditPreference extends DialogPreference {
                 mValueList.add(mi);
                 mListadapter.sort();
                 et_list_value.setText("");
-                CommonDialog.setViewEnabled(getContext(), mDialogOkButton, true);
+                setViewEnabled(getContext(), mDialogOkButton, true);
             }
         });
 
@@ -378,7 +378,7 @@ public class ListEditPreference extends DialogPreference {
                 mListadapter.notifyDataSetChanged();
                 dialog.dismiss();
                 mEditItemDialog=null;
-                CommonDialog.setViewEnabled(getContext(), mDialogOkButton, true);
+                setViewEnabled(getContext(), mDialogOkButton, true);
             }
         });
         dialog.show();
@@ -457,9 +457,9 @@ public class ListEditPreference extends DialogPreference {
                     holder.tv_row_filter.setAlpha(0.3f);
                     holder.btn_row_delbtn.setEnabled(false);
                     holder.btn_row_delbtn.setAlpha(0.3f);
-                    CommonDialog.setViewEnabled(mContext, holder.btn_row_delbtn, false);
+                    setViewEnabled(mContext, holder.btn_row_delbtn, false);
                 } else {
-                    CommonDialog.setViewEnabled(mContext, holder.btn_row_delbtn, true);
+                    setViewEnabled(mContext, holder.btn_row_delbtn, true);
                 }
 
                 final int p = position;
@@ -472,7 +472,7 @@ public class ListEditPreference extends DialogPreference {
                         o.setDeleted(true);
                         notifyDataSetChanged();
 
-                        CommonDialog.setViewEnabled(c, mDialogOkButton, true);
+                        setViewEnabled(c, mDialogOkButton, true);
 //                        if (mNotifyDeleteListener != null)
 //                            mNotifyDeleteListener.notifyToListener(true, new Object[]{o});
                     }
@@ -522,6 +522,11 @@ public class ListEditPreference extends DialogPreference {
             else
                 throw new IllegalArgumentException();
         }
+    }
+
+    private static void setViewEnabled(Context a, View v, boolean enabled) {
+        boolean isLight=ThemeUtil.isLightThemeUsed(a);
+        CommonDialog.setViewEnabled(isLight, v, enabled);
     }
 
 }
