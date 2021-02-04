@@ -281,7 +281,7 @@ public class MessageDialogFragment extends DialogFragment {
 //        else dlg_view.setBackgroundColor(Color.parseColor("#444444"));
     	ImageView title_icon=(ImageView)mDialog.findViewById(R.id.common_dialog_icon);
         NonWordwrapTextView title=(NonWordwrapTextView)mDialog.findViewById(R.id.common_dialog_title);
-        title.setWordWrapEnabled(true);
+//        title.setWordWrapEnabled(true);
     	LinearLayout title_view=(LinearLayout)mDialog.findViewById(R.id.common_dialog_title_view);
     	title_view.setBackgroundColor(mThemeColorList.title_background_color);
     	ScrollView msg_view=(ScrollView)mDialog.findViewById(R.id.common_dialog_msg_view);
@@ -293,7 +293,7 @@ public class MessageDialogFragment extends DialogFragment {
         TextView msg_text=(TextView)mDialog.findViewById(R.id.common_dialog_msg);
         msg_text.setVisibility(TextView.GONE);
         mCustomTextView=(NonWordwrapTextView)mDialog.findViewById(R.id.common_dialog_custom_text_view);
-        mCustomTextView.setWordWrapEnabled(mWordWrap);
+//        mCustomTextView.setWordWrapEnabled(mWordWrap);
 //        mCustomTextView.setBackgroundColor(Color.DKGRAY);
 
 //        mCustomTextView.setTextColor(Color.LTGRAY);

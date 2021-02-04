@@ -35,33 +35,43 @@ import com.sentaroh.android.Utilities3.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Locale;
+
 public class NonWordwrapTextView extends TextView {
     private static Logger log= LoggerFactory.getLogger(NonWordwrapTextView.class);
     private CharSequence mOrgText = "";
     private BufferType mOrgBufferType = BufferType.NORMAL;
     private int mSplitTextLineCount=0;
     private SpannableStringBuilder mSpannableSplitText=null;
-    private boolean mWordWrapMode =false;
+    private boolean mWordWrapMode =true;
 
     private boolean mDebugEnabled=false;
 
     public NonWordwrapTextView(Context context) {
         super(context);
+        setDefaultWordwrapMode();
         if (mDebugEnabled) log.info("constructor 1");
+    }
+
+    private void setDefaultWordwrapMode() {
+        if (Locale.getDefault().getLanguage().equals("ja") || Locale.getDefault().getLanguage().equals("zh")) setWordWrapEnabled(false);
     }
 
     public NonWordwrapTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setDefaultWordwrapMode();
         if (mDebugEnabled) log.info("constructor 2");
     }
 
     public NonWordwrapTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        setDefaultWordwrapMode();
         if (mDebugEnabled) log.info("constructor 3");
     }
 
     public NonWordwrapTextView(Context context, AttributeSet attrs, int defStyle, int defStyleRes) {
         super(context, attrs, defStyle, defStyleRes);
+        setDefaultWordwrapMode();
         if (mDebugEnabled) log.info("constructor 4");
     }
 

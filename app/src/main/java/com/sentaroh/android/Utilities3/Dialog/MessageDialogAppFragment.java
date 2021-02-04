@@ -44,8 +44,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.sentaroh.android.Utilities3.NotifyEvent;
+import com.sentaroh.android.Utilities3.R;
 import com.sentaroh.android.Utilities3.ThemeColorList;
 import com.sentaroh.android.Utilities3.ThemeUtil;
+import com.sentaroh.android.Utilities3.Widget.NonWordwrapTextView;
 
 public class MessageDialogAppFragment extends DialogFragment {
     private final static boolean DEBUG_ENABLE=false;
@@ -215,13 +217,15 @@ public class MessageDialogAppFragment extends DialogFragment {
         }
     };
 
+    private boolean mWordWrap =true;
+    private NonWordwrapTextView mCustomTextView=null;
     private void initViewWidget() {
         if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"initViewWidget");
 
         mDialog.setContentView(com.sentaroh.android.Utilities3.R.layout.common_dialog);
 
         ImageView title_icon=(ImageView)mDialog.findViewById(com.sentaroh.android.Utilities3.R.id.common_dialog_icon);
-        TextView title=(TextView)mDialog.findViewById(com.sentaroh.android.Utilities3.R.id.common_dialog_title);
+        NonWordwrapTextView title=(NonWordwrapTextView)mDialog.findViewById(com.sentaroh.android.Utilities3.R.id.common_dialog_title);
         LinearLayout title_view=(LinearLayout)mDialog.findViewById(com.sentaroh.android.Utilities3.R.id.common_dialog_title_view);
         title_view.setBackgroundColor(mThemeColorList.title_background_color);
         ScrollView msg_view=(ScrollView)mDialog.findViewById(com.sentaroh.android.Utilities3.R.id.common_dialog_msg_view);
@@ -242,10 +246,13 @@ public class MessageDialogAppFragment extends DialogFragment {
         }
         title.setTextColor(mThemeColorList.title_text_color);
         title.setText(mDialogTitle);
-        TextView msg_text=(TextView)mDialog.findViewById(com.sentaroh.android.Utilities3.R.id.common_dialog_msg);
-        if (mDialogMsgText.equals("")) msg_text.setVisibility(View.GONE);
+        TextView msg_text=(TextView)mDialog.findViewById(R.id.common_dialog_msg);
+        msg_text.setVisibility(TextView.GONE);
+        mCustomTextView=(NonWordwrapTextView)mDialog.findViewById(R.id.common_dialog_custom_text_view);
+
+        if (mDialogMsgText.equals("")) mCustomTextView.setVisibility(View.GONE);
         else {
-            msg_text.setText(mDialogMsgText);
+            mCustomTextView.setText(mDialogMsgText);
 //            msg_text.setTextColor(mThemeColorList.text_color_primary);
 //            msg_text.setBackgroundColor(mThemeColorList.dialog_msg_background_color);
         }
@@ -297,4 +304,9 @@ public class MessageDialogAppFragment extends DialogFragment {
         ft.commitAllowingStateLoss();
 //    	show(fm, APPLICATION_TAG);
     };
+
+    public void setWordWrapEanbled(boolean enabled) {
+        mWordWrap =enabled;
+    }
+
 }
