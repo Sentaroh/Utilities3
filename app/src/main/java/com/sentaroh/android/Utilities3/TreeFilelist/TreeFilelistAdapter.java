@@ -47,11 +47,15 @@ import com.sentaroh.android.Utilities3.R;
 import com.sentaroh.android.Utilities3.ThemeColorList;
 import com.sentaroh.android.Utilities3.ThemeUtil;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class TreeFilelistAdapter extends BaseAdapter {
+    private static final Logger log=LoggerFactory.getLogger(TreeFilelistAdapter.class);
 	private Context mContext;
 	private ArrayList<Integer> mShowItems=new ArrayList<Integer>();
 	private ArrayList<TreeFilelistItem> mDataItems=null;
@@ -474,7 +478,7 @@ public class TreeFilelistAdapter extends BaseAdapter {
 
 	@Override
 	public boolean isEnabled(int p) {
-//		Log.v("","n="+getDataItem(p).getName()+", e="+getDataItem(p).isEnableItem());
+//		log.debug("name="+getDataItem(p).getName()+", enabled="+getDataItem(p).isEnableItem());
         if (mDataItems.size()>p) return getDataItem(p).isEnableItem();
         else return false;
 	}

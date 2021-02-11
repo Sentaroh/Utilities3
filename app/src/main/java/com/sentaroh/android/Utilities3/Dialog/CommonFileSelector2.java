@@ -845,11 +845,12 @@ public class CommonFileSelector2 extends DialogFragment {
                         createLocalFilelist(mDialogSelectCat==DIALOG_SELECT_CATEGORY_FILE, mDialogLocalDir, ntfy, true);
                     }
                 } else {
-                    mTreeFilelistAdapter.setDataItemIsSelected(pos);
-
-                    et_file_name.setText(mTreeFilelistAdapter.getDataItem(pos).getName());
-                    if (mTreeFilelistAdapter.getDataItem(pos).isDir() && mDialogSelectCat==DIALOG_SELECT_CATEGORY_FILE) setButtonEnabled(mActivity, btnOk, false);
-                    else setButtonEnabled(mActivity, btnOk, true);
+                    if (mDialogSelectCat==DIALOG_SELECT_CATEGORY_FILE) {
+                        mTreeFilelistAdapter.setDataItemIsSelected(pos);
+                        et_file_name.setText(mTreeFilelistAdapter.getDataItem(pos).getName());
+                        if (mTreeFilelistAdapter.getDataItem(pos).isDir() && mDialogSelectCat==DIALOG_SELECT_CATEGORY_FILE) setButtonEnabled(mActivity, btnOk, false);
+                        else setButtonEnabled(mActivity, btnOk, true);
+                    }
                 }
             }
         });
@@ -1250,6 +1251,8 @@ public class CommonFileSelector2 extends DialogFragment {
 
     private void createLocalFilelist(final boolean fileOnly, final String dir, final NotifyEvent ntfy, final boolean show_pd_circle_delay) {
         SafFile3 sf= new SafFile3(mContext, dir);
+        log.debug("createLocalFilelist");
+
         if (sf.isSafFile()) {
             File lf=new File(sf.getPath());
             if (lf.canRead()) createFileApiFilelist(fileOnly, lf, ntfy, show_pd_circle_delay);
@@ -1330,8 +1333,9 @@ public class CommonFileSelector2 extends DialogFragment {
                                                 (isAndroidVersion30orUp() && canAccessDirectory(ff[i].getPath()))) {
                                             tfl.add(tfi);
                                         }
-//                                    } else {
-//                                        tfl.add(tfi);
+                                    } else {
+                                        tfi.setEnableItem(false);
+                                        tfl.add(tfi);
                                     }
                                 } else {
                                     if (ff[i].isDirectory()) {
@@ -1433,10 +1437,15 @@ public class CommonFileSelector2 extends DialogFragment {
                                 mUiHandler.post(new Runnable(){
                                     @Override
                                     public void run() {
-                                        if (!fileOnly) {
-                                            if (tfi.isDir()) tfl.add(tfi);
-                                        } else {
+                                        if (tfi.isDir()) {
                                             tfl.add(tfi);
+                                        } else {
+                                            if (!fileOnly) {
+                                                tfi.setEnableItem(false);
+                                                tfl.add(tfi);
+                                            } else {
+                                                tfl.add(tfi);
+                                            }
                                         }
                                     }
                                 });
