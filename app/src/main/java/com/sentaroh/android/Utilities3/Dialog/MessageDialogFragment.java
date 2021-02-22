@@ -75,6 +75,8 @@ public class MessageDialogFragment extends DialogFragment {
 	
 	private ThemeColorList mThemeColorList;
 
+	private Activity mActivity=null;
+
 	public static MessageDialogFragment newInstance(
             boolean negative, String type, String title, String msgtext) {
         MessageDialogFragment frag = new MessageDialogFragment();
@@ -154,6 +156,7 @@ public class MessageDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
         if (mDebugEnabled) log.debug("onCreate terminateRequired="+terminateRequired);
+        if (mActivity==null) mActivity=getActivity();
         if (!terminateRequired) {
             Bundle bd=getArguments();
             setRetainInstance(true);
@@ -178,6 +181,7 @@ public class MessageDialogFragment extends DialogFragment {
 	final public void onAttach(Activity activity) {
 	    super.onAttach(activity);
         if (mDebugEnabled) log.debug("onAttach terminateRequired="+terminateRequired);
+        if (mActivity==null) mActivity=getActivity();
 	};
 	@Override
 	final public void onDetach() {
@@ -229,13 +233,13 @@ public class MessageDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         if (mDebugEnabled) log.debug("onCreateDialog terminateRequired="+terminateRequired);
 
-        mDialog=new Dialog(getActivity());//, ThemeUtil.getAppTheme(getActivity()));
+        mDialog=new Dialog(mActivity);//, ThemeUtil.getAppTheme(mActivity));
 
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		mDialog.setCanceledOnTouchOutside(false);
 
 		if (!terminateRequired) {
-			mThemeColorList=ThemeUtil.getThemeColorList(getActivity());
+			mThemeColorList=ThemeUtil.getThemeColorList(mActivity);
 			initViewWidget();
 		}
 		

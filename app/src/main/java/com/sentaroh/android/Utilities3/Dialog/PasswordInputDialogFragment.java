@@ -72,6 +72,7 @@ public class PasswordInputDialogFragment extends DialogFragment {
 	private EditText confirmPasswdEditText;
 	private TextView mDlgMsg;
 	private Context mContext=null;
+    private Activity mActivity=null;
 	private String mPswd="", mConfPswd="";
 	
 	public static PasswordInputDialogFragment newInstance(String title, int min_length) {
@@ -123,6 +124,7 @@ public class PasswordInputDialogFragment extends DialogFragment {
     	super.onCreate(savedInstanceState);
         if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"onCreate terminateRequired="+terminateRequired);
         mContext=getActivity();
+        mActivity=getActivity();
         if (!terminateRequired) {
             Bundle bd=getArguments();
             setRetainInstance(true);
@@ -191,13 +193,13 @@ public class PasswordInputDialogFragment extends DialogFragment {
 	@Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
     	if (DEBUG_ENABLE) Log.v(APPLICATION_TAG,"onCreateDialog terminateRequired="+terminateRequired);
-    	mDialog=new Dialog(getActivity());//, ThemeUtil.getAppTheme(getActivity()));//, MiscUtil.getAppTheme(getActivity()));
+    	mDialog=new Dialog(mActivity);//, ThemeUtil.getAppTheme(mActivity));//, MiscUtil.getAppTheme(mActivity));
 		mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 		mDialog.setCanceledOnTouchOutside(false);
 
 		if (!terminateRequired) {
-			mThemeColorList=ThemeUtil.getThemeColorList(getActivity());
+			mThemeColorList=ThemeUtil.getThemeColorList(mActivity);
 			initViewWidget();
 		}
 		

@@ -236,7 +236,7 @@ public class CommonFileSelector2 extends DialogFragment {
 
         if (savedInstanceState!=null) mRestartStatus=2;
 
-        mSafFileMgr3 =new SafManager3(getActivity().getApplicationContext());
+        mSafFileMgr3 =new SafManager3(mActivity.getApplicationContext());
         mSafStorageList = mSafFileMgr3.getSafStorageList();
 
         mFragment=this;
@@ -251,7 +251,7 @@ public class CommonFileSelector2 extends DialogFragment {
 //                    ", ldir="+mDialogLocalDir+
                     ", file name="+mDialogFileName);
 
-//        	mCcMenu=new CustomContextMenu(getActivity().getResources(), this.getFragmentManager());
+//        	mCcMenu=new CustomContextMenu(mActivity.getResources(), this.getFragmentManager());
         }
     }
 
@@ -327,12 +327,12 @@ public class CommonFileSelector2 extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         if (mDebug) log.debug("onCreateDialog");
 
-        mDialog=new Dialog(getActivity(), ThemeUtil.getAppTheme(getActivity()));
+        mDialog=new Dialog(mActivity, ThemeUtil.getAppTheme(mActivity));
 
         mDialog.setCanceledOnTouchOutside(false);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        mThemeColorList= ThemeUtil.getThemeColorList(getActivity());
+        mThemeColorList= ThemeUtil.getThemeColorList(mActivity);
 
         if (!mTerminateRequired) {
             initViewWidget(true);
@@ -435,7 +435,7 @@ public class CommonFileSelector2 extends DialogFragment {
         }
 
         final Button btnOk = (Button) mDialog.findViewById(R.id.common_file_selector_btn_ok);
-        CommonDialog.setViewEnabled(getActivity(), btnOk, mSavedViewContentsValue.mainDialogOkButtonEnabled);
+        CommonDialog.setViewEnabled(mActivity, btnOk, mSavedViewContentsValue.mainDialogOkButtonEnabled);
 
         resetSavedViewContents();
     };
@@ -532,12 +532,12 @@ public class CommonFileSelector2 extends DialogFragment {
 
         final Button btnTop = (Button)mDialog.findViewById(R.id.common_file_selector_top_btn);
 //        btnTop.setTextColor(mThemeColorList.text_color_primary);
-        if (ThemeUtil.isLightThemeUsed(getActivity())) btnTop.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_16_go_top_dark, 0, 0, 0);
+        if (ThemeUtil.isLightThemeUsed(mActivity)) btnTop.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_16_go_top_dark, 0, 0, 0);
         else btnTop.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_16_go_top_light, 0, 0, 0);
 
         final Button btnUp = (Button)mDialog.findViewById(R.id.common_file_selector_up_btn);
 //        btnUp.setTextColor(mThemeColorList.text_color_primary);
-        if (ThemeUtil.isLightThemeUsed(getActivity())) btnUp.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_16_go_up_dark, 0, 0, 0);
+        if (ThemeUtil.isLightThemeUsed(mActivity)) btnUp.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_16_go_up_dark, 0, 0, 0);
         else btnUp.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_16_go_up_light, 0, 0, 0);
 
 
@@ -552,7 +552,7 @@ public class CommonFileSelector2 extends DialogFragment {
         }
 
         mStorageSelectorSpinner =(Spinner) mDialog.findViewById(R.id.common_file_selector_storage_spinner);
-        setSpinnerBackground(mContext, mStorageSelectorSpinner, ThemeUtil.isLightThemeUsed(getActivity()));
+        setSpinnerBackground(mContext, mStorageSelectorSpinner, ThemeUtil.isLightThemeUsed(mActivity));
         mStorageSelectorSpinner.setVisibility(Spinner.VISIBLE);
         //	Root directory spinner
         CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(mActivity, android.R.layout.simple_spinner_item);
@@ -1287,7 +1287,7 @@ public class CommonFileSelector2 extends DialogFragment {
     }
 
     private void  createFileApiFilelist(final boolean fileOnly, final File target_dir, final NotifyEvent ntfy, final boolean show_pd_circle_delay) {
-        final Dialog pd= CommonDialog.showProgressSpinIndicator(getActivity());
+        final Dialog pd= CommonDialog.showProgressSpinIndicator(mActivity);
         if (show_pd_circle_delay) {
             mUiHandler.post(new Runnable(){
                 @Override
@@ -1397,7 +1397,7 @@ public class CommonFileSelector2 extends DialogFragment {
 
 
     private void  createSafApiFilelist(final boolean fileOnly, final SafFile3 target_dir, final NotifyEvent ntfy, final boolean show_pd_circle_delay) {
-        final Dialog pd= CommonDialog.showProgressSpinIndicator(getActivity());
+        final Dialog pd= CommonDialog.showProgressSpinIndicator(mActivity);
         if (show_pd_circle_delay) {
             mUiHandler.post(new Runnable(){
                 @Override
