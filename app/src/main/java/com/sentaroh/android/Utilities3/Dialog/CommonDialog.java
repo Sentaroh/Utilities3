@@ -95,6 +95,12 @@ public class CommonDialog {
         return dialog;
     }
 
+    final static public void performClickNoSound(View v) {
+        v.setSoundEffectsEnabled(false);
+        v.performClick();
+        v.setSoundEffectsEnabled(true);
+    }
+
     final static public float toPixel(Resources res, int dip) {
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, res.getDisplayMetrics());
         return px;
