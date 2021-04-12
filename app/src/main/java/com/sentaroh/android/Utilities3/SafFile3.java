@@ -1510,14 +1510,14 @@ public class SafFile3 {
                 result = DocumentsContract.renameDocument(mContext.getContentResolver(), mUri, new_name.getName());
                 return true;
             } catch (Exception e) {
-                putErrorMessage("renameTo rename failed, msg="+e.getMessage()+"\n"+MiscUtil.getStackTraceString(e));
-                return false;
-//                if (!exists(mUri) && new_name.exists()) {
-//                    return true;
-//                } else {
-//                    putErrorMessage("renameTo rename failed, msg="+e.getMessage());
-//                    return false;
-//                }
+//                putErrorMessage("renameTo rename failed, msg="+e.getMessage()+"\n"+MiscUtil.getStackTraceString(e));
+//                return false;
+                if (!this.exists() && new_name.exists()) {
+                    return true;
+                } else {
+                    putErrorMessage("renameTo rename failed, msg="+e.getMessage()+"\n"+MiscUtil.getStackTraceString(e));
+                    return false;
+                }
             }
         } else {
             return this.mFile.renameTo(new_name.getFile());
@@ -1555,24 +1555,18 @@ public class SafFile3 {
             Uri move_result=null;
             try {
                 if (log.isDebugEnabled()) putDebugMessage("moveTo mUri="+mUri.getPath()+", to_file="+to_file.getUri().getPath());
+                if (to_file.exists()) {
+                    putErrorMessage("moveTo failed. To file already exists.");
+                    return false;
+                }
                 Uri f_parent=getParentUri(mUri.toString());
                 Uri t_parent=getParentUri(to_file.getUri().toString());
                 move_result = DocumentsContract.moveDocument(mContext.getContentResolver(), mUri, f_parent, t_parent);
                 mUri = move_result;
                 if (mUri!=null) {
                     if (!this.getName().toLowerCase().equals(to_file.getName().toLowerCase())) {
-                        try {
-                            this.renameTo(to_file);
-                            return true;
-                        } catch(Exception e) {
-                            putErrorMessage("moveTo rename failed, to="+to_file+", error="+e.getMessage()+"\n"+MiscUtil.getStackTraceString(e));
-                            return false;
-//                            if (!to_file.exists()) {
-//                                putErrorMessage("moveTo rename failed, to="+to_file+", error="+e.getMessage());
-//                                return false;
-//                            }
-//                            return true;
-                        }
+                        boolean result=this.renameTo(to_file);
+                        return result;
                     } else {
                         return true;
                     }
