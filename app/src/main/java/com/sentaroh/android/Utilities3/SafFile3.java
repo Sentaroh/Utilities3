@@ -1203,6 +1203,20 @@ public class SafFile3 {
         }
     }
 
+    public boolean delete(ContentProviderClient cpc) {
+        if (isBuildError()) return false;
+        if (mSafFile) {
+            try {
+                deleteDocument(cpc, mUri);
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
+        } else {
+            return mFile.delete();
+        }
+    }
+
     public boolean exists() {
         if (isBuildError()) return false;
         if (mSafFile) {
