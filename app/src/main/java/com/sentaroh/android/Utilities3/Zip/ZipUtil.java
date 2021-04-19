@@ -228,7 +228,9 @@ public class ZipUtil {
 
     static public ZipModel getZipModel(Context c, SafFile3 sf, String password, String encoding) {
         try {
-            SeekableInputStream sis = new SeekableInputStream(c, sf.getUri(), sf.length());
+            SeekableInputStream sis = null;
+            if (sf.isSafFile()) sis = new SeekableInputStream(c, sf.getUri(), sf.length());
+            else sis = new SeekableInputStream(c, sf.getFile());
             HeaderReader header_reader = new HeaderReader();
             ZipModel zm = header_reader.readAllHeaders(sis, Charset.forName(encoding));
             return zm;
@@ -236,6 +238,19 @@ public class ZipUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    static public boolean isSplitArchiveFile(Context c, SafFile3 sf) {
+        if (sf.exists()) {
+            ZipModel zm=getZipModel(c, sf, null, ZipUtil.DEFAULT_ZIP_FILENAME_ENCODING);
+            if (zm.isSplitArchive()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     static public FileHeader getFileHeader(ZipModel zm, String item_name) throws ZipException {
