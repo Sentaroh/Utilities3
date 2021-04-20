@@ -67,8 +67,10 @@
         <string name="msgs_log_file_list_dlg_send_zip_file_cancelled">La création du fichier zip a été annulée.</string>
         <string name="msgs_log_file_list_log_save">Sauvegarder</string>
         <string name="msgs_log_file_list_log_browse_active_log">Envoi des journaux aux développeurs</string>
+        <string name="msgs_log_file_list_log_export">Exportation des journaux</string>
+        <string name="msgs_log_file_list_log_export_title">Sélection de la destination pour l\'exportation des journaux</string>
         <string name="msgs_log_file_list_log_send_dev">journal d\'activité</string>
-        <string name="msgs_log_file_list_log_title">Journal des événements</string>
+        <string name="deleted_msgs_log_file_list_log_title">Journal des événements</string>
         <string name="msgs_log_file_list_log_enable_title">Journalisation</string>
         <string name="msgs_log_file_list_log_toggle_enabled">Journalisation activée</string>
         <string name="msgs_log_file_list_log_toggle_disabled">Journalisation désactivée</string>

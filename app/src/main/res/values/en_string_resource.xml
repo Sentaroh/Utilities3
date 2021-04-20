@@ -67,8 +67,10 @@
         <string name="msgs_log_file_list_dlg_send_zip_file_cancelled">Zip file creation has been canceled</string>
         <string name="msgs_log_file_list_log_save">Save</string>
         <string name="msgs_log_file_list_log_browse_active_log">Browse log</string>
+        <string name="msgs_log_file_list_log_export">Exporting logs</string>
+        <string name="msgs_log_file_list_log_export_title">Selecting the destination for log export</string>
         <string name="msgs_log_file_list_log_send_dev">Send to developer</string>
-        <string name="msgs_log_file_list_log_title">Events log</string>
+        <string name="deleted_msgs_log_file_list_log_title">Events log</string>
         <string name="msgs_log_file_list_log_enable_title">Enable Logging</string>
         <string name="msgs_log_file_list_log_toggle_enabled">Logging enabled</string>
         <string name="msgs_log_file_list_log_toggle_disabled">Logging disabled</string>

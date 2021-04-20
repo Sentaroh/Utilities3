@@ -67,14 +67,20 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.sentaroh.android.Utilities3.BuildConfig;
+import com.sentaroh.android.Utilities3.CallBackListener;
 import com.sentaroh.android.Utilities3.ContextButton.ContextButtonUtil;
 import com.sentaroh.android.Utilities3.Dialog.CommonDialog;
+import com.sentaroh.android.Utilities3.Dialog.CommonFileSelector2;
 import com.sentaroh.android.Utilities3.Dialog.MessageDialogFragment;
 import com.sentaroh.android.Utilities3.Dialog.ProgressBarDialogFragment;
 import com.sentaroh.android.Utilities3.LocalMountPoint;
+import com.sentaroh.android.Utilities3.MiscUtil;
 import com.sentaroh.android.Utilities3.NotifyEvent;
 import com.sentaroh.android.Utilities3.NotifyEvent.NotifyEventListener;
 import com.sentaroh.android.Utilities3.R;
+import com.sentaroh.android.Utilities3.SafFile3;
+import com.sentaroh.android.Utilities3.SafManager3;
+import com.sentaroh.android.Utilities3.StringUtil;
 import com.sentaroh.android.Utilities3.ThemeColorList;
 import com.sentaroh.android.Utilities3.ThemeUtil;
 import com.sentaroh.android.Utilities3.ThreadCtrl;
@@ -89,6 +95,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -379,6 +387,7 @@ public class CommonLogManagementFragment extends DialogFragment {
         final Spinner sp_log_level=(Spinner)mDialog.findViewById(R.id.log_file_list_dlg_log_level);
         final LinearLayout ll_log_level_view=(LinearLayout) mDialog.findViewById(R.id.log_file_list_dlg_log_level_view);
     	final Button btn_browse=(Button)mDialog.findViewById(R.id.log_file_list_dlg_log_browse_active_log);
+        final Button btn_export=(Button)mDialog.findViewById(R.id.log_file_list_dlg_log_export);
     	final Button btn_send_dev=(Button)mDialog.findViewById(R.id.log_file_list_dlg_log_send);
     	final CheckBox cb_log_enabled=(CheckBox)mDialog.findViewById(R.id.log_file_list_dlg_log_enabled);
         CommonDialog.setButtonEnabled(getActivity(), btn_browse, mClog.isLogEnabled());
@@ -410,7 +419,14 @@ public class CommonLogManagementFragment extends DialogFragment {
 			}
     	});
 
-    	btn_send_dev.setOnClickListener(new OnClickListener(){
+        btn_export.setOnClickListener(new OnClickListener(){
+            @Override
+            public void onClick(View arg0) {
+                exportLogZipFile();
+            }
+        });
+
+        btn_send_dev.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
 				confirmSendLog();
@@ -823,7 +839,75 @@ public class CommonLogManagementFragment extends DialogFragment {
 		}
 	};
 
-	final private void sendLogFileToDeveloper(String log_file_path, String msg_text, String password) {
+    private void exportLogZipFile() {
+
+        CommonLogUtil.flushLog(mContext);
+
+        File ilf=new File(mClog.getLogDirName()+"/"+mClog.getLogFileName()+".txt");
+        if (ilf.length()==0) {
+            MessageDialogFragment mdf =MessageDialogFragment.newInstance(false, "W",
+                    mContext.getString(R.string.msgs_log_file_list_empty_can_not_send), "");
+            mdf.showDialog(mFragment.getFragmentManager(), mdf, null);
+            return ;
+        }
+
+        createTempLogFile();
+
+        String log_file_path=getTempLogFilePath();
+
+        CommonLogUtil.resetLogReceiver(mContext);
+
+        String zip_file_name=getZipLogFilePath();
+
+        final File lf=new File(zip_file_name);
+        lf.delete();
+
+//		createZipFile(zip_file_name,log_file_path);
+//		String[] lmp=LocalMountPoint.convertFilePathToMountpointFormat(mContext, log_file_path);
+//		ZipUtil.createZipFile(mContext, null, null, zip_file_name, lmp[0], log_file_path);
+        String lfd=new File(log_file_path).getParent();
+        ZipUtil.createZipFile(mContext, null, null, zip_file_name, lfd, log_file_path);
+
+        NotifyEvent ntfy_file_select=new NotifyEvent(getActivity());
+        ntfy_file_select.setListener(new NotifyEventListener() {
+            @Override
+            public void positiveResponse(Context c, Object[] o) {
+                final Uri fpath = (Uri) o[0];
+                SafFile3 sf=new SafFile3(getActivity(), fpath);
+                byte[] buff=new byte[1024*1024];
+                try {
+                    int rc=0;
+                    sf.deleteIfExists();
+                    OutputStream os=sf.getOutputStream();
+                    InputStream is=new FileInputStream(lf);
+                    while((rc=is.read(buff))>0) {
+                        os.write(buff, 0, rc);
+                    }
+                    is.close();
+                    os.flush();
+                    os.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void negativeResponse(Context c, Object[] o) {}
+        });
+        String pkg_name=getActivity().getPackageName();
+        int lp=pkg_name.lastIndexOf(".");
+        String export_file_name="log.zip";
+        if (lp>0) {
+            String dt_time= StringUtil.convDateTimeTo_YearMonthDayHourMinSec(System.currentTimeMillis()).replaceAll("/","").replaceAll(":","").replaceAll(" ","_");
+            export_file_name=pkg_name.substring(lp+1)+"_log_"+dt_time+".zip";
+        }
+        CommonFileSelector2 fsdf=
+                CommonFileSelector2.newInstance(true, true, false, CommonFileSelector2.DIALOG_SELECT_CATEGORY_FILE,
+                        true, SafManager3.SAF_FILE_PRIMARY_UUID, "/SMBSync3", export_file_name, getActivity().getString(R.string.msgs_log_file_list_log_export_title));
+        fsdf.showDialog(false, getActivity().getSupportFragmentManager(), fsdf, ntfy_file_select);
+    }
+
+	private void sendLogFileToDeveloper(String log_file_path, String msg_text, String password) {
 		CommonLogUtil.resetLogReceiver(mContext);
 
 		String zip_file_name=getZipLogFilePath();
@@ -889,20 +973,18 @@ public class CommonLogManagementFragment extends DialogFragment {
 
     private boolean mDisableChangeLogEnabled=false;
 	final private void confirmSettingsLogOption(final boolean enabled) {
-        final Button btn_browse=(Button)mDialog.findViewById(R.id.log_file_list_dlg_log_browse_active_log);
-    	final Button btn_send_dev=(Button)mDialog.findViewById(R.id.log_file_list_dlg_log_send);
-    	final CheckBox cb_log_enabled=(CheckBox)mDialog.findViewById(R.id.log_file_list_dlg_log_enabled);
-//        final Spinner sp_log_level=(Spinner)mDialog.findViewById(R.id.log_file_list_dlg_log_level);
 		NotifyEvent ntfy=new NotifyEvent(mContext);
 		ntfy.setListener(new NotifyEventListener(){
 			@Override
 			public void positiveResponse(Context c, Object[] o) {
                 final Button btn_browse=(Button)mDialog.findViewById(R.id.log_file_list_dlg_log_browse_active_log);
+                final Button btn_export=(Button)mDialog.findViewById(R.id.log_file_list_dlg_log_export);
                 final Button btn_send_dev=(Button)mDialog.findViewById(R.id.log_file_list_dlg_log_send);
                 final CheckBox cb_log_enabled=(CheckBox)mDialog.findViewById(R.id.log_file_list_dlg_log_enabled);
 			    mClog.setLogOptionLogEnabled(mContext, cb_log_enabled.isChecked());
                 if (!cb_log_enabled.isChecked()) performRotateLog();
                 CommonDialog.setButtonEnabled(getActivity(), btn_browse, enabled);
+                CommonDialog.setButtonEnabled(getActivity(), btn_export, enabled);
                 CommonDialog.setButtonEnabled(getActivity(), btn_send_dev, enabled);
 		    	Handler hndl=new Handler();
 		    	hndl.postDelayed(new Runnable(){
@@ -918,8 +1000,6 @@ public class CommonLogManagementFragment extends DialogFragment {
 			}
 			@Override
 			public void negativeResponse(Context c, Object[] o) {
-                final Button btn_browse=(Button)mDialog.findViewById(R.id.log_file_list_dlg_log_browse_active_log);
-                final Button btn_send_dev=(Button)mDialog.findViewById(R.id.log_file_list_dlg_log_send);
                 final CheckBox cb_log_enabled=(CheckBox)mDialog.findViewById(R.id.log_file_list_dlg_log_enabled);
 				mDisableChangeLogEnabled=true;
 				cb_log_enabled.setChecked(!cb_log_enabled.isChecked());
@@ -1086,7 +1166,7 @@ public class CommonLogManagementFragment extends DialogFragment {
 
     private void sendLogFile() {
 		final String zip_file_name=getZipLogFilePath();
-		
+
 		int no_of_files=0;
 		for (int i=0;i<mLogFileManagementAdapter.getCount();i++) {
 			if (mLogFileManagementAdapter.getItem(i).isChecked) no_of_files++;
@@ -1112,7 +1192,7 @@ public class CommonLogManagementFragment extends DialogFragment {
 		});
 
 		final ProgressBarDialogFragment pbdf=ProgressBarDialogFragment.newInstance(
-				mContext.getString(R.string.msgs_log_file_list_dlg_send_zip_file_creating), 
+				mContext.getString(R.string.msgs_log_file_list_dlg_send_zip_file_creating),
 				"",
 				mContext.getString(R.string.msgs_common_dialog_cancel),
 				mContext.getString(R.string.msgs_common_dialog_cancel));
@@ -1128,7 +1208,7 @@ public class CommonLogManagementFragment extends DialogFragment {
 				    Intent intent=new Intent();
 				    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				    intent.setAction(Intent.ACTION_SEND);
-//				    intent.setType("message/rfc822");  
+//				    intent.setType("message/rfc822");
 //				    intent.setType("text/plain");
 				    intent.setType("application/zip");
                     Uri uri=createLogFileUri(mContext, mClog.getLogDirName()+"/"+mClog.getLogFileName()+".txt");

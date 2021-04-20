@@ -67,8 +67,10 @@
         <string name="msgs_log_file_list_dlg_send_zip_file_cancelled">Создание Zip-файла отменено</string>
         <string name="msgs_log_file_list_log_save">Сохранить</string>
         <string name="msgs_log_file_list_log_browse_active_log">Просмотреть журнал</string>
+        <string name="msgs_log_file_list_log_export">Журналы экспорта</string>
+        <string name="msgs_log_file_list_log_export_title">Выбор места назначения для экспорта журнала</string>
         <string name="msgs_log_file_list_log_send_dev">Отправить разработчику</string>
-        <string name="msgs_log_file_list_log_title">Активный журнал</string>
+        <string name="deleted_msgs_log_file_list_log_title">Активный журнал</string>
         <string name="msgs_log_file_list_log_enable_title">Включить протоколирование</string>
         <string name="msgs_log_file_list_log_toggle_enabled">Для включения журнала</string>
         <string name="msgs_log_file_list_log_toggle_disabled">Чтобы отключить журнал</string>

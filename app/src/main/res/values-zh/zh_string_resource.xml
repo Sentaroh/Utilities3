@@ -67,8 +67,10 @@
         <string name="msgs_log_file_list_dlg_send_zip_file_cancelled">Zip文件的创建已被取消</string>
         <string name="msgs_log_file_list_log_save">拯救</string>
         <string name="msgs_log_file_list_log_browse_active_log">浏览日志</string>
+        <string name="msgs_log_file_list_log_export">输出日志</string>
+        <string name="msgs_log_file_list_log_export_title">选择日志输出的目的地</string>
         <string name="msgs_log_file_list_log_send_dev">发送给开发者</string>
-        <string name="msgs_log_file_list_log_title">活动日志</string>
+        <string name="deleted_msgs_log_file_list_log_title">活动日志</string>
         <string name="msgs_log_file_list_log_enable_title">伐木</string>
         <string name="msgs_log_file_list_log_toggle_enabled">启用日志记录</string>
         <string name="msgs_log_file_list_log_toggle_disabled">禁用记录</string>

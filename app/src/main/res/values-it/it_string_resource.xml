@@ -67,8 +67,10 @@
         <string name="msgs_log_file_list_dlg_send_zip_file_cancelled">La creazione di file zip è stata annullata</string>
         <string name="msgs_log_file_list_log_save">Salva</string>
         <string name="msgs_log_file_list_log_browse_active_log">Sfoglia il registro</string>
+        <string name="msgs_log_file_list_log_export">Esportare i registri</string>
+        <string name="msgs_log_file_list_log_export_title">Selezionare la destinazione per l\'esportazione dei log</string>
         <string name="msgs_log_file_list_log_send_dev">Inviare allo sviluppatore</string>
-        <string name="msgs_log_file_list_log_title">Diario degli eventi</string>
+        <string name="deleted_msgs_log_file_list_log_title">Diario degli eventi</string>
         <string name="msgs_log_file_list_log_enable_title">Attivare la registrazione</string>
         <string name="msgs_log_file_list_log_toggle_enabled">Registrazione abilitata</string>
         <string name="msgs_log_file_list_log_toggle_disabled">Disabilitazione della registrazione</string>

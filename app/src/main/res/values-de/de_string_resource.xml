@@ -67,8 +67,10 @@
         <string name="msgs_log_file_list_dlg_send_zip_file_cancelled">Die Erstellung von Zip-Dateien wurde abgebrochen</string>
         <string name="msgs_log_file_list_log_save">Speichern</string>
         <string name="msgs_log_file_list_log_browse_active_log">Protokoll durchsuchen</string>
+        <string name="msgs_log_file_list_log_export">Protokolle exportieren</string>
+        <string name="msgs_log_file_list_log_export_title">Auswählen des Ziels für den Protokollexport</string>
         <string name="msgs_log_file_list_log_send_dev">An Entwickler senden</string>
-        <string name="msgs_log_file_list_log_title">Aktives Protokoll</string>
+        <string name="deleted_msgs_log_file_list_log_title">Aktives Protokoll</string>
         <string name="msgs_log_file_list_log_enable_title">Protokollierung aktivieren</string>
         <string name="msgs_log_file_list_log_toggle_enabled">So aktivieren Sie das Protokoll</string>
         <string name="msgs_log_file_list_log_toggle_disabled">So deaktivieren Sie das Protokoll</string>
