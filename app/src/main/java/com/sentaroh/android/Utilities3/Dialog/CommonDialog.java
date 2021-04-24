@@ -79,11 +79,11 @@ public class CommonDialog {
 
     public void showCommonDialog(Context c, boolean negative, String type, String title, String msgtext, CallBackListener cbl) {
         MessageDialogFragment cdf =MessageDialogFragment.newInstance(negative, type, title, msgtext);
-        cdf.showDialog(c, mFragMgr, cdf, cbl);
+        cdf.showDialog(mFragMgr, cdf, cbl);
     };
     static public void showCommonDialog(Context c, FragmentManager fm, final boolean negative, String type, String title, String msgtext, CallBackListener cbl) {
         MessageDialogFragment cdf =MessageDialogFragment.newInstance(negative, type, title, msgtext);
-        cdf.showDialog(c, fm, cdf, cbl);
+        cdf.showDialog(fm, cdf, cbl);
     };
 
     static public Dialog showProgressSpinIndicator(Activity a) {

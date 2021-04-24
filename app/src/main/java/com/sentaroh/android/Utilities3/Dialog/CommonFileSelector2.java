@@ -54,6 +54,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.sentaroh.android.Utilities3.CallBackListener;
 import com.sentaroh.android.Utilities3.MiscUtil;
 import com.sentaroh.android.Utilities3.NotifyEvent;
 import com.sentaroh.android.Utilities3.R;
@@ -1239,11 +1240,27 @@ public class CommonFileSelector2 extends DialogFragment {
         }
     };
 
-    public void showDialog(boolean debug, FragmentManager fm, Fragment frag, NotifyEvent ntfy) {
+    public void showDialog(boolean debug, FragmentManager fm, Fragment frag, final Object listener) {
         mDebug=debug;
         if (mDebug) log.debug("showDialog");
         mTerminateRequired=false;
-        mNotifyEvent=ntfy;
+
+        if (listener==null || listener instanceof NotifyEvent) {
+            mNotifyEvent=(NotifyEvent)listener;
+        } else if (listener instanceof CallBackListener) {
+            NotifyEvent ntfy=new NotifyEvent(null);
+            ntfy.setListener(new NotifyEvent.NotifyEventListener() {
+                @Override
+                public void positiveResponse(Context c, Object[] o) {
+                    ((CallBackListener)listener).onCallBack(mActivity, true, o);
+                }
+                @Override
+                public void negativeResponse(Context c, Object[] o) {
+                    ((CallBackListener)listener).onCallBack(mActivity, false, o);
+                }
+            });
+            mNotifyEvent=ntfy;
+        }
         FragmentTransaction ft = fm.beginTransaction();
         ft.add(frag,null);
         ft.commitAllowingStateLoss();

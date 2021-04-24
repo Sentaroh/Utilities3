@@ -396,8 +396,11 @@ public class MessageDialogFragment extends DialogFragment {
         mWordWrap =enabled;
     }
 
-    public void showDialog(boolean debug, FragmentManager fm, Fragment frag, NotifyEvent ntfy) {
-        mDebugEnabled=debug;
+    public void setDebugEanbled(boolean enabled) {
+        mDebugEnabled =enabled;
+    }
+
+    private void showDialogInternal(FragmentManager fm, Fragment frag, NotifyEvent ntfy) {
         if (mDebugEnabled) log.debug("showDialog");
 
         terminateRequired=false;
@@ -405,28 +408,31 @@ public class MessageDialogFragment extends DialogFragment {
         FragmentTransaction ft = fm.beginTransaction();
         ft.add(frag,null);
         ft.commitAllowingStateLoss();
-//    	show(fm, APPLICATION_TAG);
     };
 
-    public void showDialog(FragmentManager fm, Fragment frag, NotifyEvent ntfy) {
-        mDebugEnabled=false;
-        showDialog(false, fm, frag, ntfy);
-    };
+//    public void showDialog(FragmentManager fm, Fragment frag, final NotifyEvent ntfy) {
+//        mDebugEnabled=false;
+//        showDialog(false, fm, frag, ntfy);
+//    };
 
-    public void showDialog(Context c, FragmentManager fm, Fragment frag, final CallBackListener cbl) {
-        mDebugEnabled=false;
-        NotifyEvent ntfy=new NotifyEvent(c);
-        ntfy.setListener(new NotifyEvent.NotifyEventListener() {
-            @Override
-            public void positiveResponse(Context c, Object[] o) {
-                if (cbl!=null) cbl.onCallBack(c, true, o);
-            }
+    public void showDialog(FragmentManager fm, Fragment frag, final Object listener) {
+        Context c=frag.getContext();
+        if (listener==null || listener instanceof NotifyEvent) {
+            showDialogInternal(fm, frag, (NotifyEvent)listener);
+        } else if (listener instanceof CallBackListener){
+            NotifyEvent ntfy=new NotifyEvent(c);
+            ntfy.setListener(new NotifyEvent.NotifyEventListener() {
+                @Override
+                public void positiveResponse(Context c, Object[] o) {
+                    if (listener!=null) ((CallBackListener)listener).onCallBack(mActivity, true, o);
+                }
 
-            @Override
-            public void negativeResponse(Context c, Object[] o) {
-                if (cbl!=null) cbl.onCallBack(c, false, o);
-            }
-        });
-        showDialog(false, fm, frag, ntfy);
+                @Override
+                public void negativeResponse(Context c, Object[] o) {
+                    if (listener!=null) ((CallBackListener)listener).onCallBack(mActivity, false, o);
+                }
+            });
+            showDialogInternal(fm, frag, ntfy);
+        }
     };
 }

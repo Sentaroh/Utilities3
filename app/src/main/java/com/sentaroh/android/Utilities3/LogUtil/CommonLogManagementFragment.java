@@ -955,7 +955,7 @@ public class CommonLogManagementFragment extends DialogFragment {
 	    MessageDialogFragment mdf=MessageDialogFragment.newInstance(true, "W",
                 mContext.getString(R.string.msgs_log_file_list_confirm_send_log_send_password_title),
                 mContext.getString(R.string.msgs_log_file_list_confirm_send_log_send_password_message));
-	    mdf.showDialog(true, getFragmentManager(), mdf, ntfy);
+	    mdf.showDialog(getFragmentManager(), mdf, ntfy);
     }
 
 
@@ -1352,7 +1352,7 @@ public class CommonLogManagementFragment extends DialogFragment {
             File lf=c.getExternalFilesDirs(null)[0];
             MessageDialogFragment mdf=MessageDialogFragment.newInstance(false, "E",
                     c.getString(R.string.msgs_log_can_not_start_log_mgmt), "file="+lf);
-            mdf.showDialog(false, fm, mdf, null);
+            mdf.showDialog(fm, mdf, null);
         }
     };
 
