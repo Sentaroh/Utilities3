@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
     <!-- file_select_edit -->
-        <string name="msgs_file_select_edit_dlg_create">Create</string>
+        <string name="msgs_file_select_edit_dlg_create">Create directory</string>
         <string name="msgs_file_select_edit_dlg_home_dir">Home</string>
         <string name="msgs_file_select_edit_dlg_refresh">Refresh</string>
         <string name="msgs_file_select_edit_dlg_ok">OK</string>
         <string name="msgs_file_select_edit_dlg_cancel">Cancel</string>
         <string name="msgs_file_select_edit_dlg_filename">File name</string>
         <string name="msgs_file_select_edit_dlg_dir_name">Directory name</string>
+        <string name="msgs_file_select_edit_dlg_dir_not_specified">Specify the directory name.</string>
         <string name="msgs_file_select_edit_dlg_dir_created">%s was created</string>
         <string name="msgs_file_select_edit_dlg_dir_not_created">failed to create %s</string>
         <string name="msgs_file_select_edit_dlg_dir_create_file">Create new file</string>
@@ -68,6 +69,9 @@
         <string name="msgs_log_file_list_log_save">Save</string>
         <string name="msgs_log_file_list_log_browse_active_log">Browse log</string>
         <string name="msgs_log_file_list_log_export">Exporting logs</string>
+        <string name="msgs_log_file_list_log_file_export_file_log_was_exported">Finished writing the log.</string>
+        <string name="msgs_log_file_list_log_file_export_file_already_exists">The log file already exists, do you want to overwrite it?</string>
+        <string name="msgs_log_file_list_log_file_export_log_file_export_confirm">Are you sure you want to export the log file?</string>
         <string name="msgs_log_file_list_log_export_title">Selecting the destination for log export</string>
         <string name="msgs_log_file_list_log_send_dev">Send to developer</string>
         <string name="deleted_msgs_log_file_list_log_title">Events log</string>

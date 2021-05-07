@@ -110,33 +110,58 @@ public class SafFile3 {
         String user_path_seg="";
         String rebuild_path="";
 
-        boolean saf_mp_exists=isSafFileMountPointExists(reformed_fp);
-
-        if (all_file_access && saf_mp_exists) {
-            if (reformed_fp.startsWith(SAF_FILE_PRIMARY_STORAGE_PREFIX)) {
-                user_path_seg=reformed_fp.replace(SAF_FILE_PRIMARY_STORAGE_PREFIX,"");
-                rebuild_path=reformed_fp;
-                buildOsFile(rebuild_path, user_path_seg);
-            } else {
-                String[] path_array=reformed_fp.split("/");
-                String t_uuid=path_array.length>=3?path_array[2]:"";
-                String t_user_path_seg=reformed_fp.replace("/"+path_array[1]+"/"+t_uuid,"");
-                user_path_seg=t_user_path_seg.startsWith("/")?t_user_path_seg.substring(1):t_user_path_seg;
-                rebuild_path=reformed_fp;
-                buildOsFile(rebuild_path, user_path_seg);
+        if (reformed_fp.startsWith("/data")) {
+            try {
+                String file_path=context.getFilesDir().getCanonicalPath();
+                String cache_path=context.getCacheDir().getCanonicalPath();
+                File lf=new File(reformed_fp);
+                String lf_path=lf.getCanonicalPath();
+                mPath=lf_path;
+                mFile=lf;
+                mUuid="data";
+                mSafFile =false;
+                mDocName=lf.getName();
+                mAppDirectoryFiles=file_path;
+                mAppDirectoryCache=cache_path;
+                if (!lf_path.startsWith(file_path) &&! lf_path.startsWith(cache_path)) {
+                    putErrorMessage("SafFile3 build error, invalid File path. Path="+reformed_fp);
+                    mBuildError=true;
+                    return;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                putErrorMessage("SafFile3 build error, File path obtain error. error="+e.getMessage());
+                mBuildError=true;
+                return;
             }
         } else {
-            if (reformed_fp.startsWith(SAF_FILE_PRIMARY_STORAGE_PREFIX)) {
-                user_path_seg=reformed_fp.replace(SAF_FILE_PRIMARY_STORAGE_PREFIX,"");
-                rebuild_path=reformed_fp;
-                buildOsFile(rebuild_path, user_path_seg);
+            boolean saf_mp_exists=isSafFileMountPointExists(reformed_fp);
+            if (all_file_access && saf_mp_exists) {
+                if (reformed_fp.startsWith(SAF_FILE_PRIMARY_STORAGE_PREFIX)) {
+                    user_path_seg=reformed_fp.replace(SAF_FILE_PRIMARY_STORAGE_PREFIX,"");
+                    rebuild_path=reformed_fp;
+                    buildOsFile(rebuild_path, user_path_seg);
+                } else {
+                    String[] path_array=reformed_fp.split("/");
+                    String t_uuid=path_array.length>=3?path_array[2]:"";
+                    String t_user_path_seg=reformed_fp.replace("/"+path_array[1]+"/"+t_uuid,"");
+                    user_path_seg=t_user_path_seg.startsWith("/")?t_user_path_seg.substring(1):t_user_path_seg;
+                    rebuild_path=reformed_fp;
+                    buildOsFile(rebuild_path, user_path_seg);
+                }
             } else {
-                String[] path_array=reformed_fp.split("/");
-                String t_uuid=path_array.length>=3?path_array[2]:"";
-                String t_user_path_seg=reformed_fp.replace("/"+path_array[1]+"/"+t_uuid,"");
-                user_path_seg=t_user_path_seg.startsWith("/")?t_user_path_seg.substring(1):t_user_path_seg;
-                rebuild_path=reformed_fp;
-                buildSafStorage(rebuild_path, user_path_seg);
+                if (reformed_fp.startsWith(SAF_FILE_PRIMARY_STORAGE_PREFIX)) {
+                    user_path_seg=reformed_fp.replace(SAF_FILE_PRIMARY_STORAGE_PREFIX,"");
+                    rebuild_path=reformed_fp;
+                    buildOsFile(rebuild_path, user_path_seg);
+                } else {
+                    String[] path_array=reformed_fp.split("/");
+                    String t_uuid=path_array.length>=3?path_array[2]:"";
+                    String t_user_path_seg=reformed_fp.replace("/"+path_array[1]+"/"+t_uuid,"");
+                    user_path_seg=t_user_path_seg.startsWith("/")?t_user_path_seg.substring(1):t_user_path_seg;
+                    rebuild_path=reformed_fp;
+                    buildSafStorage(rebuild_path, user_path_seg);
+                }
             }
         }
     }

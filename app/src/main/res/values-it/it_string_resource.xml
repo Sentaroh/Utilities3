@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
     <!-- file_select_edit -->
-        <string name="msgs_file_select_edit_dlg_create">Crea</string>
+        <string name="msgs_file_select_edit_dlg_create">Creare una directory</string>
         <string name="msgs_file_select_edit_dlg_home_dir">Home</string>
         <string name="msgs_file_select_edit_dlg_refresh">Aggiorna</string>
         <string name="msgs_file_select_edit_dlg_ok">OK</string>
         <string name="msgs_file_select_edit_dlg_cancel">Annulla</string>
         <string name="msgs_file_select_edit_dlg_filename">Nome del file</string>
         <string name="msgs_file_select_edit_dlg_dir_name">Nome dell\'elenco</string>
+        <string name="msgs_file_select_edit_dlg_dir_not_specified">Si prega di specificare il nome della directory.</string>
         <string name="msgs_file_select_edit_dlg_dir_created">%s è stato creato</string>
         <string name="msgs_file_select_edit_dlg_dir_not_created">non è riuscito a creare %s</string>
         <string name="msgs_file_select_edit_dlg_dir_create_file">Creare un nuovo file</string>
@@ -68,6 +69,9 @@
         <string name="msgs_log_file_list_log_save">Salva</string>
         <string name="msgs_log_file_list_log_browse_active_log">Sfoglia il registro</string>
         <string name="msgs_log_file_list_log_export">Esportare i registri</string>
+        <string name="msgs_log_file_list_log_file_export_file_log_was_exported">Finito di scrivere il registro.</string>
+        <string name="msgs_log_file_list_log_file_export_file_already_exists">Il file esiste già, vuoi sovrascriverlo?</string>
+        <string name="msgs_log_file_list_log_file_export_log_file_export_confirm">Sei sicuro di voler scrivere il file di log?</string>
         <string name="msgs_log_file_list_log_export_title">Selezionare la destinazione per l\'esportazione dei log</string>
         <string name="msgs_log_file_list_log_send_dev">Inviare allo sviluppatore</string>
         <string name="deleted_msgs_log_file_list_log_title">Diario degli eventi</string>

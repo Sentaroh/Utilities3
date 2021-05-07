@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
     <!-- file_select_edit -->
-        <string name="msgs_file_select_edit_dlg_create">作成</string>
+        <string name="msgs_file_select_edit_dlg_create">ディレクトリー作成</string>
         <string name="msgs_file_select_edit_dlg_home_dir">ホーム</string>
         <string name="msgs_file_select_edit_dlg_refresh">リスト再読込</string>
         <string name="msgs_file_select_edit_dlg_ok">了解</string>
         <string name="msgs_file_select_edit_dlg_cancel">キャンセル</string>
         <string name="msgs_file_select_edit_dlg_filename">ファイル名</string>
         <string name="msgs_file_select_edit_dlg_dir_name">ディレクトリー名</string>
+        <string name="msgs_file_select_edit_dlg_dir_not_specified">ディレクトリー名を指定してください。</string>
         <string name="msgs_file_select_edit_dlg_dir_created">%s を作成しました</string>
         <string name="msgs_file_select_edit_dlg_dir_not_created">%s の作成に失敗しました</string>
         <string name="msgs_file_select_edit_dlg_dir_create_file">ファイルを作成する</string>
@@ -68,6 +69,9 @@
         <string name="msgs_log_file_list_log_save">保存</string>
         <string name="msgs_log_file_list_log_browse_active_log">ログを表示</string>
         <string name="msgs_log_file_list_log_export">ログの書出し</string>
+        <string name="msgs_log_file_list_log_file_export_file_log_was_exported">ログの書出しが終了しました。</string>
+        <string name="msgs_log_file_list_log_file_export_file_already_exists">ログファイルが既に存在しています、上書きしますか？</string>
+        <string name="msgs_log_file_list_log_file_export_log_file_export_confirm">ログファイルを書き出してよろしいでしょうか？</string>
         <string name="msgs_log_file_list_log_export_title">ログ書出し先の選択</string>
         <string name="msgs_log_file_list_log_send_dev">開発者にログを送る</string>
         <string name="deleted_msgs_log_file_list_log_title">活動ログ</string>

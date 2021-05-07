@@ -117,13 +117,19 @@
                 android:text="@string/msgs_file_select_edit_dlg_dir_name"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <EditText
-                android:id="@+id/common_file_selector_dir_name"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="text"
-                android:hint="Name" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/common_file_selector_dir_name_view"
+                style="@style/ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/common_file_selector_dir_name"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:hint="Name" />
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
@@ -141,13 +147,19 @@
                 android:text="@string/msgs_file_select_edit_dlg_filename"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <EditText
-                android:id="@+id/common_file_selector_file_name"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="text|textMultiLine"
-                android:hint="Name" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/common_file_selector_file_name_layout_view"
+                style="@style/ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/common_file_selector_file_name"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="text|textMultiLine"
+                    android:hint="Name" />
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 

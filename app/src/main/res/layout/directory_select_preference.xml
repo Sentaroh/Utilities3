@@ -41,13 +41,18 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:visibility="gone" />
 
-    <EditText
-        android:id="@+id/directory_select_preference_filename"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:inputType="text" />
-
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/directory_select_preference_filename_view"
+        style="@style/ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/directory_select_preference_filename"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>

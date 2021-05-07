@@ -822,7 +822,7 @@ public class CommonLogManagementFragment extends DialogFragment {
 			FileOutputStream fos=new FileOutputStream(olf);
             for(File in_file:in_log_file_list) {
                 FileInputStream fis=new FileInputStream(in_file);
-                byte[] buff=new byte[1024*256];
+                byte[] buff=new byte[1024*1024];
                 int rc=0;
                 fos.write((new String(in_file.getPath()+"\n").getBytes()));
                 while((rc=fis.read(buff))>0) {
@@ -851,44 +851,151 @@ public class CommonLogManagementFragment extends DialogFragment {
             return ;
         }
 
-        createTempLogFile();
+        Thread th=new Thread() {
+            @Override
+            public void run() {
+                createTempLogFile();
+                String log_file_path=getTempLogFilePath();
+                CommonLogUtil.resetLogReceiver(mContext);
+                String zip_file_name=getZipLogFilePath();
+                final File lf=new File(zip_file_name);
+                lf.delete();
 
-        String log_file_path=getTempLogFilePath();
+                String lfd=new File(log_file_path).getParent();
+                ZipUtil.createZipFile(mContext, null, null, zip_file_name, lfd, log_file_path);
 
-        CommonLogUtil.resetLogReceiver(mContext);
+                NotifyEvent ntfy_file_select=new NotifyEvent(getActivity());
+                ntfy_file_select.setListener(new NotifyEventListener() {
+                    @Override
+                    public void positiveResponse(Context c, Object[] o) {
+                        final Uri fpath = (Uri) o[0];
+                        final SafFile3 sf=new SafFile3(getActivity(), fpath);
 
-        String zip_file_name=getZipLogFilePath();
+                        NotifyEvent ntfy_export=new NotifyEvent(mContext);
+                        ntfy_export.setListener(new NotifyEventListener() {
+                            @Override
+                            public void positiveResponse(Context c, Object[] o) {
+                                byte[] buff=new byte[1024*1024];
+                                try {
+                                    int rc=0;
+                                    sf.deleteIfExists();
+                                    OutputStream os=sf.getOutputStream();
+                                    InputStream is=new FileInputStream(lf);
+                                    while((rc=is.read(buff))>0) {
+                                        os.write(buff, 0, rc);
+                                    }
+                                    is.close();
+                                    os.flush();
+                                    os.close();
+                                    MessageDialogFragment mdf =MessageDialogFragment.newInstance(false, "W",
+                                            mContext.getString(R.string.msgs_log_file_list_log_file_export_file_log_was_exported), sf.getPath());
+                                    mdf.showDialog(mFragment.getFragmentManager(), mdf, null);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
 
-        final File lf=new File(zip_file_name);
-        lf.delete();
+                            @Override
+                            public void negativeResponse(Context c, Object[] o) {}
+                        });
+                        if (sf.exists()) {
+                            MessageDialogFragment mdf =MessageDialogFragment.newInstance(true, "W",
+                                    mContext.getString(R.string.msgs_log_file_list_log_file_export_file_already_exists), sf.getPath());
+                            mdf.showDialog(mFragment.getFragmentManager(), mdf, ntfy_export);
+                        } else {
+                            ntfy_export.notifyToListener(true, null);
+                        }
+                    }
 
-//		createZipFile(zip_file_name,log_file_path);
-//		String[] lmp=LocalMountPoint.convertFilePathToMountpointFormat(mContext, log_file_path);
-//		ZipUtil.createZipFile(mContext, null, null, zip_file_name, lmp[0], log_file_path);
-        String lfd=new File(log_file_path).getParent();
-        ZipUtil.createZipFile(mContext, null, null, zip_file_name, lfd, log_file_path);
+                    @Override
+                    public void negativeResponse(Context c, Object[] o) {}
+                });
+                String pkg_name=getActivity().getPackageName();
+                int lp=pkg_name.lastIndexOf(".");
+                String export_file_name="log.zip";
+                if (lp>0) {
+                    String dt_time= StringUtil.convDateTimeTo_YearMonthDayHourMinSec(System.currentTimeMillis()).replaceAll("/","").replaceAll(":","").replaceAll(" ","_");
+                    export_file_name=pkg_name.substring(lp+1)+"_log_"+dt_time+".zip";
+                }
+            }
+        };
 
+        final Handler hndl=new Handler();
         NotifyEvent ntfy_file_select=new NotifyEvent(getActivity());
         ntfy_file_select.setListener(new NotifyEventListener() {
             @Override
             public void positiveResponse(Context c, Object[] o) {
                 final Uri fpath = (Uri) o[0];
-                SafFile3 sf=new SafFile3(getActivity(), fpath);
-                byte[] buff=new byte[1024*1024];
-                try {
-                    int rc=0;
-                    sf.deleteIfExists();
-                    OutputStream os=sf.getOutputStream();
-                    InputStream is=new FileInputStream(lf);
-                    while((rc=is.read(buff))>0) {
-                        os.write(buff, 0, rc);
+                final SafFile3 sf=new SafFile3(getActivity(), fpath);
+                NotifyEvent ntfy_override_conf=new NotifyEvent(getActivity());
+                ntfy_override_conf.setListener(new NotifyEventListener() {
+                    @Override
+                    public void positiveResponse(Context c, Object[] o) {
+                        final Dialog pd=CommonDialog.showProgressSpinIndicator(getActivity());
+                        pd.show();
+                        Thread th=new Thread() {
+                            @Override
+                            public void run() {
+                                createTempLogFile();
+                                String log_file_path=getTempLogFilePath();
+                                CommonLogUtil.resetLogReceiver(mContext);
+                                String zip_file_name=getZipLogFilePath();
+                                final File lf=new File(zip_file_name);
+                                lf.delete();
+                                String lfd=new File(log_file_path).getParent();
+                                ZipUtil.createZipFile(mContext, null, null, zip_file_name, lfd, log_file_path);
+
+                                byte[] buff=new byte[1024*1024];
+                                try {
+                                    int rc=0;
+                                    sf.deleteIfExists();
+                                    OutputStream os=sf.getOutputStream();
+                                    InputStream is=new FileInputStream(lf);
+                                    while((rc=is.read(buff))>0) {
+                                        os.write(buff, 0, rc);
+                                    }
+                                    is.close();
+                                    os.flush();
+                                    os.close();
+                                    hndl.post(new Runnable(){
+                                        @Override
+                                        public void run() {
+                                            pd.dismiss();
+                                            MessageDialogFragment mdf =MessageDialogFragment.newInstance(false, "W",
+                                                    mContext.getString(R.string.msgs_log_file_list_log_file_export_file_log_was_exported), sf.getPath());
+                                            mdf.showDialog(mFragment.getFragmentManager(), mdf, null);
+                                        }
+                                    });
+                                } catch (Exception e) {
+                                    hndl.post(new Runnable(){
+                                        @Override
+                                        public void run() {
+                                            pd.dismiss();
+//                                                    MessageDialogFragment mdf =MessageDialogFragment.newInstance(false, "W",
+//                                                            mContext.getString(R.string.msgs_log_file_list_log_file_export_file_log_was_exported), sf.getPath());
+//                                                    mdf.showDialog(mFragment.getFragmentManager(), mdf, null);
+                                        }
+                                    });
+                                    e.printStackTrace();
+                                }
+                            }
+                        };
+                        th.start();
                     }
-                    is.close();
-                    os.flush();
-                    os.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    @Override
+                    public void negativeResponse(Context c, Object[] o) {}
+                });
+
+                if (sf.exists()) {
+                    MessageDialogFragment mdf =MessageDialogFragment.newInstance(true, "W",
+                            mContext.getString(R.string.msgs_log_file_list_log_file_export_file_already_exists), sf.getPath());
+                    mdf.showDialog(mFragment.getFragmentManager(), mdf, ntfy_override_conf);
+                } else {
+                    MessageDialogFragment mdf =MessageDialogFragment.newInstance(true, "W",
+                            mContext.getString(R.string.msgs_log_file_list_log_file_export_log_file_export_confirm), sf.getPath());
+                    mdf.showDialog(mFragment.getFragmentManager(), mdf, ntfy_override_conf);
                 }
+
             }
 
             @Override

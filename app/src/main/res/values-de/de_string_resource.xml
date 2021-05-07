@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
     <!-- file_select_edit -->
-        <string name="msgs_file_select_edit_dlg_create">Erstellen</string>
+        <string name="msgs_file_select_edit_dlg_create">Verzeichnis erstellen</string>
         <string name="msgs_file_select_edit_dlg_home_dir">Startseite</string>
         <string name="msgs_file_select_edit_dlg_refresh">Aktualisieren Sie</string>
         <string name="msgs_file_select_edit_dlg_ok">OK</string>
         <string name="msgs_file_select_edit_dlg_cancel">Abbrechen</string>
         <string name="msgs_file_select_edit_dlg_filename">Name der Datei</string>
         <string name="msgs_file_select_edit_dlg_dir_name">Name des Verzeichnisses</string>
+        <string name="msgs_file_select_edit_dlg_dir_not_specified">Bitte geben Sie den Verzeichnisnamen an.</string>
         <string name="msgs_file_select_edit_dlg_dir_created">%s hat erstellt</string>
         <string name="msgs_file_select_edit_dlg_dir_not_created">%s scheiterten an der Schaffung</string>
         <string name="msgs_file_select_edit_dlg_dir_create_file">Neue Datei erstellen</string>
@@ -68,6 +69,9 @@
         <string name="msgs_log_file_list_log_save">Speichern</string>
         <string name="msgs_log_file_list_log_browse_active_log">Protokoll durchsuchen</string>
         <string name="msgs_log_file_list_log_export">Protokolle exportieren</string>
+        <string name="msgs_log_file_list_log_file_export_file_log_was_exported">Beendet das Schreiben des Protokolls.</string>
+        <string name="msgs_log_file_list_log_file_export_file_already_exists">Die Datei existiert bereits, wollen Sie sie überschreiben?</string>
+        <string name="msgs_log_file_list_log_file_export_log_file_export_confirm">Sind Sie sicher, dass Sie die Protokolldatei ausschreiben wollen?</string>
         <string name="msgs_log_file_list_log_export_title">Auswählen des Ziels für den Protokollexport</string>
         <string name="msgs_log_file_list_log_send_dev">An Entwickler senden</string>
         <string name="deleted_msgs_log_file_list_log_title">Aktives Protokoll</string>

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
     <!-- file_select_edit -->
-        <string name="msgs_file_select_edit_dlg_create">Создать</string>
+        <string name="msgs_file_select_edit_dlg_create">Создать каталог</string>
         <string name="msgs_file_select_edit_dlg_home_dir">Главная страница</string>
         <string name="msgs_file_select_edit_dlg_refresh">Обновить</string>
         <string name="msgs_file_select_edit_dlg_ok">OK</string>
         <string name="msgs_file_select_edit_dlg_cancel">Отменить</string>
         <string name="msgs_file_select_edit_dlg_filename">Имя файла</string>
         <string name="msgs_file_select_edit_dlg_dir_name">Название каталога</string>
+        <string name="msgs_file_select_edit_dlg_dir_not_specified">Пожалуйста, укажите имя каталога.</string>
         <string name="msgs_file_select_edit_dlg_dir_created">%s создал</string>
         <string name="msgs_file_select_edit_dlg_dir_not_created">%s не удалось создать</string>
         <string name="msgs_file_select_edit_dlg_dir_create_file">Создать новый файл</string>
@@ -68,6 +69,9 @@
         <string name="msgs_log_file_list_log_save">Сохранить</string>
         <string name="msgs_log_file_list_log_browse_active_log">Просмотреть журнал</string>
         <string name="msgs_log_file_list_log_export">Журналы экспорта</string>
+        <string name="msgs_log_file_list_log_file_export_file_log_was_exported">Закончил запись журнала.</string>
+        <string name="msgs_log_file_list_log_file_export_file_already_exists">Файл уже существует, хотите ли вы перезаписать его?</string>
+        <string name="msgs_log_file_list_log_file_export_log_file_export_confirm">Вы уверены, что хотите записать файл журнала?</string>
         <string name="msgs_log_file_list_log_export_title">Выбор места назначения для экспорта журнала</string>
         <string name="msgs_log_file_list_log_send_dev">Отправить разработчику</string>
         <string name="deleted_msgs_log_file_list_log_title">Активный журнал</string>

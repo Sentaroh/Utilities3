@@ -54,6 +54,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.sentaroh.android.Utilities3.CallBackListener;
 import com.sentaroh.android.Utilities3.MiscUtil;
 import com.sentaroh.android.Utilities3.NotifyEvent;
@@ -577,6 +578,7 @@ public class CommonFileSelector2 extends DialogFragment {
         final TextView hdr_file_name = (TextView) mDialog.findViewById(R.id.common_file_selector_hdr_file_name);
         final EditText et_dir_name = (EditText) mDialog.findViewById(R.id.common_file_selector_dir_name);
         final EditText et_file_name = (EditText) mDialog.findViewById(R.id.common_file_selector_file_name);
+        et_file_name.setEnabled(false);
         hdr_file_name.setVisibility(TextView.GONE);
         ll_dir_name.setVisibility(LinearLayout.GONE);
         ll_file_name.setVisibility(LinearLayout.VISIBLE);
@@ -657,7 +659,8 @@ public class CommonFileSelector2 extends DialogFragment {
             if (mDialogSelectCat==DIALOG_SELECT_CATEGORY_FILE) {
                 et_file_name.setText(mDialogFileName);
             } else {
-                et_file_name.setVisibility(EditText.GONE);
+//                et_file_name.setVisibility(EditText.GONE);
+                ll_file_name.setVisibility(LinearLayout.VISIBLE);
 //                mTreeFilelistAdapter.setDirectorySelectable(false);
 //                if (mDialogLocalDir.length()>1) et_file_name.setText(mDialogLocalDir.substring(1));
 //                else et_file_name.setText("");
@@ -749,12 +752,14 @@ public class CommonFileSelector2 extends DialogFragment {
         }
         if (mDialogDisableInput) {
             et_file_name.setEnabled(false);
-            et_file_name.setVisibility(EditText.GONE);
+//            et_file_name.setVisibility(EditText.GONE);
+            ll_file_name.setVisibility(LinearLayout.GONE);
             if (ThemeUtil.isLightThemeUsed(mActivity)) et_file_name.setTextColor(Color.BLACK) ;
             else et_file_name.setTextColor(Color.LTGRAY) ;
         } else {
             et_file_name.setEnabled(true);
-            et_file_name.setVisibility(EditText.VISIBLE);
+//            et_file_name.setVisibility(EditText.VISIBLE);
+            ll_file_name.setVisibility(LinearLayout.VISIBLE);
             if (ThemeUtil.isLightThemeUsed(mActivity)) et_file_name.setTextColor(Color.BLACK) ;
             else et_file_name.setTextColor(Color.LTGRAY) ;
         }
@@ -1595,30 +1600,36 @@ public class CommonFileSelector2 extends DialogFragment {
                                                final NotifyEvent p_ntfy, final ListView lv) {
         final String stg_name=(String) mStorageSelectorSpinner.getSelectedItem();
         final SafStorage3 ss= getSafStorageFromName(stg_name);
-
+        ThemeColorList tcl=ThemeUtil.getThemeColorList(activity);
         mCreateDirDialog = new Dialog(activity);
         mCreateDirDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mCreateDirDialog.setContentView(R.layout.single_item_input_dlg);
+        LinearLayout ll_title_view=(LinearLayout)mCreateDirDialog.findViewById(R.id.single_item_input_title_view);
         final TextView dlg_title = (TextView) mCreateDirDialog.findViewById(R.id.single_item_input_title);
         dlg_title.setText(context.getString(R.string.msgs_file_select_edit_dlg_create));
+        dlg_title.setTextColor(tcl.title_text_color);
+        ll_title_view.setBackgroundColor(tcl.title_background_color);
         final TextView dlg_msg = (TextView) mCreateDirDialog.findViewById(R.id.single_item_input_msg);
         dlg_msg.setVisibility(TextView.VISIBLE);
         final TextView dlg_cmp = (TextView) mCreateDirDialog.findViewById(R.id.single_item_input_name);
         final Button btnOk = (Button) mCreateDirDialog.findViewById(R.id.single_item_input_ok_btn);
         final Button btnCancel = (Button) mCreateDirDialog.findViewById(R.id.single_item_input_cancel_btn);
+        final TextInputLayout ll_dir_view=(TextInputLayout)mCreateDirDialog.findViewById(R.id.single_item_input_dir_view);
+        ll_dir_view.setHint(activity.getString(R.string.msgs_file_select_edit_dlg_dir_name));
         final EditText etDir=(EditText) mCreateDirDialog.findViewById(R.id.single_item_input_dir);
 
         dlg_cmp.setText(context.getString(R.string.msgs_file_select_edit_parent_directory)+":"+dir);
         CommonDialog.setDlgBoxSizeCompact(mCreateDirDialog);
-        btnOk.setEnabled(false);
+
+        dlg_msg.setText(activity.getString(R.string.msgs_file_select_edit_dlg_dir_not_specified));
+
+        CommonDialog.setViewEnabled(activity, btnOk, false);
         etDir.addTextChangedListener(new TextWatcher(){
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -1627,17 +1638,21 @@ public class CommonFileSelector2 extends DialogFragment {
                     if (isAndroidVersion30orUp()) {
                         if (!canAccessDirectory(create_dir)) {
                             dlg_msg.setText(context.getString(R.string.msgs_single_item_input_dlg_prohibit_access_directory, s.toString()));
+                            CommonDialog.setViewEnabled(activity, btnOk, false);
                             return;
                         }
                     }
                     File lf=new File(create_dir);
                     if (lf.exists()) {
-                        btnOk.setEnabled(false);
+                        CommonDialog.setViewEnabled(activity, btnOk, false);
                         dlg_msg.setText(context.getString(R.string.msgs_single_item_input_dlg_duplicate_dir));
                     } else {
-                        btnOk.setEnabled(true);
+                        CommonDialog.setViewEnabled(activity, btnOk, true);
                         dlg_msg.setText("");
                     }
+                } else {
+                    CommonDialog.setViewEnabled(activity, btnOk, false);
+                    dlg_msg.setText(activity.getString(R.string.msgs_file_select_edit_dlg_dir_not_specified));
                 }
             }
 

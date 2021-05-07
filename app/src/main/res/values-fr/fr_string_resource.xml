@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
     <!-- file_select_edit -->
-        <string name="msgs_file_select_edit_dlg_create">Créer</string>
+        <string name="msgs_file_select_edit_dlg_create">Créer un répertoire</string>
         <string name="msgs_file_select_edit_dlg_home_dir">Accueil</string>
         <string name="msgs_file_select_edit_dlg_refresh">Actualiser</string>
         <string name="msgs_file_select_edit_dlg_ok">OK</string>
         <string name="msgs_file_select_edit_dlg_cancel">Annuler</string>
         <string name="msgs_file_select_edit_dlg_filename">Nom du fichier</string>
         <string name="msgs_file_select_edit_dlg_dir_name">Nom du dossier</string>
+        <string name="msgs_file_select_edit_dlg_dir_not_specified">Veuillez spécifier le nom du répertoire.</string>
         <string name="msgs_file_select_edit_dlg_dir_created">%s créé</string>
         <string name="msgs_file_select_edit_dlg_dir_not_created">%s n\'a pas pu être créé</string>
         <string name="msgs_file_select_edit_dlg_dir_create_file">Créer un nouveau fichier</string>
@@ -68,6 +69,9 @@
         <string name="msgs_log_file_list_log_save">Sauvegarder</string>
         <string name="msgs_log_file_list_log_browse_active_log">Envoi des journaux aux développeurs</string>
         <string name="msgs_log_file_list_log_export">Exportation des journaux</string>
+        <string name="msgs_log_file_list_log_file_export_file_log_was_exported">Fini d\'écrire le journal.</string>
+        <string name="msgs_log_file_list_log_file_export_file_already_exists">Le fichier existe déjà, voulez-vous l\'écraser ?</string>
+        <string name="msgs_log_file_list_log_file_export_log_file_export_confirm">Êtes-vous sûr de vouloir écrire le fichier journal ?</string>
         <string name="msgs_log_file_list_log_export_title">Sélection de la destination pour l\'exportation des journaux</string>
         <string name="msgs_log_file_list_log_send_dev">journal d\'activité</string>
         <string name="deleted_msgs_log_file_list_log_title">Journal des événements</string>
