@@ -61,7 +61,8 @@ public class CommonLogParameters {
             edit.putBoolean(LOG_OPTION_KEY_LOG_ENABLE, false);
             edit.apply();
         }
-        File files_dir=c.getExternalFilesDirs(null)[0];
+//        File files_dir=c.getExternalFilesDirs(null)[0];
+        File files_dir=c.getFilesDir();
         if (files_dir!=null) {
             log_dir_name=files_dir.getPath()+"/log";
             log_file_package_name =c.getPackageName();
