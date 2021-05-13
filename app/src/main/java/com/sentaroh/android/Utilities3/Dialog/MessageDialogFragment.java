@@ -266,6 +266,7 @@ public class MessageDialogFragment extends DialogFragment {
 
     private NonWordwrapTextView mCustomTextView=null;
     private int mMessageTextColor=-1;
+    private boolean mWordWrapSetRequired =false;
     private boolean mWordWrap =true;
 
     final static public String CATEGORY_INFO="I";
@@ -297,7 +298,7 @@ public class MessageDialogFragment extends DialogFragment {
         TextView msg_text=(TextView)mDialog.findViewById(R.id.common_dialog_msg);
         msg_text.setVisibility(TextView.GONE);
         mCustomTextView=(NonWordwrapTextView)mDialog.findViewById(R.id.common_dialog_custom_text_view);
-//        mCustomTextView.setWordWrapEnabled(mWordWrap);
+        if (mWordWrapSetRequired) mCustomTextView.setWordWrapEnabled(mWordWrap);
 //        mCustomTextView.setBackgroundColor(Color.DKGRAY);
 
 //        mCustomTextView.setTextColor(Color.LTGRAY);
@@ -394,6 +395,7 @@ public class MessageDialogFragment extends DialogFragment {
 
     public void setWordWrapEanbled(boolean enabled) {
         mWordWrap =enabled;
+        mWordWrapSetRequired=true;
     }
 
     public void setDebugEanbled(boolean enabled) {
