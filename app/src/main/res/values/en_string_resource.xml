@@ -117,6 +117,7 @@
         <string name="msgs_log_file_log_level_minimum_level">1:Minimum debug info</string>
         <string name="msgs_log_file_log_level_verbose_level">2:Detailed debug info</string>
         <string name="msgs_log_file_log_level_trace_level">3:Trace debug info</string>
+        <string name="msgs_log_file_log_file_archive">Archived log files</string>
         <string name="msgs_log_file_prob_question_desc_title">App Problem or question</string>
         <string name="msgs_log_file_prob_question_desc_hint">Please describe app problem or question</string>
         <string name="msgs_log_file_prob_question_desc_no_desc">App Problem/question is not described. If the problem/question of application is not described, it cannot be answered.</string>

@@ -117,6 +117,7 @@
         <string name="msgs_log_file_log_level_minimum_level">1:Informations minimales de débogage</string>
         <string name="msgs_log_file_log_level_verbose_level">2:Informations détaillées sur le débogage</string>
         <string name="msgs_log_file_log_level_trace_level">3:Informations sur le débogage des traces</string>
+        <string name="msgs_log_file_log_file_archive">Archived log files</string>
         <string name="msgs_log_file_prob_question_desc_title">Problème ou question</string>
         <string name="msgs_log_file_prob_question_desc_hint">Veuillez décrire le problème ou la question de l\'application</string>
         <string name="msgs_log_file_prob_question_desc_no_desc">Le problème/la question n\'est pas décrit. Si le problème/la question de la demande n\'est pas décrit, il est impossible d\'y répondre.</string>

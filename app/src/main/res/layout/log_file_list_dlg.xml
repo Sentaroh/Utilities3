@@ -41,6 +41,13 @@
         android:text="@string/msgs_log_file_list_log_enable_title"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 
+    <Button
+        android:id="@+id/log_file_list_dlg_log_archive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="@string/msgs_log_file_log_file_archive"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
     <LinearLayout
         android:id="@+id/log_file_list_dlg_log_level_view"
         android:layout_width="match_parent"
@@ -57,8 +64,9 @@
         <Spinner
             android:id="@+id/log_file_list_dlg_log_level"
             style="?android:attr/spinnerStyle"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_gravity="center_vertical"
             android:layout_marginTop="2dp"
             android:background="@drawable/spinner_color_background"
@@ -66,6 +74,7 @@
             android:minHeight="40dp"
             android:paddingLeft="5dp"
             android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:textAppearance="?android:attr/textAppearanceLarge" />
     </LinearLayout>
 
@@ -110,29 +119,44 @@
         layout="@layout/divider_line1" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/log_file_list_dlg_log_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:text="@string/msgs_log_file_list_log_archive_title"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-    
-    <ListView
-        android:id="@+id/log_file_list_dlg_log_listview"
+
+    <LinearLayout
+        android:id="@+id/log_file_list_dlg_log_file_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="5dp"
-        android:layout_weight="1" 
-        android:fadeScrollbars="false">
-    </ListView>
-	<include layout="@layout/log_context_view" />
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/divider_line1" />
+
+        <ListView
+            android:id="@+id/log_file_list_dlg_log_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:fadeScrollbars="false" />
+
+        <include layout="@layout/divider_line1" />
+
+    </LinearLayout>
+
+    <include layout="@layout/log_context_view" />
+
     <Button
         android:id="@+id/log_file_list_dlg_log_close"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:visibility="gone"
         android:text="@string/msgs_common_dialog_close" 
         android:textAppearance="?android:attr/textAppearanceLarge" />
 

@@ -219,7 +219,7 @@ public class CommonLogUtil {
     	if (file_list!=null) {
     		for (int i=0;i<file_list.length;i++) {
     			if (file_list[i].getName().startsWith(clog.getLogFileName())) {
-    				if (file_list[i].getName().startsWith(clog.getLogFileName()+"_20")) {
+    				if (file_list[i].getName().startsWith(clog.getLogFileName()+"_2")) {
         		    	CommonLogFileListItem t=new CommonLogFileListItem();
         		    	t.log_file_name=file_list[i].getName();
         		    	t.log_file_path=file_list[i].getPath();
@@ -246,6 +246,10 @@ public class CommonLogUtil {
     			
     		});
     	}
+
+
+
+
     	if (lfm_fl.size()==0) {
     		CommonLogFileListItem t=new CommonLogFileListItem();
     		lfm_fl.add(t);
