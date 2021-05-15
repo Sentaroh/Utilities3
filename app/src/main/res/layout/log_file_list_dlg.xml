@@ -41,110 +41,117 @@
         android:text="@string/msgs_log_file_list_log_enable_title"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-    <Button
-        android:id="@+id/log_file_list_dlg_log_archive"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:text="@string/msgs_log_file_log_file_archive"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
     <LinearLayout
-        android:id="@+id/log_file_list_dlg_log_level_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="5dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="@string/msgs_log_file_log_level_title"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-        <Spinner
-            android:id="@+id/log_file_list_dlg_log_level"
-            style="?android:attr/spinnerStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="2dp"
-            android:background="@drawable/spinner_color_background"
-            android:gravity="left"
-            android:minHeight="40dp"
-            android:paddingLeft="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="3dp">
-
-        <Button
-            android:id="@+id/log_file_list_dlg_log_browse_active_log"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/msgs_log_file_list_log_browse_active_log"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-        <Button
-            android:id="@+id/log_file_list_dlg_log_export"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/msgs_log_file_list_log_export"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="3dp">
-        <Button
-            android:id="@+id/log_file_list_dlg_log_send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/msgs_log_file_list_log_send_dev"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-    </LinearLayout>
-
-    <include
-        layout="@layout/divider_line1" />
-
-    <TextView
-        android:id="@+id/log_file_list_dlg_log_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:text="@string/msgs_log_file_list_log_archive_title"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <LinearLayout
-        android:id="@+id/log_file_list_dlg_log_file_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginLeft="3dp"
         android:orientation="vertical">
+        <Button
+            android:id="@+id/log_file_list_dlg_log_archive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="1dp"
+            android:text="@string/msgs_log_file_log_file_archive"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        <LinearLayout
+            android:id="@+id/log_file_list_dlg_log_level_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/msgs_log_file_log_level_title"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <Spinner
+                android:id="@+id/log_file_list_dlg_log_level"
+                style="?android:attr/spinnerStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="2dp"
+                android:gravity="left"
+                android:minHeight="40dp"
+                android:paddingLeft="5dp"
+                android:layout_marginLeft="5dp"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="2dp">
+
+            <Button
+                android:id="@+id/log_file_list_dlg_log_browse_active_log"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/msgs_log_file_list_log_browse_active_log"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <Button
+                android:id="@+id/log_file_list_dlg_log_export"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/msgs_log_file_list_log_export"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="2dp">
+            <Button
+                android:id="@+id/log_file_list_dlg_log_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/msgs_log_file_list_log_send_dev"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        </LinearLayout>
 
         <include
             layout="@layout/divider_line1" />
 
-        <ListView
-            android:id="@+id/log_file_list_dlg_log_listview"
+        <TextView
+            android:id="@+id/log_file_list_dlg_log_title"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="5dp"
-            android:fadeScrollbars="false" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/msgs_log_file_list_log_archive_title"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <include layout="@layout/divider_line1" />
+        <LinearLayout
+            android:id="@+id/log_file_list_dlg_log_file_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <include
+                layout="@layout/divider_line1" />
+
+            <ListView
+                android:id="@+id/log_file_list_dlg_log_listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:fadeScrollbars="false" />
+
+            <include layout="@layout/divider_line1" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
