@@ -188,7 +188,19 @@ public class CustomContextMenuFragment extends DialogFragment {
 //		mDialog.setCanceledOnTouchOutside(true);
 //        CommonDialog.setDlgBoxSizeCompact(mDialog);
 
-		if (!terminateRequired) initViewWidget();
+		if (!terminateRequired) {
+		    initViewWidget();
+
+		    // Workaround for Huawei MediPad M5
+            Handler hndl=new Handler();
+            hndl.post(new Runnable(){
+                @Override
+                public void run() {
+                    mDialog.hide();
+                    mDialog.show();
+                }
+            });
+        }
 
         return mDialog;
     };
