@@ -67,7 +67,8 @@ public class MessageDialogFragment extends DialogFragment {
 	private MessageDialogFragment mFragment=null;
 	private boolean terminateRequired=true;
 
-    private String mDialogTitleType="", mDialogTitle="",mDialogMsgText="", mDialogButtonOkText="", mDialogButtonCancelText="";
+    private String mDialogTitleType="", mDialogTitle="",mDialogMsgText="", mDialogButtonOkText="",
+            mDialogButtonCancelText="", mDialogButtonExtraText="";
     private Spannable mDialogMsgSpannable=null;
 	private boolean mDialogTypeNegative=false;
 	
@@ -97,13 +98,36 @@ public class MessageDialogFragment extends DialogFragment {
         return frag;
     }
 
-    public static MessageDialogFragment newInstance(boolean negative, String type, String title, String msgtext, String btn_ok_text, String btn_cancel_text) {
+    public static MessageDialogFragment newInstance(boolean negative, String type, String title, String msgtext,
+                                                    String btn_ok_text, String btn_cancel_text) {
 //		log.debug("newInstance sub="+title+", msg="+msgtext);
         MessageDialogFragment frag = new MessageDialogFragment();
         Bundle bundle = new Bundle();
 
         bundle.putString("button_ok_text", btn_ok_text);
         bundle.putString("button_cancel_text", btn_cancel_text);
+
+        if (title!=null) bundle.putString("title", title);
+        else bundle.putString("title", "");
+
+        if (msgtext!=null) bundle.putString("msgtext", msgtext);
+        else bundle.putString("msgtext", "");
+
+        bundle.putString("type", type);
+        bundle.putBoolean("negative", negative);
+        frag.setArguments(bundle);
+        return frag;
+    }
+
+    public static MessageDialogFragment newInstance(boolean negative, String type, String title, String msgtext,
+                                                    String btn_ok_text, String btn_cancel_text, String btn_extra_text) {
+//		log.debug("newInstance sub="+title+", msg="+msgtext);
+        MessageDialogFragment frag = new MessageDialogFragment();
+        Bundle bundle = new Bundle();
+
+        bundle.putString("button_ok_text", btn_ok_text);
+        bundle.putString("button_cancel_text", btn_cancel_text);
+        bundle.putString("button_extra_text", btn_extra_text);
 
         if (title!=null) bundle.putString("title", title);
         else bundle.putString("title", "");
@@ -148,7 +172,8 @@ public class MessageDialogFragment extends DialogFragment {
     	View view=super.onCreateView(inflater, container, savedInstanceState);
 //    	CommonDialog.setDlgBoxSizeCompact(mDialog);
         mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        mDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        if (mMaxDialogWindowSize) mDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        else mDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         return view;
     };
 
@@ -167,6 +192,7 @@ public class MessageDialogFragment extends DialogFragment {
 
             mDialogButtonOkText=bd.getString("button_ok_text", "");
             mDialogButtonCancelText=bd.getString("button_cancel_text", "");
+            mDialogButtonExtraText=bd.getString("button_extra_text", "");
 
         }
     	mFragment=this;
@@ -177,17 +203,20 @@ public class MessageDialogFragment extends DialogFragment {
 	    super.onActivityCreated(savedInstanceState);
         if (mDebugEnabled) log.debug("onActivityCreated terminateRequired="+terminateRequired);
 	};
+
 	@Override
 	final public void onAttach(Activity activity) {
 	    super.onAttach(activity);
         if (mDebugEnabled) log.debug("onAttach terminateRequired="+terminateRequired);
         if (mActivity==null) mActivity=getActivity();
 	};
+
 	@Override
 	final public void onDetach() {
 	    super.onDetach();
         if (mDebugEnabled) log.debug("onDetach terminateRequired="+terminateRequired);
 	};
+
 	@Override
 	final public void onStart() {
 //		CommonDialog.setDlgBoxSizeCompact(mDialog);
@@ -278,8 +307,6 @@ public class MessageDialogFragment extends DialogFragment {
         if (mDebugEnabled) log.debug("initViewWidget enterd");
 
     	mDialog.setContentView(R.layout.common_dialog);
-
-
         LinearLayout dlg_view=(LinearLayout)mDialog.findViewById(R.id.common_dialog_view);
         dlg_view.setBackgroundColor(mThemeColorList.text_background_color);
 //        if (mThemeColorList.theme_is_light) dlg_view.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -339,8 +366,24 @@ public class MessageDialogFragment extends DialogFragment {
 //			msg_text.setTextColor(mThemeColorList.text_color_primary);
 //			msg_text.setBackgroundColor(mThemeColorList.dialog_msg_background_color);
 		}
-		
-		final Button btnOk = (Button) mDialog.findViewById(R.id.common_dialog_btn_ok);
+
+        final Button btnExtra = (Button) mDialog.findViewById(R.id.common_dialog_extra_button);
+		if (mExtraButtonListener!=null) {
+            if (!mDialogButtonExtraText.equals("")) {
+                btnExtra.setText(mDialogButtonExtraText);
+                btnExtra.setVisibility(Button.VISIBLE);
+
+                btnExtra.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mExtraButtonListener.onCallBack(mActivity, true, null);
+                    }
+                });
+
+            }
+        }
+
+        final Button btnOk = (Button) mDialog.findViewById(R.id.common_dialog_btn_ok);
 		if (!mDialogButtonOkText.equals("")) btnOk.setText(mDialogButtonOkText);
 		final Button btnCancel = (Button) mDialog.findViewById(R.id.common_dialog_btn_cancel);
         if (!mDialogButtonCancelText.equals("")) btnCancel.setText(mDialogButtonCancelText);
@@ -418,7 +461,15 @@ public class MessageDialogFragment extends DialogFragment {
 //    };
 
     public void showDialog(FragmentManager fm, Fragment frag, final Object listener) {
+        showDialog(fm, frag, listener, null, false);
+    };
+
+    private CallBackListener mExtraButtonListener=null;
+    private boolean mMaxDialogWindowSize=false;
+    public void showDialog(FragmentManager fm, Fragment frag, final Object listener, final CallBackListener cbl, boolean max_size) {
         Context c=frag.getContext();
+        mExtraButtonListener=cbl;
+        mMaxDialogWindowSize=max_size;
         if (listener==null || listener instanceof NotifyEvent) {
             showDialogInternal(fm, frag, (NotifyEvent)listener);
         } else if (listener instanceof CallBackListener){
@@ -437,4 +488,5 @@ public class MessageDialogFragment extends DialogFragment {
             showDialogInternal(fm, frag, ntfy);
         }
     };
+
 }
