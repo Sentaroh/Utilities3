@@ -91,7 +91,13 @@ public class SystemInfo {
 
         ArrayList<SafStorage3> ssl=safMgr3.getSafStorageList();
         out.add("Saf storage:");
-        for(SafStorage3 sf:ssl) out.add("  Desc="+sf.description+", uuid="+sf.uuid+", name="+sf.saf_file.getName());
+        for(SafStorage3 sf:ssl) {
+            if (sf.uuid.equals(SafFile3.SAF_FILE_PRIMARY_UUID)) {
+                out.add("  Desc="+sf.description+", uuid="+sf.uuid+", name="+sf.saf_file.getName());
+            } else {
+                out.add("  Desc="+sf.description+", uuid="+sf.uuid+", name="+sf.saf_file.getName()+", fs="+getExternalStorageFileSystemName(sf.uuid));
+            }
+        }
 
         out.addAll(getRemovableStoragePaths(c, true));
         out.add("Storage information end");
@@ -109,6 +115,24 @@ public class SystemInfo {
         }
 
         return out;
+    }
+
+    static private String getExternalStorageFileSystemName(String uuid) {
+        String result="";
+        try {
+            String resp= ShellCommandUtil.executeShellCommand(new String[]{"/bin/sh", "-c", "mount | grep -e ^/dev.*/mnt/media_rw/"+uuid});
+            if (resp!=null && !resp.equals("")) {
+                String[] fs_array=resp.split(" ");
+                for(int i=0;i<fs_array.length;i++) {
+                    if (fs_array[i].equals("type")) {
+                        result=fs_array[i+1];
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     static private ArrayList<String> getRemovableStoragePaths(Context context, boolean debug) {
