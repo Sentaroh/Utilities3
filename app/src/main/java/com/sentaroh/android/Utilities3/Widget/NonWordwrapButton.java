@@ -136,7 +136,7 @@ public class NonWordwrapButton extends Button {
         TextPaint paint = getPaint();
         int wpl =getCompoundPaddingLeft();
         int wpr =getCompoundPaddingRight();
-        int width = w - wpl - wpr;
+        int width = w - wpl - wpr - 5;
         if (mDebugEnabled) log.info("buildSplitText width="+width+", w="+w+", wpl="+wpl+", wpr="+wpr+", h="+h+", length="+mOrgText.length()+", Text="+mOrgText.toString());
 
         SpannableStringBuilder output = null;
@@ -154,7 +154,7 @@ public class NonWordwrapButton extends Button {
 
             if (output.length()>1) {
                 while(start<output.length()) {
-//                if (mDebugEnabled)  log.info("start="+start);
+//                    if (mDebugEnabled)  log.info("start="+start);
                     String in_text=output.subSequence(start, output.length()).toString();
                     int cr_pos=in_text.indexOf("\n");
                     if (cr_pos>0) {
@@ -162,18 +162,18 @@ public class NonWordwrapButton extends Button {
                         int nc = paint.breakText(in_text, true, width-1, null);
                         if (output.charAt(start + nc) != '\n') {
                             output.insert(start + nc, "\n");
-//                        log.info("cr inserted1, pos="+(start + nc));
+//                            log.info("cr inserted1, pos="+(start + nc));
                         }
                         start = start + nc + 1;
                     } else if (cr_pos==0) {
                         start = start + 1;
                     } else {
                         int nc=paint.breakText(in_text, true, width-1, null);
-//                    log.info("start="+start+", nc="+nc);
-//                    log.info("in_text length="+in_text.length()+", text="+in_text);
+//                        log.info("start="+start+", nc="+nc);
+//                        log.info("in_text length="+in_text.length()+", text="+in_text);
                         if (nc<=(output.length()-start-1)) {
                             output.insert(start+nc, "\n");
-//                        log.info("cr inserted2, pos="+(start + nc)+", output length="+output.length());
+//                            log.info("cr inserted2, pos="+(start + nc)+", output length="+output.length());
                             start=start+nc+1;
                         } else {
                             start=start+nc+1;
