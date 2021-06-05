@@ -185,7 +185,7 @@ public class HeaderReader {
 
       zip4jRaf.readFully(intBuff);
       fileHeader.setCrc(rawIO.readLongLittleEndian(intBuff, 0));
-      fileHeader.setCrcRawData(intBuff);
+//      fileHeader.setCrcRawData(intBuff);
 
       fileHeader.setCompressedSize(rawIO.readLongLittleEndian(zip4jRaf, 4));
       fileHeader.setUncompressedSize(rawIO.readLongLittleEndian(zip4jRaf, 4));
@@ -569,7 +569,7 @@ public class HeaderReader {
 
     inputStream.read(intBuff);
     localFileHeader.setCrc(rawIO.readLongLittleEndian(intBuff, 0));
-    localFileHeader.setCrcRawData(intBuff.clone());
+//    localFileHeader.setCrcRawData(intBuff.clone());
 
     localFileHeader.setCompressedSize(rawIO.readLongLittleEndian(inputStream, 4));
     localFileHeader.setUncompressedSize(rawIO.readLongLittleEndian(inputStream, 4));

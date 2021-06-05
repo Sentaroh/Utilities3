@@ -221,18 +221,19 @@ public class ZipUtil {
         });
     }
 
-    static public ZipModel getZipModel(Context c, Uri zip_path, String password, String encoding) {
+    static public ZipModel getZipModel(Context c, Uri zip_path, String encoding) {
         SafFile3 sf=new SafFile3(c, zip_path);
-        return getZipModel(c, sf, password, encoding);
+        return getZipModel(c, sf, encoding);
     }
 
-    static public ZipModel getZipModel(Context c, SafFile3 sf, String password, String encoding) {
+    static public ZipModel getZipModel(Context c, SafFile3 sf, String encoding) {
         try {
             SeekableInputStream sis = null;
             if (sf.isSafFile()) sis = new SeekableInputStream(c, sf.getUri(), sf.length());
             else sis = new SeekableInputStream(c, sf.getFile());
             HeaderReader header_reader = new HeaderReader();
             ZipModel zm = header_reader.readAllHeaders(sis, Charset.forName(encoding));
+            sis.close();
             return zm;
         } catch (IOException e) {
             e.printStackTrace();
@@ -242,7 +243,7 @@ public class ZipUtil {
 
     static public boolean isSplitArchiveFile(Context c, SafFile3 sf) {
         if (sf.exists()) {
-            ZipModel zm=getZipModel(c, sf, null, ZipUtil.DEFAULT_ZIP_FILENAME_ENCODING);
+            ZipModel zm=getZipModel(c, sf, ZipUtil.DEFAULT_ZIP_FILENAME_ENCODING);
             if (zm.isSplitArchive()) {
                 return true;
             } else {
@@ -280,6 +281,7 @@ public class ZipUtil {
             HeaderReader header_reader = new HeaderReader();
             ZipModel zm = header_reader.readAllHeaders(sis, Charset.forName(encoding));
             ArrayList<FileHeader> file_header_list = (ArrayList<FileHeader>) zm.getCentralDirectory().getFileHeaders();
+            sis.close();
             return file_header_list;
         } catch (IOException e) {
 //            log.info("error="+e.getMessage());
@@ -297,6 +299,7 @@ public class ZipUtil {
             HeaderReader header_reader = new HeaderReader();
             ZipModel zm = header_reader.readAllHeaders(sis, Charset.forName(encoding));
             ArrayList<FileHeader> file_header_list = (ArrayList<FileHeader>) zm.getCentralDirectory().getFileHeaders();
+            sis.close();
             return file_header_list;
         } catch (IOException e) {
             e.printStackTrace();
