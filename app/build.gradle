@@ -70,5 +70,5 @@ dependencies {
     implementation files('libs/juniversalchardet-1.0.3.jar')
 
     implementation files('libs/zip4j_2.2.3_20191102_04.jar')
-    implementation files('libs/WrapperForSlf4j-1.0.3.jar')
+    implementation files('libs/WrapperForSlf4j-1.7.36.jar')
 }
