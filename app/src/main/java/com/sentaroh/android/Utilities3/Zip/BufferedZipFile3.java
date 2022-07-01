@@ -98,6 +98,7 @@ public class BufferedZipFile3 {
 //    private OutputStream mAddSplitOutputStream = null;
 
     private String mEncoding =DEFAULT_ZIP_FILENAME_ENCODING;
+    private String mPassword = "";
     private static final String DEFAULT_ZIP_FILENAME_ENCODING="UTF-8";
 
     private String[] mNoCompressExtention=null;
@@ -119,11 +120,11 @@ public class BufferedZipFile3 {
         mNoCompressFileLength=no_compress_file_length;
     }
 
-    public BufferedZipFile3(Context c, String input_path, String output_path, String encoding) throws ZipException {
+    public BufferedZipFile3(Context c, String input_path, String output_path, String encoding, String password) throws ZipException {
         mContext=c;
         SafFile3 in_uri=input_path!=null?new SafFile3(mContext, input_path):null;
         SafFile3 out_uri=new SafFile3(mContext, output_path);
-        init(in_uri, out_uri, encoding);
+        init(in_uri, out_uri, encoding, password);
     }
 
     //    public BufferedZipFile3(Context c, File input_file, File output_file, String encoding, String wfp) {
@@ -133,10 +134,10 @@ public class BufferedZipFile3 {
 //        init(in_uri, out_uri, encoding, wfp);
 //    }
 //
-    public BufferedZipFile3(Context c, SafFile3 input_file, SafFile3 output_file, String encoding) throws ZipException {
+    public BufferedZipFile3(Context c, SafFile3 input_file, SafFile3 output_file, String encoding, String password) throws ZipException {
         mContext=c;
         SafFile3 add_wrk_uri=new SafFile3(mContext, output_file.getPath()+".add_work");
-        init(input_file, output_file, encoding);
+        init(input_file, output_file, encoding, password);
     }
 
     public SafFile3 getInputZipFile() {
@@ -148,7 +149,7 @@ public class BufferedZipFile3 {
     }
 
     private boolean mEmptyInputZipFile=true;
-    private void init(SafFile3 in_uri, SafFile3 out_uri, String encoding) throws ZipException {
+    private void init(SafFile3 in_uri, SafFile3 out_uri, String encoding, String password) throws ZipException {
         log.debug("<init> Input="+in_uri+", Output="+out_uri+", Encoding="+encoding);
         if (in_uri!=null && out_uri!=null) {
             if (in_uri.getPath().equals(out_uri.getPath())) throw new ZipException("BufferedZipFile3 create failed.(Same path)");
@@ -159,6 +160,7 @@ public class BufferedZipFile3 {
         mOutputSafFile=out_uri;
         mInputUri=mInputSafFile!=null?mInputSafFile.getUri():null;
         mEncoding =encoding;
+        mPassword =password;
 //        mTempOsFile =new File(work_file_path+"/ziputility.tmp");
 //        mAddOsFile =new File(work_file_path+"/ziputility.add");
         mInputZipFileHeaderList =new ArrayList<BzfFileHeaderItem>();
@@ -247,7 +249,8 @@ public class BufferedZipFile3 {
                 log.error("addItem OutputStream was not created",e);
                 return false;
             }
-            mAddZipOutputStream =new ZipOutputStream(os, null, Charset.forName(mEncoding), mAddZipModel);
+            //mAddZipOutputStream =new ZipOutputStream(os, null, Charset.forName(mEncoding), mAddZipModel);
+            mAddZipOutputStream =new ZipOutputStream(os, mPassword.toCharArray(), Charset.forName(mEncoding));
         }
         return addItemInternal(in_uri, zp, cbl);
     };
@@ -355,7 +358,8 @@ public class BufferedZipFile3 {
                 log.error("addItemInputStream OutputStream was not created",e);
                 return false;
             }
-            mAddZipOutputStream =new ZipOutputStream(os, null, Charset.forName(mEncoding), mAddZipModel);
+            //mAddZipOutputStream =new ZipOutputStream(os, null, Charset.forName(mEncoding), mAddZipModel);
+            mAddZipOutputStream =new ZipOutputStream(os, mPassword.toCharArray(), Charset.forName(mEncoding));
         }
         return addItemInternalInputStream(is, zp, directory, cbl);
     };
