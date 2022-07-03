@@ -831,7 +831,7 @@ public class CommonFileSelector2 extends DialogFragment {
                                     mTreeFileListView.setVisibility(TextView.VISIBLE);
                                     mTreeFilelistAdapter.setDataList(tfl);
                                 }
-                                if (mDialogSelectCat==DIALOG_SELECT_CATEGORY_FILE && mDialogFileName.equals("")) {
+                                if (mDialogSelectCat==DIALOG_SELECT_CATEGORY_FILE && et_file_name.getText().toString().equals("")) {
                                     setButtonEnabled(mActivity, btnOk, false);
                                     putDlgMsg(dlg_msg, mContext.getString(R.string.msgs_file_select_edit_dlg_filename_not_specified));
                                 } else {
@@ -854,7 +854,7 @@ public class CommonFileSelector2 extends DialogFragment {
                     if (mDialogSelectCat==DIALOG_SELECT_CATEGORY_FILE) {
                         mTreeFilelistAdapter.setDataItemIsSelected(pos);
                         et_file_name.setText(mTreeFilelistAdapter.getDataItem(pos).getName());
-                        if (mTreeFilelistAdapter.getDataItem(pos).isDir() && mDialogSelectCat==DIALOG_SELECT_CATEGORY_FILE) setButtonEnabled(mActivity, btnOk, false);
+                        if (mTreeFilelistAdapter.getDataItem(pos).isDir()) setButtonEnabled(mActivity, btnOk, false);
                         else setButtonEnabled(mActivity, btnOk, true);
                     }
                 }
