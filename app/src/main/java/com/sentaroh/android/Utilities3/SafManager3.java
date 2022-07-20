@@ -315,18 +315,24 @@ public class SafManager3 {
     }
 
     static private String getAppSpecificDirectory(Context c, String uuid) {
-        String app_dir="";
-        File[] fl =c.getExternalFilesDirs(null);
-        if (uuid.equals(SAF_FILE_PRIMARY_UUID)) {
-            app_dir=fl[0].getPath();
-        } else {
-            for(File item_fl:fl) {
-                if (item_fl!=null && item_fl.getPath().contains(uuid)) {
-                    app_dir=item_fl.getPath();
-                    break;
+        String app_dir = null;
+        File[] fl =c.getExternalFilesDirs(null); // null for no subdirectory
+        if (fl != null) {
+            if (uuid.equals(SAF_FILE_PRIMARY_UUID) && fl[0] != null) {
+                app_dir=fl[0].getPath(); // -> /storage/emulated/0/Android/data/com.sentaroh.android.SMBSync3/files/
+            } else {
+                for(File item_fl:fl) {
+                    if (item_fl != null && item_fl.getPath().contains(uuid)) {
+                        app_dir=item_fl.getPath(); // exp for SDCARD: /storage/1B14-0701/Android/data/com.sentaroh.android.SMBSync3/files
+                        break;
+                    }
                 }
             }
+        } else {
+            log.debug("getAppSpecificDirectory Error: getExternalFilesDirs(null) could not get app specific directory for uuid="+uuid);
         }
+
+        log.debug("getAppSpecificDirectory : uuid="+uuid + ", app_dir="+app_dir);
         return app_dir;
     }
 
@@ -350,7 +356,7 @@ public class SafManager3 {
                 for(StorageVolume item:svs) {
                     StorageVolumeInfo svi=new StorageVolumeInfo();
                     svi.description=item.getDescription(c);
-                    svi.uuid=item.getUuid()==null?SAF_FILE_PRIMARY_UUID:item.getUuid();
+                    svi.uuid=item.getUuid()==null?SAF_FILE_PRIMARY_UUID:item.getUuid(); //primary internal storage getUuid() returns null
                     svi.isPrimary=item.isPrimary();
                     svi.isRemovable=item.isRemovable();
                     svi.volume=item;
