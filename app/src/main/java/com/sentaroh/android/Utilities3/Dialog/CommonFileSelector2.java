@@ -1390,11 +1390,12 @@ public class CommonFileSelector2 extends DialogFragment {
         th.start();
     }
 
+    // On browse for files/dirs to select, do not list /Android/data
     private boolean canAccessDirectory(String path) {
         boolean result=true;
         if (path.endsWith(".android_secure")) result=false;
         else {
-            if (Build.VERSION.SDK_INT>=30) {
+            if (Build.VERSION.SDK_INT >= 30) {
                 String primary_storage_path = SafManager3.getPrimaryStoragePath(); // "/storage/emulated/0"
                 String[] fp_array=path.split("/");
                 if (path.startsWith(primary_storage_path)) {
@@ -1405,7 +1406,7 @@ public class CommonFileSelector2 extends DialogFragment {
                         }
                     }
                 } else {
-                    if (fp_array.length>=3) {
+                    if (fp_array.length >= 3) {
                         String abs_dir=path.replace("/"+fp_array[1]+"/"+fp_array[2], "");
                         if (!abs_dir.equals("")) {
                             if (abs_dir.startsWith("/Android/data") || abs_dir.startsWith("/Android/obb")) {

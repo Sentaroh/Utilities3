@@ -34,8 +34,8 @@ import java.util.Collections;
 
 @SuppressLint("SdCardPath")
 public class LocalMountPoint {
-	
-	
+
+    // legacy code that should be narrowed. Used only by send log as zip file (CommonLogManagementFragment -> sendLogFile())
 	static public String[] convertFilePathToMountpointFormat(Context c, String fp) {
 		ArrayList<String> ml=getLocalMountPointList(c);
 		String ldir="/",lfile="";
@@ -47,7 +47,7 @@ public class LocalMountPoint {
 			}
 		}
 		File lf=new File(fp);
-		if (lf.isDirectory()) {
+		if (lf != null && lf.isDirectory()) {
 			ldir=fp.replace(lurl, "");
 		} else {
 			if (fp.lastIndexOf("/")>=0) {
@@ -76,10 +76,13 @@ public class LocalMountPoint {
 		else result=false;
 		return result;
 	};
-	
+
+    // legacy code that should be narrowed. Used only by send log as zip file (CommonLogManagementFragment -> sendLogFile())
+    // called for send log as zip by convertFilePathToMountpointFormat() and getLocalMountPointList()
 	static public String getExternalStorageDir() {
-		String ext_dir= Environment.getExternalStorageDirectory().toString();
-		if (ext_dir!=null) return ext_dir;
+		//String ext_dir= Environment.getExternalStorageDirectory().toString();
+        String ext_dir=Environment.getExternalStorageDirectory().getPath(); // /storage/emulated/0
+		if (ext_dir != null) return ext_dir; // is never null
 		else return "/";
 //    	String status   = Environment.getExternalStorageState();  
 //		if (!status.equals(Environment.MEDIA_MOUNTED)) {  
@@ -99,6 +102,7 @@ public class LocalMountPoint {
 //    	}
 	};
 
+    // legacy not used
 	static public boolean isExternalStorageAvailable() {
     	String status   = Environment.getExternalStorageState();
 		if (!status.equals(Environment.MEDIA_MOUNTED)) return false;
@@ -115,6 +119,7 @@ public class LocalMountPoint {
 		return result;
 	};
 
+    // legacy not used
 	static public boolean isExternalMountPoint(Context c, String fp) {
 		boolean result=false;
 		if (isExternalStorageAvailable()) {
@@ -128,7 +133,8 @@ public class LocalMountPoint {
 		} else result=false;
 		return result;
 	};
-	
+
+    // legacy not used
 	@SuppressLint("SdCardPath")
 	static public boolean isMountPointAvailable(Context c, String fp) {
 		boolean result=false;
@@ -149,7 +155,8 @@ public class LocalMountPoint {
 		}
 		return result;
 	};
-	
+
+    // legacy not used
 	static public boolean isAppSpecificDirectory(Context c, String lmp, String dir) {
 		String fp="";
 		if (dir.equals("")) fp=lmp;
@@ -157,6 +164,7 @@ public class LocalMountPoint {
 		return isAppSpecificDirectory(c,fp);
 	};
 
+    // legacy not used
 	static public boolean isAppSpecificDirectory(Context c, String fp) {
 		boolean result=false;
 		ArrayList<String> ml=getLocalMountPointList(c);
@@ -234,6 +242,7 @@ public class LocalMountPoint {
 //		return ml;
 //	};
 
+    // legacy not used
     static public boolean isMountPointCanWrite(String mp) {
 	    boolean result=false;
         File lf=new File(mp+"/isLocalMountPointWritable_temp.tmp");
@@ -246,6 +255,7 @@ public class LocalMountPoint {
         return result;
     }
 
+    // legacy not used
     static public ArrayList<String> getLocalMountpointList2(Context c) {
         ArrayList<String> ml=LocalMountPoint.getLocalMountPointList(c);
         ArrayList<String> new_ml=new ArrayList<String>();
@@ -281,7 +291,8 @@ public class LocalMountPoint {
         return new_ml;
     }
 
-    // not used, fix File NPE before use
+    // legacy code that should be narrowed. Used only by send log as zip file (CommonLogManagementFragment -> sendLogFile())
+    // called for send log as zip by convertFilePathToMountpointFormat()
     @SuppressLint("SdCardPath")
 	static public ArrayList<String> getLocalMountPointList(Context c) {
 		String pkg_name=c.getClass().getPackage().getName();
@@ -293,8 +304,9 @@ public class LocalMountPoint {
 		if (fl_1!=null) {
 			for (int i=0;i<fl_1.length;i++) {
 				if (fl_1[i].getName().equals("emulated")) {
-					File tlf=new File("/storage/emulated");
-					File[] tlist=tlf.listFiles();
+					//File tlf=new File("/storage/emulated");
+					//File[] tlist=tlf.listFiles();
+                    File[] tlist=fl_1[i].listFiles(); // /storage/emulated
 					if (tlist!=null) {
 						for (int j=0;j<tlist.length;j++) {
 							addMountPointPrimary(tlist[j].getPath(), ml);
@@ -379,7 +391,7 @@ public class LocalMountPoint {
 	
 	private static void addMountPointPrimaryAndSecondary(String mp, ArrayList<String> ml, String pkg_name) {
 		File lf =new File(mp);
-		if (lf.canRead()) {
+		if (lf != null && lf.canRead()) {
 			ml.add(mp);
 			ml.add(mp+"/Android/data/"+pkg_name+"/files");
 //			Log.v("","added p&s="+mp);
@@ -423,6 +435,7 @@ public class LocalMountPoint {
 //	};
 //	
 
+    // legacy not used
 	final public static ArrayList<LocalMountPointListItem> getLocalMountPointListWithLink(Context c) {
 		ArrayList<LocalMountPointListItem> list=new ArrayList<LocalMountPointListItem>();
 		ArrayList<String> mp_list=getLocalMountPointList(c);
@@ -450,6 +463,8 @@ public class LocalMountPoint {
 		}
 		return list;
 	};
+
+    // legacy not used
 	static public class LocalMountPointListItem {
 		public boolean isSynbolicLink=false;
 		public String mount_point_name=null;

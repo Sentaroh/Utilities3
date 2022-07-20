@@ -92,7 +92,7 @@ public class SafManager3 {
     public static final int SCOPED_STORAGE_SDKX=99;
     public SafManager3(Context c) {
         mContext=c;
-        mPrimaryStoragePath = getPrimaryStoragePath(); // "/storage/emulated/0"
+        mPrimaryStoragePath = getPrimaryStoragePath(); // /storage/emulated/0
 
         if (Build.VERSION.SDK_INT>=SCOPED_STORAGE_SDKX) {
             mScopedStorageMode=true;//!Environment.isExternalStorageLegacy();
@@ -246,12 +246,12 @@ public class SafManager3 {
                             sli.description=item_svi.description;
                             sli.uuid=item_svi.uuid;
                             sli.isSafFile=false;
-                            sli.appDirectory=getAppSpecificDirectory(mContext,  item_svi.uuid);
-                            sli.appMountpoint=mPrimaryStoragePath;
                             File[] fl=mContext.getExternalFilesDirs(null);
                             if (fl != null && fl[0] != null) {
-                                String fp=fl[0].getPath();
-                                sli.saf_file=new SafFile3(mContext, fp.substring(0, fp.indexOf("/Android/data")));
+                                sli.appDirectory=fl[0].getPath(); // /storage/emulated/0/Android/data/APP_TAG/file
+                                sli.appMountpoint=mPrimaryStoragePath;
+                                //sli.saf_file=new SafFile3(mContext, fp.substring(0, fp.indexOf("/Android/data"))); // /storage/emulated/0
+                                sli.saf_file=new SafFile3(mContext, mPrimaryStoragePath);
                                 saf_list.add(sli);
                             }
                         } else {//SDCARD or USB
@@ -269,7 +269,7 @@ public class SafManager3 {
                                 sli.appMountpoint=rt.getPath();
                                 if (isAllFileAccessMode()) sli.isSafFile=false;
                                 else sli.isSafFile=true;
-                                sli.appDirectory=getAppSpecificDirectory(mContext,  item_svi.uuid);
+                                sli.appDirectory=getAppSpecificDirectory(mContext, item_svi.uuid);
                                 saf_list.add(sli);
                             }
                         }

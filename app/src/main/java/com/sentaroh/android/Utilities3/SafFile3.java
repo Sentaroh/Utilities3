@@ -101,7 +101,7 @@ public class SafFile3 {
             return;
         }
 //        long b_time=System.currentTimeMillis();
-        mSafPrimaryStoragePrefix=Environment.getExternalStorageDirectory().getPath();
+        mSafPrimaryStoragePrefix=Environment.getExternalStorageDirectory().getPath(); // /storage/emulated/0
         boolean all_file_access=isAllFileAccessAvailable();
         mContext = context;
         String remove_redundant_separator=fpath;
@@ -573,13 +573,16 @@ public class SafFile3 {
     }
 
     private File getAppDirectoryFile(String uuid) {
+/*
         File result=null;
         if (uuid.equals(SafManager3.SAF_FILE_PRIMARY_UUID)) {
             result=new File(mSafPrimaryStoragePrefix+"/Android/data/"+mContext.getApplicationInfo().packageName+"/files");
         } else {
             result=new File("/storage/"+uuid+"/Android/data/"+mContext.getApplicationInfo().packageName+"/files");
         }
-        return result.canRead()?result:null;
+*/
+        File result = new File(SafManager3.getAppSpecificDirectory(mContext, uuid));
+        return result.canRead()? result:null;
     }
 
     private void putDebugMessage(String msg) {

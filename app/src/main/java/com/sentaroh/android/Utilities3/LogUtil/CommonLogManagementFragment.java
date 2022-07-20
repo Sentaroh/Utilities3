@@ -1306,7 +1306,7 @@ public class CommonLogManagementFragment extends DialogFragment {
 			public void run() {
 				File lf=new File(zip_file_name);
 				lf.delete();
-				String[] lmp=LocalMountPoint.convertFilePathToMountpointFormat(mContext, file_name[0]);
+				String[] lmp=LocalMountPoint.convertFilePathToMountpointFormat(mContext, file_name[0]); // should just use /storage/emulated/0 (SafManager3.getPrimaryStoragePath())
 				ZipUtil.createZipFile(mContext, tc,pbdf,zip_file_name,lmp[0],file_name);
 				if (tc.isEnabled()) {
 				    Intent intent=new Intent();
