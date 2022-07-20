@@ -211,10 +211,11 @@ public class SystemInfo {
             }
         }
 
-        out.add("/storage/emulated/0 directory:");
-        File lf = new File("/storage/emulated/0");
+        String primary_storage_path = SafManager3.getPrimaryStoragePath(); // "/storage/emulated/0"
+        out.add(primary_storage_path+" directory:");
+        File lf = new File(primary_storage_path);
         try {
-            if (lf.exists()) out.add("   /storage/emulated/0" + ", read=" + lf.canRead()+", write="+lf.canWrite());
+            if (lf.exists()) out.add("   " + primary_storage_path + ", read="+lf.canRead() + ", write="+lf.canWrite());
         } catch(Exception e) {}
 
         out.add("/Removable directory:");

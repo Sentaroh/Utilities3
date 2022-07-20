@@ -55,13 +55,13 @@ public class SafManager3 {
 
     private ArrayList<SafStorage3> mSafFileList =new ArrayList<SafStorage3>();
 
-    private String baseMp=null;
+    private String mPrimaryStoragePath=null;
 
     private static Logger log = LoggerFactory.getLogger(SafManager3.class);
 
     private boolean mScopedStorageMode=false;
 
-    public final static String SAF_FILE_PRIMARY_STORAGE_PREFIX="/storage/emulated/0";
+    //public final static String SAF_FILE_PRIMARY_STORAGE_PREFIX="/storage/emulated/0";
     public final static String SAF_FILE_EXTERNAL_STORAGE_PREFIX="/storage/";
     public final static String SAF_FILE_DOCUMENT_TREE_URI_PREFIX="content://com.android.externalstorage.documents/tree/";
 
@@ -92,7 +92,7 @@ public class SafManager3 {
     public static final int SCOPED_STORAGE_SDKX=99;
     public SafManager3(Context c) {
         mContext=c;
-        baseMp= Environment.getExternalStorageDirectory().getPath();
+        mPrimaryStoragePath = getPrimaryStoragePath(); // "/storage/emulated/0"
 
         if (Build.VERSION.SDK_INT>=SCOPED_STORAGE_SDKX) {
             mScopedStorageMode=true;//!Environment.isExternalStorageLegacy();
@@ -113,6 +113,11 @@ public class SafManager3 {
         String uuid=getUuidFromUri(uri.toString());
         if (uri.toString().endsWith("%3A") || uri.toString().endsWith(":")) result=true;
         return result;
+    }
+
+    // returns primary storag epath "/sorage/emulated/0"
+    public static String getPrimaryStoragePath () {
+        return Environment.getExternalStorageDirectory().getPath();
     }
 
     public boolean isUuidMounted(String uuid) {
@@ -242,7 +247,7 @@ public class SafManager3 {
                             sli.uuid=item_svi.uuid;
                             sli.isSafFile=false;
                             sli.appDirectory=getAppSpecificDirectory(mContext,  item_svi.uuid);
-                            sli.appMountpoint=baseMp;
+                            sli.appMountpoint=mPrimaryStoragePath;
                             File[] fl=mContext.getExternalFilesDirs(null);
                             if (fl != null && fl[0] != null) {
                                 String fp=fl[0].getPath();
@@ -278,8 +283,8 @@ public class SafManager3 {
                             File[] fl=mContext.getExternalFilesDirs(null);
                             if (fl != null && fl[0] != null) {
                                 sli.appDirectory=fl[0].getPath();
-                                sli.appMountpoint=baseMp;
-                                sli.saf_file=new SafFile3(mContext, SAF_FILE_PRIMARY_STORAGE_PREFIX);
+                                sli.appMountpoint=mPrimaryStoragePath;
+                                sli.saf_file=new SafFile3(mContext, mPrimaryStoragePath);
                                 saf_list.add(sli);
                             }
                         } else {
@@ -320,7 +325,7 @@ public class SafManager3 {
         return saf_list;
     }
 
-    static private String getAppSpecificDirectory(Context c, String uuid) {
+    static public String getAppSpecificDirectory(Context c, String uuid) {
         String app_dir = null;
         if (uuid == null) {
             log.debug("getAppSpecificDirectory Error: null uuid specified");
@@ -330,7 +335,7 @@ public class SafManager3 {
         File[] fl = c.getExternalFilesDirs(null); // null for no subdirectory
         if (fl != null) {
             if (uuid.equals(SAF_FILE_PRIMARY_UUID) && fl[0] != null) {
-                app_dir=fl[0].getPath(); // -> /storage/emulated/0/Android/data/com.sentaroh.android.SMBSync3/files/
+                app_dir=fl[0].getPath(); // -> /storage/emulated/0/Android/data/com.sentaroh.android.SMBSync3/files
             } else {
                 for(File item_fl:fl) {
                     if (item_fl != null && item_fl.getPath().contains(uuid)) {
@@ -343,7 +348,6 @@ public class SafManager3 {
             log.debug("getAppSpecificDirectory Error: getExternalFilesDirs(null) could not get app specific directory for uuid="+uuid);
         }
 
-        log.debug("getAppSpecificDirectory : uuid="+uuid + ", app_dir="+app_dir);
         return app_dir;
     }
 

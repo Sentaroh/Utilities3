@@ -29,6 +29,7 @@ import android.net.Uri;
 import com.sentaroh.android.Utilities3.CallBackListener;
 import com.sentaroh.android.Utilities3.MiscUtil;
 import com.sentaroh.android.Utilities3.SafFile3;
+import com.sentaroh.android.Utilities3.SafManager3;
 import com.sentaroh.android.Utilities3.StringUtil;
 
 import net.lingala.zip4j.ZipFile;
@@ -452,7 +453,7 @@ public class BufferedZipFile3 {
             ZipParameters fileParameters = new ZipParameters(parameters);
             String fp_prefix="";
             if (input.getUuid().equals(SafFile3.SAF_FILE_PRIMARY_UUID)) {
-                fp_prefix="/storage/emulated/0/";
+                fp_prefix= SafManager3.getPrimaryStoragePath(); // "/storage/emulated/0"
             } else {
                 fp_prefix="/storage/"+input.getUuid()+"/";
             }

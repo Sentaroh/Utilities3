@@ -1285,7 +1285,8 @@ public class CommonFileSelector2 extends DialogFragment {
     }
 
     private String getRootFilePath(String fp) {
-        if (fp.startsWith("/storage/emulated/0")) return "/storage/emulated/0";
+        String primary_storage_path = SafManager3.getPrimaryStoragePath(); // "/storage/emulated/0"
+        if (fp.startsWith(primary_storage_path)) return primary_storage_path;
         else {
             String[] fp_parts=fp.startsWith("/")?fp.substring(1).split("/"):fp.split("/");
             String rt_fp="/"+fp_parts[0]+"/"+fp_parts[1];
@@ -1394,9 +1395,10 @@ public class CommonFileSelector2 extends DialogFragment {
         if (path.endsWith(".android_secure")) result=false;
         else {
             if (Build.VERSION.SDK_INT>=30) {
+                String primary_storage_path = SafManager3.getPrimaryStoragePath(); // "/storage/emulated/0"
                 String[] fp_array=path.split("/");
-                if (path.startsWith("/storage/emulated/0")) {
-                    String abs_dir=path.replace("/storage/emulated/0", "");
+                if (path.startsWith(primary_storage_path)) {
+                    String abs_dir=path.replace(primary_storage_path, "");
                     if (!abs_dir.equals("")) {
                         if (abs_dir.startsWith("/Android/data") || abs_dir.startsWith("/Android/obb")) {
                             result=false;
