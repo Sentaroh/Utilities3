@@ -1466,9 +1466,14 @@ public class CommonLogManagementFragment extends DialogFragment {
             ft.commitAllowingStateLoss();
             mNotifyUpdateLogOption=ntfy;
         } else {
-            File lf=c.getExternalFilesDirs(null)[0];
+            String fp = "";
+            File[] fl=c.getExternalFilesDirs(null);
+            if (fl != null) {
+                File lf=fl[0];
+                if (lf != null) fp = lf.getPath(); // internal storage app specific dir
+            }
             MessageDialogFragment mdf=MessageDialogFragment.newInstance(false, "E",
-                    c.getString(R.string.msgs_log_can_not_start_log_mgmt), "file="+lf);
+                    c.getString(R.string.msgs_log_can_not_start_log_mgmt), "file="+fp);
             mdf.showDialog(fm, mdf, null);
         }
     };

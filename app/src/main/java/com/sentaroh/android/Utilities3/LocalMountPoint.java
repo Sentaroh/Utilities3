@@ -281,6 +281,7 @@ public class LocalMountPoint {
         return new_ml;
     }
 
+    // not used, fix File NPE before use
     @SuppressLint("SdCardPath")
 	static public ArrayList<String> getLocalMountPointList(Context c) {
 		String pkg_name=c.getClass().getPackage().getName();
@@ -353,19 +354,20 @@ public class LocalMountPoint {
 		addMountPointPrimaryAndSecondary("/storage/external_SD", ml, pkg_name);
 
 //		File[] ext_dirs =ContextCompat.getExternalFilesDirs(c, null);
-        File[] ext_dirs =c.getExternalFilesDirs(null);
-		if (ext_dirs!=null) {
-			for (int i=0;i<ext_dirs.length;i++) {
-				if (ext_dirs[i]!=null && ext_dirs[i].getPath()!=null) {
-					if (!ext_dirs[i].getPath().startsWith(primary_esd)) {
-						boolean found=false;
-						for(int j=0;j<ml.size();j++) {
-							if (ext_dirs[i].getPath().equals(ml.get(j))) {
-								found=true;
+        File[] ext_dirs = c.getExternalFilesDirs(null);
+		if (ext_dirs != null) {
+			for (int i=0; i < ext_dirs.length; i++) {
+				if (ext_dirs[i] != null) {
+                    String ext_dir_path = ext_dirs[i].getPath();
+					if (ext_dir_path != null && !ext_dir_path.startsWith(primary_esd)) {
+						boolean found = false;
+						for(int j=0; j < ml.size(); j++) {
+							if (ext_dir_path.equals(ml.get(j))) {
+								found = true;
 								break;
 							}
 						}
-						if (!found) ml.add(ext_dirs[i].getPath());
+						if (!found) ml.add(ext_dir_path);
 					}
 				}
 			}

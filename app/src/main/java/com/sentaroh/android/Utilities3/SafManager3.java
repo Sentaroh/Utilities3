@@ -225,13 +225,13 @@ public class SafManager3 {
             if (!item_svi.isDuplicate) {
                 if (isScopedStorageMode()) {
                     rt=SafFile3.fromTreeUri(mContext, Uri.parse(SAF_FILE_DOCUMENT_TREE_URI_PREFIX+item_svi.uuid+"%3A"));
-                    if (rt.exists()) {//Internal storage, SDCARD or USB
+                    if (rt != null && rt.exists()) {//Internal storage, SDCARD or USB
                         SafStorage3 sli=new SafStorage3();
                         sli.description=item_svi.description;
                         sli.uuid=item_svi.uuid;
                         sli.saf_file =rt;
                         sli.isSafFile=true;
-                        sli.appDirectory=getAppSpecificDirectory(mContext,  item_svi.uuid);
+                        sli.appDirectory=getAppSpecificDirectory(mContext, item_svi.uuid);
                         saf_list.add(sli);
                     }
                 } else {
@@ -243,9 +243,12 @@ public class SafManager3 {
                             sli.isSafFile=false;
                             sli.appDirectory=getAppSpecificDirectory(mContext,  item_svi.uuid);
                             sli.appMountpoint=baseMp;
-                            String fp=mContext.getExternalFilesDirs(null)[0].getPath();
-                            sli.saf_file=new SafFile3(mContext, fp.substring(0, fp.indexOf("/Android/data")));
-                            saf_list.add(sli);
+                            File[] fl=mContext.getExternalFilesDirs(null);
+                            if (fl != null && fl[0] != null) {
+                                String fp=fl[0].getPath();
+                                sli.saf_file=new SafFile3(mContext, fp.substring(0, fp.indexOf("/Android/data")));
+                                saf_list.add(sli);
+                            }
                         } else {//SDCARD or USB
                             File lf=new File(SafFile3.SAF_FILE_EXTERNAL_STORAGE_PREFIX+ item_svi.uuid);
                             if (lf.exists()) {
@@ -272,13 +275,16 @@ public class SafManager3 {
                             sli.description=item_svi.description;
                             sli.uuid=SAF_FILE_PRIMARY_UUID;
                             sli.isSafFile=false;
-                            sli.appDirectory=mContext.getExternalFilesDirs(null)[0].getPath();
-                            sli.appMountpoint=baseMp;
-                            sli.saf_file=new SafFile3(mContext, SAF_FILE_PRIMARY_STORAGE_PREFIX);
-                            saf_list.add(sli);
+                            File[] fl=mContext.getExternalFilesDirs(null);
+                            if (fl != null && fl[0] != null) {
+                                sli.appDirectory=fl[0].getPath();
+                                sli.appMountpoint=baseMp;
+                                sli.saf_file=new SafFile3(mContext, SAF_FILE_PRIMARY_STORAGE_PREFIX);
+                                saf_list.add(sli);
+                            }
                         } else {
                             rt=SafFile3.fromTreeUri(mContext, Uri.parse(SAF_FILE_DOCUMENT_TREE_URI_PREFIX+item_svi.uuid+"%3A"));
-                            if (rt.exists()) {
+                            if (rt != null && rt.exists()) {
                                 SafStorage3 sli=new SafStorage3();
                                 sli.description=item_svi.description;
                                 sli.uuid=item_svi.uuid;
@@ -316,7 +322,12 @@ public class SafManager3 {
 
     static private String getAppSpecificDirectory(Context c, String uuid) {
         String app_dir = null;
-        File[] fl =c.getExternalFilesDirs(null); // null for no subdirectory
+        if (uuid == null) {
+            log.debug("getAppSpecificDirectory Error: null uuid specified");
+            return app_dir;
+        }
+
+        File[] fl = c.getExternalFilesDirs(null); // null for no subdirectory
         if (fl != null) {
             if (uuid.equals(SAF_FILE_PRIMARY_UUID) && fl[0] != null) {
                 app_dir=fl[0].getPath(); // -> /storage/emulated/0/Android/data/com.sentaroh.android.SMBSync3/files/
