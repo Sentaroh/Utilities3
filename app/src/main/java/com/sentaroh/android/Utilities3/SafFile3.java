@@ -573,16 +573,17 @@ public class SafFile3 {
     }
 
     private File getAppDirectoryFile(String uuid) {
+        File result = null;
 /*
-        File result=null;
         if (uuid.equals(SafManager3.SAF_FILE_PRIMARY_UUID)) {
             result=new File(mSafPrimaryStoragePrefix+"/Android/data/"+mContext.getApplicationInfo().packageName+"/files");
         } else {
             result=new File("/storage/"+uuid+"/Android/data/"+mContext.getApplicationInfo().packageName+"/files");
         }
 */
-        File result = new File(SafManager3.getAppSpecificDirectory(mContext, uuid));
-        return result.canRead()? result:null;
+        String path = SafManager3.getAppSpecificDirectory(mContext, uuid);
+        if (path != null) result = new File(path);
+        return result != null && result.canRead() ? result:null;
     }
 
     private void putDebugMessage(String msg) {

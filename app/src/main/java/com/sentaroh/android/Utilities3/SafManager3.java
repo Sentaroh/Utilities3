@@ -348,6 +348,7 @@ public class SafManager3 {
             log.debug("getAppSpecificDirectory Error: getExternalFilesDirs(null) could not get app specific directory for uuid="+uuid);
         }
 
+        if (log.isDebugEnabled()) log.debug("getAppSpecificDirectory: app_dir="+app_dir + " uuid="+uuid);
         return app_dir;
     }
 
