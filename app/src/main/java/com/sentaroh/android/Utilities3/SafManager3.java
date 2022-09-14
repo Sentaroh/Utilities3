@@ -108,7 +108,7 @@ public class SafManager3 {
         mSafFileList.addAll(saf_list);
     }
 
-    static public boolean isRootTreeUri(Uri uri) {
+    public static boolean isRootTreeUri(Uri uri) {
         boolean result=false;
         String uuid=getUuidFromUri(uri.toString());
         if (uri.toString().endsWith("%3A") || uri.toString().endsWith(":")) result=true;
@@ -124,7 +124,7 @@ public class SafManager3 {
         return isUuidMounted(mContext, uuid);
     }
 
-    static public boolean isUuidMounted(Context c, String uuid) {
+    public static boolean isUuidMounted(Context c, String uuid) {
         long b_time= System.currentTimeMillis();
         ArrayList<StorageVolumeInfo>svl=getStorageVolumeInfo(c);
 
@@ -138,7 +138,7 @@ public class SafManager3 {
         return false;
     }
 
-    static public ArrayList<SafStorage3> getDuplicateUuid(Context c) {
+    public static ArrayList<SafStorage3> getDuplicateUuid(Context c) {
         long b_time= System.currentTimeMillis();
         ArrayList<StorageVolumeInfo>svl=getStorageVolumeInfo(c);
         ArrayList<SafStorage3>duplicate_list=new ArrayList<SafStorage3>();
@@ -157,7 +157,7 @@ public class SafManager3 {
         return isUuidRegistered(mContext, uuid);
     }
 
-    static public boolean isUuidRegistered(Context c, String uuid) {
+    public static boolean isUuidRegistered(Context c, String uuid) {
         long b_time= System.currentTimeMillis();
         SafFile3 rt=null;
         boolean result=false;
@@ -180,13 +180,13 @@ public class SafManager3 {
         return isStoragePermissionRequired(mContext);
     }
 
-    static public boolean isStoragePermissionRequired(Context c) {
+    public static boolean isStoragePermissionRequired(Context c) {
         ArrayList<StorageVolumeInfo> rows=buildStoragePermissionRequiredList(c);
         if (rows.size()>0) return true;
         else return false;
     }
 
-    static public ArrayList<StorageVolumeInfo> buildStoragePermissionRequiredList(Context c) {
+    public static ArrayList<StorageVolumeInfo> buildStoragePermissionRequiredList(Context c) {
         final ArrayList<StorageVolumeInfo> svi_list= getStorageVolumeInfo(c);
         final ArrayList<StorageVolumeInfo> rows=new ArrayList<StorageVolumeInfo>();
 
@@ -325,7 +325,7 @@ public class SafManager3 {
         return saf_list;
     }
 
-    static public String getAppSpecificDirectory(Context c, String uuid) {
+    public static String getAppSpecificDirectory(Context c, String uuid) {
         String app_dir = null;
         if (uuid == null) {
             log.debug("getAppSpecificDirectory Error: null uuid specified");
@@ -363,7 +363,7 @@ public class SafManager3 {
         return result;
     }
 
-    static public ArrayList<StorageVolumeInfo> getStorageVolumeInfo(Context c) {
+    public static ArrayList<StorageVolumeInfo> getStorageVolumeInfo(Context c) {
         ArrayList<StorageVolumeInfo> svl=new ArrayList<StorageVolumeInfo>();
         try {
             StorageManager sm = (StorageManager) c.getSystemService(Context.STORAGE_SERVICE);
@@ -456,7 +456,7 @@ public class SafManager3 {
         return getRootSafFile(mSafFileList, uuid);
     }
 
-    static public SafFile3 getRootSafFile(ArrayList<SafStorage3> sl, String uuid) {
+    public static SafFile3 getRootSafFile(ArrayList<SafStorage3> sl, String uuid) {
         for(SafStorage3 sli:sl) {
             if (sli.uuid.equals(uuid)) {
                 return sli.saf_file;
@@ -683,7 +683,7 @@ public class SafManager3 {
 //        return document;
 //    };
 
-    static public class StorageVolumeInfo {
+    public static class StorageVolumeInfo {
         public String path="";
         public String uuid="";
         public String description="";

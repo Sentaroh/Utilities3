@@ -84,7 +84,7 @@ public class SafFile3 {
 //    public final static String SAF_FILE_EXTERNAL_STORAGE_ANDROID_APP_DIRECTORY="/storage/%1$s/Android/data/%2$s";
     public final static String SAF_FILE_DOCUMENT_TREE_URI_PREFIX="content://com.android.externalstorage.documents/tree/";
 
-    static public boolean isAllFileAccessAvailable() {
+    public static boolean isAllFileAccessAvailable() {
         if (Build.VERSION.SDK_INT>=30) return true;
         else return false;
     }
