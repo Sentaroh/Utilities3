@@ -731,7 +731,7 @@ public class TreeFilelistAdapter extends BaseAdapter {
            		    if (mLightThemeUsed) holder.ll_view.setBackgroundColor(Color.LTGRAY);
            		    else holder.ll_view.setBackgroundColor(Color.GRAY);
                 } else {
-           		    holder.ll_view.setBackgroundDrawable(mPrimayBackgroundColor);
+           		    holder.ll_view.setBackground(mPrimayBackgroundColor);
                 }
             }
             return v;

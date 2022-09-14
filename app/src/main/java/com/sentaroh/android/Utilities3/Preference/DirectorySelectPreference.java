@@ -262,8 +262,8 @@ public class DirectorySelectPreference extends DialogPreference {
 
 	@SuppressWarnings("deprecation")
 	public static void setSpinnerBackground(Context c, Spinner spinner, boolean theme_is_light) {
-		if (theme_is_light) spinner.setBackgroundDrawable(c.getResources().getDrawable(R.drawable.spinner_color_background_light));
-		else spinner.setBackgroundDrawable(c.getResources().getDrawable(R.drawable.spinner_color_background));
+		if (theme_is_light) spinner.setBackground(c.getResources().getDrawable(R.drawable.spinner_color_background_light));
+		else spinner.setBackground(c.getResources().getDrawable(R.drawable.spinner_color_background));
 	};
 
     private ListView mTreeFileListView=null;
