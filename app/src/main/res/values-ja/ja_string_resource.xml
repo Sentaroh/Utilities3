@@ -57,6 +57,7 @@
         <string name="msgs_list_edit_preference_list_edit_list_specify_new_value">新しい値を入力してください</string>
         <string name="msgs_list_edit_preference_list_edit_list_value_was_already_registerd">既に登録されています</string>
         <string name="msgs_list_edit_preference_list_edit_list_specify_list_value">値を入力してください</string>
+        <string name="msgs_list_edit_preference_item_edit_file_type_dialog_title">Edit file type</string>
     <!-- msgs_log_management -->
         <string name="msgs_log_file_list_title">ログファイル管理</string>
         <string name="msgs_log_file_list_label_delete">ログの削除</string>
