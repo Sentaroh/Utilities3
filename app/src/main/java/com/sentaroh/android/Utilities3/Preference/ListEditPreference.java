@@ -66,10 +66,4 @@ public class ListEditPreference extends DialogPreference {
     public String getAddItemHint() {
         return mHint;
     }
-
-    @Override
-    protected Object onGetDefaultValue(@NonNull TypedArray a, int index) {
-        if (mDebugEnabled) log.debug(APPLICATION_TAG + " onGetDefaultValue");
-        return a.getString(index);
-    }
 }

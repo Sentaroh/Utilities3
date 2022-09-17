@@ -74,11 +74,22 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
     private final static String APPLICATION_TAG = "ListEditPreferenceDialogFragment";
     private Context mContext = null;
     private String mHint = "";
+    private final String DIALOG_TITLE_DEFAULT_VALUE = "";
 
     public static ListEditPreferenceDialogFragment newInstance(String key) {
         final ListEditPreferenceDialogFragment fragment = new ListEditPreferenceDialogFragment();
         final Bundle b = new Bundle(1);
         b.putString(ARG_KEY, key);
+        fragment.setArguments(b);
+
+        return fragment;
+    }
+
+    public static ListEditPreferenceDialogFragment newInstance(String key, String title) {
+        final ListEditPreferenceDialogFragment fragment = new ListEditPreferenceDialogFragment();
+        final Bundle b = new Bundle(1);
+        b.putString(ARG_KEY, key);
+        b.putString("AlertDialogTitle", title);
         fragment.setArguments(b);
 
         return fragment;
@@ -114,7 +125,14 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
             listEditView = reInitViewWidget();
         }
 
+        String dialog_title = DIALOG_TITLE_DEFAULT_VALUE;
+        Bundle currentFragmentBundle = this.getArguments();
+        if (currentFragmentBundle != null) {
+            dialog_title = currentFragmentBundle.getString("AlertDialogTitle", DIALOG_TITLE_DEFAULT_VALUE);
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle(dialog_title);
         builder.setView(listEditView);
 
         builder.setPositiveButton(R.string.msgs_common_dialog_save,  new DialogInterface.OnClickListener() {
