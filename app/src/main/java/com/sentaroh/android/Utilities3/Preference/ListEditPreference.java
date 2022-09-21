@@ -27,7 +27,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 
-import androidx.annotation.NonNull;
 import androidx.preference.DialogPreference;
 
 import com.sentaroh.android.Utilities3.R;

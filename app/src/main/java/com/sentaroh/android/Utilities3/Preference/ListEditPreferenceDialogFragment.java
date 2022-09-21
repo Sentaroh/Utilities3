@@ -63,6 +63,12 @@ import com.sentaroh.android.Utilities3.ThemeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -110,6 +116,13 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
         super.onBindDialogView(view);
     }
 
+    private static final String STATE_ADAPTER_LIST = "STATE_ADAPTER_LIST";
+    private static final String STATE_ADAPTER_LIST_CLONE = "STATE_ADAPTER_LIST_CLONE";
+    private static final String STATE_OK_BUTTON_ENABLED = "STATE_OK_BUTTON_ENABLED";
+    private static final String STATE_EDIT_DIALOG_VALUE = "STATE_EDIT_DIALOG_VALUE";
+    private static final String STATE_EDIT_DIALOG_ITEM_POSITION = "STATE_EDIT_DIALOG_ITEM_POSITION";
+    private static final String STATE_EDIT_DIALOG_OK_BUTTON_ENABLED = "STATE_EDIT_DIALOG_OK_BUTTON_ENABLED";
+
     @Override
     public @NonNull
     Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -118,10 +131,19 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
 
         View listEditView;
         if (savedInstanceState == null) {
-            listEditView = initViewWidget();
+                listEditView = initViewWidget();
         } else {
-            mValueList = savedInstanceState.getParcelableArrayList(STATE_ADAPTER_LIST);
-            mDialogOkButtonEnabled = savedInstanceState.getBoolean(STATE_OK_BUTTON_ENABLED);
+//            if (Build.VERSION.SDK_INT >= 33) {
+//                // Android T
+//                mValueList.value_item_list_array = savedInstanceState.getParcelableArrayList(STATE_ADAPTER_LIST, ValueItem.class);
+//                mOriginalValueList.value_item_list_array = savedInstanceState.getParcelableArrayList(STATE_ADAPTER_LIST_CLONE, ValueItem.class);
+//                mDialogOkButtonEnabled = savedInstanceState.getBoolean(STATE_OK_BUTTON_ENABLED);
+//            } else {
+                mValueList.value_item_list_array = savedInstanceState.getParcelableArrayList(STATE_ADAPTER_LIST);
+                mOriginalValueList.value_item_list_array = savedInstanceState.getParcelableArrayList(STATE_ADAPTER_LIST_CLONE);
+                mDialogOkButtonEnabled = savedInstanceState.getBoolean(STATE_OK_BUTTON_ENABLED);
+//            }
+
             listEditView = reInitViewWidget();
         }
 
@@ -178,7 +200,7 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
 
                         if (edit_dialog_text != null) {
                             mEditItemPosition = edit_dialog_item_position;
-                            editListValue(mValueList.get(edit_dialog_item_position), edit_dialog_ok_button_enabled, new SpannableStringBuilder(edit_dialog_text));
+                            editListValue(mValueList.value_item_list_array.get(edit_dialog_item_position), edit_dialog_ok_button_enabled, new SpannableStringBuilder(edit_dialog_text));
                         }
                     } catch (MissingResourceException e) {
                         // On configuration changed while no editListValue dialog is shown
@@ -190,17 +212,12 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
         return ad;
     }
 
-    private static final String STATE_ADAPTER_LIST = "STATE_ADAPTER_LIST";
-    private static final String STATE_OK_BUTTON_ENABLED = "STATE_OK_BUTTON_ENABLED";
-    private static final String STATE_EDIT_DIALOG_VALUE = "STATE_EDIT_DIALOG_VALUE";
-    private static final String STATE_EDIT_DIALOG_ITEM_POSITION = "STATE_EDIT_DIALOG_ITEM_POSITION";
-    private static final String STATE_EDIT_DIALOG_OK_BUTTON_ENABLED = "STATE_EDIT_DIALOG_OK_BUTTON_ENABLED";
-
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         if (mDebugEnabled) log.debug(APPLICATION_TAG + " onSaveInstanceState");
 
-        outState.putParcelableArrayList(STATE_ADAPTER_LIST, mValueList);
+        outState.putParcelableArrayList(STATE_ADAPTER_LIST, mValueList.value_item_list_array);
+        outState.putParcelableArrayList(STATE_ADAPTER_LIST_CLONE, mOriginalValueList.value_item_list_array);
         outState.putBoolean(STATE_OK_BUTTON_ENABLED, mDialogOkButton.isEnabled());
 
         if (mEditItemDialog != null) {
@@ -249,7 +266,8 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
     private Button mDialogCancelButton = null;
 
     private String mCurrentListData = "";
-    private ArrayList<ListValueItem> mValueList = new ArrayList<ListValueItem>();
+    private ValueItemList mValueList = new ValueItemList();
+    private ValueItemList mOriginalValueList = new ValueItemList();
     private int mEditItemPosition = 0;
     private AdapterListEditor mListadapter = null;
 
@@ -262,31 +280,34 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
             mHint = ((ListEditPreference) preference).getAddItemHint();
         }
 
-        mValueList.clear();
+        mValueList.value_item_list_array.clear();
         String[] list_array = mCurrentListData.split(";");
         for(String item : list_array) {
             if (item.length() > 0) {
-                ListValueItem mi = new ListValueItem(item);
-                mValueList.add(mi);
+                ValueItem mi = new ValueItem(item);
+                mValueList.value_item_list_array.add(mi);
             }
         }
-        Collections.sort(mValueList, new CustomComparator());
+        Collections.sort(mValueList.value_item_list_array, new CustomComparator());
+
+        //mOriginalValueList = mValueList.clone();
+        mOriginalValueList = mValueList.cloneSerial();
 
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         // Inflate without parent because it is for AlertDialog !
         @SuppressLint("InflateParams") View listEditView = inflater.inflate(R.layout.list_edit_preference, null);
 
         final ListView lv = listEditView.findViewById(R.id.list_edit_preference_list_view);
-        mListadapter = new AdapterListEditor(mContext, R.layout.list_edit_preference_entry_item, mValueList);
+        mListadapter = new AdapterListEditor(mContext, R.layout.list_edit_preference_entry_item, mValueList.value_item_list_array);
         lv.setAdapter(mListadapter);
         //mListadapter.sort(); //already sorted above by Collections
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (!mValueList.get(i).isDeleted()) {
+                if (!mValueList.value_item_list_array.get(i).isDeleted()) {
                     mEditItemPosition = i;
-                    editListValue(mValueList.get(i), false, null);
+                    editListValue(mValueList.value_item_list_array.get(i), false, null);
                 }
             }
         });
@@ -306,7 +327,7 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.length() > 0) {
-                    for(ListValueItem item : mValueList) {
+                    for(ValueItem item : mValueList.value_item_list_array) {
                         setViewEnabled(mContext, add_btn, !item.getListValue().equals(editable.toString()));
                     }
                 } else {
@@ -318,13 +339,13 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
         add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ListValueItem mi = new ListValueItem(et_list_value.getText().toString());
-                mValueList.add(mi);
+                ValueItem mi = new ValueItem(et_list_value.getText().toString());
+                mValueList.value_item_list_array.add(mi);
                 //mListadapter.sort();
-                Collections.sort(mValueList, new CustomComparator());
+                Collections.sort(mValueList.value_item_list_array, new CustomComparator());
                 mListadapter.notifyDataSetChanged();
                 et_list_value.setText("");
-                setViewEnabled(mContext, mDialogOkButton, true);
+                setViewEnabled(mContext, mDialogOkButton, !mValueList.isSame(mOriginalValueList));
             }
         });
 
@@ -347,16 +368,16 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
         @SuppressLint("InflateParams") View listEditView = inflater.inflate(R.layout.list_edit_preference, null);
 
         final ListView lv = listEditView.findViewById(R.id.list_edit_preference_list_view);
-        mListadapter = new AdapterListEditor(mContext, R.layout.list_edit_preference_entry_item, mValueList);
+        mListadapter = new AdapterListEditor(mContext, R.layout.list_edit_preference_entry_item, mValueList.value_item_list_array);
         lv.setAdapter(mListadapter);
         //mListadapter.sort(); //No need as already sorted before configuration changed
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (!mValueList.get(i).isDeleted()) {
+                if (!mValueList.value_item_list_array.get(i).isDeleted()) {
                     mEditItemPosition = i;
-                    editListValue(mValueList.get(i), false, null);
+                    editListValue(mValueList.value_item_list_array.get(i), false, null);
                 }
             }
         });
@@ -376,7 +397,7 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.length() > 0) {
-                    for(ListValueItem item : mValueList) {
+                    for(ValueItem item : mValueList.value_item_list_array) {
                         setViewEnabled(mContext, add_btn, !item.getListValue().equals(editable.toString()));
                     }
                 } else {
@@ -388,13 +409,13 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
         add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ListValueItem mi = new ListValueItem(et_list_value.getText().toString());
-                mValueList.add(mi);
+                ValueItem mi = new ValueItem(et_list_value.getText().toString());
+                mValueList.value_item_list_array.add(mi);
                 //mListadapter.sort();
-                Collections.sort(mValueList, new CustomComparator());
+                Collections.sort(mValueList.value_item_list_array, new CustomComparator());
                 mListadapter.notifyDataSetChanged();
                 et_list_value.setText("");
-                setViewEnabled(mContext, mDialogOkButton, true);
+                setViewEnabled(mContext, mDialogOkButton, !mValueList.isSame(mOriginalValueList));
             }
         });
 
@@ -404,8 +425,8 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
 
     private String buildSaveValue() {
         StringBuilder list_value = new StringBuilder();
-//        log.info("size=" + mValueList.size());
-        for(ListValueItem item : mValueList) {
+//        log.info("size=" + mValueList.value_item_list_array.size());
+        for(ValueItem item : mValueList.value_item_list_array) {
             if (!item.isDeleted()) list_value.append(item.getListValue()).append(";");
         }
         return list_value.toString();
@@ -413,7 +434,7 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
 
     // editListValue(): display the dialog to edit current list item
     private Dialog mEditItemDialog = null;
-    private void editListValue(final ListValueItem list_item, boolean ok_button_enabled, Editable init_value) {
+    private void editListValue(final ValueItem list_item, boolean ok_button_enabled, Editable init_value) {
         if (mDebugEnabled) log.debug(APPLICATION_TAG + " editListValue value=" + list_item.getListValue());
         // カスタムダイアログの生成
         final Dialog dialog = new Dialog(mContext);
@@ -450,7 +471,7 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.length() > 0) {
-                    for(ListValueItem item : mValueList) {
+                    for(ValueItem item : mValueList.value_item_list_array) {
                         if (item.getListValue().equals(editable.toString())) {
                             btn_ok.setEnabled(false);
                             btn_ok.setAlpha(0.3f);
@@ -491,30 +512,30 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
             public void onClick(View v) {
                 list_item.setListValue(et_data.getText().toString());
                 //mListadapter.sort();
-                Collections.sort(mValueList, new CustomComparator());
+                Collections.sort(mValueList.value_item_list_array, new CustomComparator());
                 mListadapter.notifyDataSetChanged();
                 dialog.dismiss();
                 mEditItemDialog = null;
-                setViewEnabled(mContext, mDialogOkButton, true);
+                setViewEnabled(mContext, mDialogOkButton, !mValueList.isSame(mOriginalValueList));
             }
         });
 
         dialog.show();
     }
 
-    public class AdapterListEditor extends ArrayAdapter<ListValueItem> {
+    public class AdapterListEditor extends ArrayAdapter<ValueItem> {
         private final Context c;
         private final int id;
-        private final ArrayList<ListValueItem> items;
+        private final ArrayList<ValueItem> items;
 
-        public AdapterListEditor(Context context, int textViewResourceId, ArrayList<ListValueItem> objects) {
+        public AdapterListEditor(Context context, int textViewResourceId, ArrayList<ValueItem> objects) {
             super(context, textViewResourceId, objects);
             c = context;
             id = textViewResourceId;
             items = objects;
         }
 
-        public ListValueItem getItem(int i) {
+        public ValueItem getItem(int i) {
             return items.get(i);
         }
 
@@ -523,16 +544,16 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
             notifyDataSetChanged();
         }
 
-        public void replace(ListValueItem fli, int i) {
+        public void replace(ValueItem fli, int i) {
             items.set(i, fli);
             notifyDataSetChanged();
         }
 
         public void sort() {
-            this.sort(new Comparator<ListValueItem>() {
+            this.sort(new Comparator<ValueItem>() {
                 @Override
-                public int compare(ListValueItem lhs,
-                                   ListValueItem rhs) {
+                public int compare(ValueItem lhs,
+                                   ValueItem rhs) {
                     return lhs.getListValue().compareToIgnoreCase(rhs.getListValue());
                 }
             });
@@ -557,36 +578,52 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
             } else {
                 holder = (ViewHolder) v.getTag();
             }
-            final ListValueItem o = getItem(position);
 
+            final ValueItem o = getItem(position);
             if (o != null) {
                 holder.tv_row_filter.setText(o.getListValue());
                 holder.tv_row_filter.setVisibility(View.VISIBLE);
                 holder.btn_row_delbtn.setVisibility(View.VISIBLE);
 
-                holder.tv_row_filter.setEnabled(true);
-                holder.btn_row_delbtn.setEnabled(true);
-
+                setViewEnabled(mContext, holder.tv_row_filter, !o.isDeleted());//will set alpha
                 if (o.isDeleted()) {
-                    holder.tv_row_filter.setEnabled(false);
-                    holder.tv_row_filter.setAlpha(0.3f);
-                    holder.btn_row_delbtn.setEnabled(false);
-                    holder.btn_row_delbtn.setAlpha(0.3f);
-                    setViewEnabled(mContext, holder.btn_row_delbtn, false);
+                    //holder.tv_row_filter.setEnabled(false);
+                    //holder.tv_row_filter.setAlpha(0.3f);
+                    //setViewEnabled(mContext, holder.tv_row_filter, false);//will set alpha
+
+                    holder.btn_row_delbtn.setImageResource(R.drawable.context_button_trash_undo);
+                    //holder.btn_row_delbtn.setEnabled(false);
+                    //holder.btn_row_delbtn.setAlpha(0.3f);
+                    //setViewEnabled(mContext, holder.btn_row_delbtn, false);
                 } else {
-                    setViewEnabled(mContext, holder.btn_row_delbtn, true);
+                    //holder.tv_row_filter.setEnabled(true);
+                    //holder.tv_row_filter.setAlpha(1.0f);
+                    //setViewEnabled(mContext, holder.tv_row_filter, true);//will set alpha
+
+                    holder.btn_row_delbtn.setImageResource(R.drawable.context_button_trash);
+                    //holder.btn_row_delbtn.setEnabled(true);
+                    //holder.btn_row_delbtn.setAlpha(1.0f);
+                    //setViewEnabled(mContext, holder.btn_row_delbtn, true);
                 }
 
                 holder.btn_row_delbtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        holder.tv_row_filter.setEnabled(false);
-                        holder.btn_row_delbtn.setEnabled(false);
+                        o.setDeleted(!o.isDeleted());
+                        setViewEnabled(mContext, holder.tv_row_filter, !o.isDeleted());//will set alpha
+                        //holder.tv_row_filter.setEnabled(!o.isDeleted());
+                        //holder.btn_row_delbtn.setEnabled(!o.isDeleted());
 
-                        o.setDeleted(true);
+                        if (o.isDeleted()) {
+                            holder.btn_row_delbtn.setImageResource(R.drawable.context_button_trash_undo);
+                        } else {
+                            holder.btn_row_delbtn.setImageResource(R.drawable.context_button_trash);
+                        }
+
                         notifyDataSetChanged();
 
-                        setViewEnabled(c, mDialogOkButton, true);
+                        //setViewEnabled(c, mDialogOkButton, true);
+                        setViewEnabled(c, mDialogOkButton, !mValueList.isSame(mOriginalValueList));
 //                        if (mNotifyDeleteListener != null)
 //                            mNotifyDeleteListener.notifyToListener(true, new Object[]{o});
                     }
@@ -604,11 +641,12 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
     }
 
     // Parcelable custom ArrayList so that it can be passed as Bundle argument
-    private static class ListValueItem implements Parcelable {
+    // Needs to implement Serializable since we clone "parent class" ValueItemList using serialization
+    private static class ValueItem implements Parcelable , Serializable, Cloneable {
         private String mListValue;
         private boolean mDelete = false;
 
-        public ListValueItem(String filter) {
+        public ValueItem(String filter) {
             this.mListValue = filter;
         }
 
@@ -633,7 +671,7 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
         }
 
         @RequiresApi(api = Build.VERSION_CODES.Q)
-        private ListValueItem(Parcel in) {
+        private ValueItem(Parcel in) {
             mListValue = in.readString();
             mDelete = in.readBoolean();
         }
@@ -645,21 +683,145 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
         }
 
         // Not being static will cause a crash when restoring after it was sent to background with kill activities enabled in system
-        public static final Parcelable.Creator<ListValueItem> CREATOR = new Parcelable.Creator<ListValueItem>() {
+        public static final Parcelable.Creator<ValueItem> CREATOR = new Parcelable.Creator<ValueItem>() {
             @RequiresApi(api = Build.VERSION_CODES.Q)
-            public ListValueItem createFromParcel(Parcel in) {
-                return new ListValueItem(in);
+            public ValueItem createFromParcel(Parcel in) {
+                return new ValueItem(in);
             }
 
-            public ListValueItem[] newArray(int size) {
-                return new ListValueItem[size];
+            public ValueItem[] newArray(int size) {
+                return new ValueItem[size];
             }
         };
+
+        @NonNull
+        @Override
+        public ValueItem clone() {
+            ValueItem ValueItemClone = null;
+            try {
+                ValueItemClone = (ValueItem) super.clone();
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+            assert ValueItemClone != null;
+            return ValueItemClone;
+        }
     }
 
-    public static class CustomComparator implements Comparator<ListValueItem> {
+    // Serializable class to clone an ArrayList<ValueItem> using Serialization
+    // Clonable to use custom super.clone()
+    // Optional: implement Parcelable to pass teh whole class as bundle arg instead of only value_item_list_array
+    private static class ValueItemList implements Serializable, Cloneable {
+        public ArrayList<ValueItem> value_item_list_array = new ArrayList<ValueItem>();
+
+        public ValueItemList(){}
+
+        // Clone using java Cloneable clone()
+        // not used
+        @NonNull
         @Override
-        public int compare(ListValueItem o1, ListValueItem o2) {
+        public ValueItemList clone() {
+            ValueItemList ValueItemListClone = null;
+            try {
+                ValueItemListClone = (ValueItemList) super.clone();
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+
+            // override super.clone() implementation to make a deep copy of value_item_list_array
+            assert ValueItemListClone != null;
+            if (this.value_item_list_array != null) {
+                ValueItemListClone.value_item_list_array = new ArrayList<ValueItem>();
+
+                for (ValueItem valueItem : this.value_item_list_array) {
+                    //Add the object clones
+                    ValueItemListClone.value_item_list_array.add((ValueItem) valueItem.clone());
+                }
+            } else {
+                ValueItemListClone.value_item_list_array = null;
+            }
+
+            //assert ValueItemListClone != null;
+            return ValueItemListClone;
+        }
+
+        // Custom clone using Serialization/Deserialization
+        public ValueItemList cloneSerial() {
+            ValueItemList ValueItemListClone = null;
+            try {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ObjectOutputStream oos = new ObjectOutputStream(baos);
+                oos.writeObject(this);
+
+                oos.flush();
+                oos.close();
+
+                baos.flush();
+                byte[] ba_buff = baos.toByteArray();
+                baos.close();
+
+                ByteArrayInputStream bais = new ByteArrayInputStream(ba_buff);
+                ObjectInputStream ois = new ObjectInputStream(bais);
+
+                ValueItemListClone = (ValueItemList) ois.readObject();
+                ois.close();
+                bais.close();
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            assert ValueItemListClone != null;
+            return ValueItemListClone;
+        }
+
+        public boolean isSame(ValueItemList comp) {
+            if (mDebugEnabled) log.debug(APPLICATION_TAG + " this.value_item_list_array.size()=" + this.value_item_list_array.size());
+            if (mDebugEnabled) log.debug(APPLICATION_TAG + " comp.value_item_list_array.size()=" + comp.value_item_list_array.size());
+
+            boolean result = false;
+            int i = 0;
+            ArrayList<ValueItem> leftList = new ArrayList<ValueItem>();
+            ArrayList<ValueItem> rightList = new ArrayList<ValueItem>();
+
+            for(ValueItem item : this.value_item_list_array) {
+                if (!item.isDeleted()) leftList.add(item);
+                i++;
+
+                if (mDebugEnabled) log.debug(APPLICATION_TAG + " leftList item" + i + "=" + item.getListValue());
+            }
+
+            i = 0;
+            for(ValueItem item : comp.value_item_list_array) {
+                if (!item.isDeleted()) rightList.add(item);
+                i++;
+
+                if (mDebugEnabled) log.debug(APPLICATION_TAG + " rightList item" + i + "=" + item.getListValue());
+            }
+
+            i = 0;
+            if (leftList.size() == rightList.size()) {
+                for(ValueItem left_item : leftList) {
+                    ValueItem right_item = rightList.get(i);
+                    boolean is_same = left_item.getListValue().toLowerCase().equals(right_item.getListValue().toLowerCase());
+
+                    if (mDebugEnabled) log.debug(APPLICATION_TAG + " left_item.getListValue().toLowerCase()=" + left_item.getListValue().toLowerCase() +
+                                                    " right_item.getListValue().toLowerCase()=" + right_item.getListValue().toLowerCase() + 
+                                                    " is_same=" + is_same);
+                    if (!is_same) break;
+                    i++;
+                }
+
+                if (i == leftList.size()) result = true;
+            }
+
+            if (mDebugEnabled) log.debug(APPLICATION_TAG + " isSame=" + result + " i=" + i + " leftList.size()=" + leftList.size() + " rightList.size()=" + rightList.size());
+            return result;
+        }
+    }
+
+    public static class CustomComparator implements Comparator<ValueItem> {
+        @Override
+        public int compare(ValueItem o1, ValueItem o2) {
             return o1.getListValue().toLowerCase().compareTo(o2.getListValue().toLowerCase());
 //            return this.filename.toLowerCase().compareTo(o.getName().toLowerCase()) * (-1);
         }
@@ -669,5 +831,4 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
         boolean isLight = ThemeUtil.isLightThemeUsed(c);
         CommonDialog.setViewEnabled(isLight, v, enabled);
     }
-
 }
