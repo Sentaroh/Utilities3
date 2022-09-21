@@ -133,16 +133,16 @@ public class ListEditPreferenceDialogFragment extends PreferenceDialogFragmentCo
         if (savedInstanceState == null) {
                 listEditView = initViewWidget();
         } else {
-//            if (Build.VERSION.SDK_INT >= 33) {
-//                // Android T
-//                mValueList.value_item_list_array = savedInstanceState.getParcelableArrayList(STATE_ADAPTER_LIST, ValueItem.class);
-//                mOriginalValueList.value_item_list_array = savedInstanceState.getParcelableArrayList(STATE_ADAPTER_LIST_CLONE, ValueItem.class);
-//                mDialogOkButtonEnabled = savedInstanceState.getBoolean(STATE_OK_BUTTON_ENABLED);
-//            } else {
+            if (Build.VERSION.SDK_INT >= 33) {
+                // Android T
+                mValueList.value_item_list_array = savedInstanceState.getParcelableArrayList(STATE_ADAPTER_LIST, ValueItem.class);
+                mOriginalValueList.value_item_list_array = savedInstanceState.getParcelableArrayList(STATE_ADAPTER_LIST_CLONE, ValueItem.class);
+                mDialogOkButtonEnabled = savedInstanceState.getBoolean(STATE_OK_BUTTON_ENABLED);
+            } else {
                 mValueList.value_item_list_array = savedInstanceState.getParcelableArrayList(STATE_ADAPTER_LIST);
                 mOriginalValueList.value_item_list_array = savedInstanceState.getParcelableArrayList(STATE_ADAPTER_LIST_CLONE);
                 mDialogOkButtonEnabled = savedInstanceState.getBoolean(STATE_OK_BUTTON_ENABLED);
-//            }
+            }
 
             listEditView = reInitViewWidget();
         }
