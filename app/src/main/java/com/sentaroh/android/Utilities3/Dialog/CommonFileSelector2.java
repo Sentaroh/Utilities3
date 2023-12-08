@@ -464,8 +464,8 @@ public class CommonFileSelector2 extends DialogFragment {
 
     @SuppressWarnings("deprecation")
     public static void setSpinnerBackground(Context c, Spinner spinner, boolean theme_is_light) {
-        if (theme_is_light) spinner.setBackgroundDrawable(c.getResources().getDrawable(R.drawable.spinner_color_background_light));
-        else spinner.setBackgroundDrawable(c.getResources().getDrawable(R.drawable.spinner_color_background));
+        if (theme_is_light) spinner.setBackground(c.getResources().getDrawable(R.drawable.spinner_color_background_light));
+        else spinner.setBackground(c.getResources().getDrawable(R.drawable.spinner_color_background));
     };
 
     private ListView mTreeFileListView=null;
@@ -831,7 +831,7 @@ public class CommonFileSelector2 extends DialogFragment {
                                     mTreeFileListView.setVisibility(TextView.VISIBLE);
                                     mTreeFilelistAdapter.setDataList(tfl);
                                 }
-                                if (mDialogSelectCat==DIALOG_SELECT_CATEGORY_FILE && mDialogFileName.equals("")) {
+                                if (mDialogSelectCat==DIALOG_SELECT_CATEGORY_FILE && et_file_name.getText().toString().equals("")) {
                                     setButtonEnabled(mActivity, btnOk, false);
                                     putDlgMsg(dlg_msg, mContext.getString(R.string.msgs_file_select_edit_dlg_filename_not_specified));
                                 } else {
@@ -854,7 +854,7 @@ public class CommonFileSelector2 extends DialogFragment {
                     if (mDialogSelectCat==DIALOG_SELECT_CATEGORY_FILE) {
                         mTreeFilelistAdapter.setDataItemIsSelected(pos);
                         et_file_name.setText(mTreeFilelistAdapter.getDataItem(pos).getName());
-                        if (mTreeFilelistAdapter.getDataItem(pos).isDir() && mDialogSelectCat==DIALOG_SELECT_CATEGORY_FILE) setButtonEnabled(mActivity, btnOk, false);
+                        if (mTreeFilelistAdapter.getDataItem(pos).isDir()) setButtonEnabled(mActivity, btnOk, false);
                         else setButtonEnabled(mActivity, btnOk, true);
                     }
                 }
@@ -1285,7 +1285,8 @@ public class CommonFileSelector2 extends DialogFragment {
     }
 
     private String getRootFilePath(String fp) {
-        if (fp.startsWith("/storage/emulated/0")) return "/storage/emulated/0";
+        String primary_storage_path = SafManager3.getPrimaryStoragePath(); // "/storage/emulated/0"
+        if (fp.startsWith(primary_storage_path)) return primary_storage_path;
         else {
             String[] fp_parts=fp.startsWith("/")?fp.substring(1).split("/"):fp.split("/");
             String rt_fp="/"+fp_parts[0]+"/"+fp_parts[1];
@@ -1389,21 +1390,23 @@ public class CommonFileSelector2 extends DialogFragment {
         th.start();
     }
 
+    // On browse for files/dirs to select, do not list /Android/data
     private boolean canAccessDirectory(String path) {
         boolean result=true;
         if (path.endsWith(".android_secure")) result=false;
         else {
-            if (Build.VERSION.SDK_INT>=30) {
+            if (Build.VERSION.SDK_INT >= 30) {
+                String primary_storage_path = SafManager3.getPrimaryStoragePath(); // "/storage/emulated/0"
                 String[] fp_array=path.split("/");
-                if (path.startsWith("/storage/emulated/0")) {
-                    String abs_dir=path.replace("/storage/emulated/0", "");
+                if (path.startsWith(primary_storage_path)) {
+                    String abs_dir=path.replace(primary_storage_path, "");
                     if (!abs_dir.equals("")) {
                         if (abs_dir.startsWith("/Android/data") || abs_dir.startsWith("/Android/obb")) {
                             result=false;
                         }
                     }
                 } else {
-                    if (fp_array.length>=3) {
+                    if (fp_array.length >= 3) {
                         String abs_dir=path.replace("/"+fp_array[1]+"/"+fp_array[2], "");
                         if (!abs_dir.equals("")) {
                             if (abs_dir.startsWith("/Android/data") || abs_dir.startsWith("/Android/obb")) {

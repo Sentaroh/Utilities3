@@ -55,13 +55,13 @@ public class SafManager3 {
 
     private ArrayList<SafStorage3> mSafFileList =new ArrayList<SafStorage3>();
 
-    private String baseMp=null;
+    private String mPrimaryStoragePath=null;
 
     private static Logger log = LoggerFactory.getLogger(SafManager3.class);
 
     private boolean mScopedStorageMode=false;
 
-    public final static String SAF_FILE_PRIMARY_STORAGE_PREFIX="/storage/emulated/0";
+    //public final static String SAF_FILE_PRIMARY_STORAGE_PREFIX="/storage/emulated/0";
     public final static String SAF_FILE_EXTERNAL_STORAGE_PREFIX="/storage/";
     public final static String SAF_FILE_DOCUMENT_TREE_URI_PREFIX="content://com.android.externalstorage.documents/tree/";
 
@@ -92,7 +92,7 @@ public class SafManager3 {
     public static final int SCOPED_STORAGE_SDKX=99;
     public SafManager3(Context c) {
         mContext=c;
-        baseMp= Environment.getExternalStorageDirectory().getPath();
+        mPrimaryStoragePath = getPrimaryStoragePath(); // /storage/emulated/0
 
         if (Build.VERSION.SDK_INT>=SCOPED_STORAGE_SDKX) {
             mScopedStorageMode=true;//!Environment.isExternalStorageLegacy();
@@ -108,18 +108,23 @@ public class SafManager3 {
         mSafFileList.addAll(saf_list);
     }
 
-    static public boolean isRootTreeUri(Uri uri) {
+    public static boolean isRootTreeUri(Uri uri) {
         boolean result=false;
         String uuid=getUuidFromUri(uri.toString());
         if (uri.toString().endsWith("%3A") || uri.toString().endsWith(":")) result=true;
         return result;
     }
 
+    // returns primary storag epath "/sorage/emulated/0"
+    public static String getPrimaryStoragePath () {
+        return Environment.getExternalStorageDirectory().getPath();
+    }
+
     public boolean isUuidMounted(String uuid) {
         return isUuidMounted(mContext, uuid);
     }
 
-    static public boolean isUuidMounted(Context c, String uuid) {
+    public static boolean isUuidMounted(Context c, String uuid) {
         long b_time= System.currentTimeMillis();
         ArrayList<StorageVolumeInfo>svl=getStorageVolumeInfo(c);
 
@@ -133,7 +138,7 @@ public class SafManager3 {
         return false;
     }
 
-    static public ArrayList<SafStorage3> getDuplicateUuid(Context c) {
+    public static ArrayList<SafStorage3> getDuplicateUuid(Context c) {
         long b_time= System.currentTimeMillis();
         ArrayList<StorageVolumeInfo>svl=getStorageVolumeInfo(c);
         ArrayList<SafStorage3>duplicate_list=new ArrayList<SafStorage3>();
@@ -152,7 +157,7 @@ public class SafManager3 {
         return isUuidRegistered(mContext, uuid);
     }
 
-    static public boolean isUuidRegistered(Context c, String uuid) {
+    public static boolean isUuidRegistered(Context c, String uuid) {
         long b_time= System.currentTimeMillis();
         SafFile3 rt=null;
         boolean result=false;
@@ -175,13 +180,13 @@ public class SafManager3 {
         return isStoragePermissionRequired(mContext);
     }
 
-    static public boolean isStoragePermissionRequired(Context c) {
+    public static boolean isStoragePermissionRequired(Context c) {
         ArrayList<StorageVolumeInfo> rows=buildStoragePermissionRequiredList(c);
         if (rows.size()>0) return true;
         else return false;
     }
 
-    static public ArrayList<StorageVolumeInfo> buildStoragePermissionRequiredList(Context c) {
+    public static ArrayList<StorageVolumeInfo> buildStoragePermissionRequiredList(Context c) {
         final ArrayList<StorageVolumeInfo> svi_list= getStorageVolumeInfo(c);
         final ArrayList<StorageVolumeInfo> rows=new ArrayList<StorageVolumeInfo>();
 
@@ -225,13 +230,13 @@ public class SafManager3 {
             if (!item_svi.isDuplicate) {
                 if (isScopedStorageMode()) {
                     rt=SafFile3.fromTreeUri(mContext, Uri.parse(SAF_FILE_DOCUMENT_TREE_URI_PREFIX+item_svi.uuid+"%3A"));
-                    if (rt.exists()) {//Internal storage, SDCARD or USB
+                    if (rt != null && rt.exists()) {//Internal storage, SDCARD or USB
                         SafStorage3 sli=new SafStorage3();
                         sli.description=item_svi.description;
                         sli.uuid=item_svi.uuid;
                         sli.saf_file =rt;
                         sli.isSafFile=true;
-                        sli.appDirectory=getAppSpecificDirectory(mContext,  item_svi.uuid);
+                        sli.appDirectory=getAppSpecificDirectory(mContext, item_svi.uuid);
                         saf_list.add(sli);
                     }
                 } else {
@@ -241,11 +246,14 @@ public class SafManager3 {
                             sli.description=item_svi.description;
                             sli.uuid=item_svi.uuid;
                             sli.isSafFile=false;
-                            sli.appDirectory=getAppSpecificDirectory(mContext,  item_svi.uuid);
-                            sli.appMountpoint=baseMp;
-                            String fp=mContext.getExternalFilesDirs(null)[0].getPath();
-                            sli.saf_file=new SafFile3(mContext, fp.substring(0, fp.indexOf("/Android/data")));
-                            saf_list.add(sli);
+                            File[] fl=mContext.getExternalFilesDirs(null);
+                            if (fl != null && fl[0] != null) {
+                                sli.appDirectory=fl[0].getPath(); // /storage/emulated/0/Android/data/APP_TAG/file
+                                sli.appMountpoint=mPrimaryStoragePath;
+                                //sli.saf_file=new SafFile3(mContext, fp.substring(0, fp.indexOf("/Android/data"))); // /storage/emulated/0
+                                sli.saf_file=new SafFile3(mContext, mPrimaryStoragePath);
+                                saf_list.add(sli);
+                            }
                         } else {//SDCARD or USB
                             File lf=new File(SafFile3.SAF_FILE_EXTERNAL_STORAGE_PREFIX+ item_svi.uuid);
                             if (lf.exists()) {
@@ -261,7 +269,7 @@ public class SafManager3 {
                                 sli.appMountpoint=rt.getPath();
                                 if (isAllFileAccessMode()) sli.isSafFile=false;
                                 else sli.isSafFile=true;
-                                sli.appDirectory=getAppSpecificDirectory(mContext,  item_svi.uuid);
+                                sli.appDirectory=getAppSpecificDirectory(mContext, item_svi.uuid);
                                 saf_list.add(sli);
                             }
                         }
@@ -272,13 +280,16 @@ public class SafManager3 {
                             sli.description=item_svi.description;
                             sli.uuid=SAF_FILE_PRIMARY_UUID;
                             sli.isSafFile=false;
-                            sli.appDirectory=mContext.getExternalFilesDirs(null)[0].getPath();
-                            sli.appMountpoint=baseMp;
-                            sli.saf_file=new SafFile3(mContext, SAF_FILE_PRIMARY_STORAGE_PREFIX);
-                            saf_list.add(sli);
+                            File[] fl=mContext.getExternalFilesDirs(null);
+                            if (fl != null && fl[0] != null) {
+                                sli.appDirectory=fl[0].getPath();
+                                sli.appMountpoint=mPrimaryStoragePath;
+                                sli.saf_file=new SafFile3(mContext, mPrimaryStoragePath);
+                                saf_list.add(sli);
+                            }
                         } else {
                             rt=SafFile3.fromTreeUri(mContext, Uri.parse(SAF_FILE_DOCUMENT_TREE_URI_PREFIX+item_svi.uuid+"%3A"));
-                            if (rt.exists()) {
+                            if (rt != null && rt.exists()) {
                                 SafStorage3 sli=new SafStorage3();
                                 sli.description=item_svi.description;
                                 sli.uuid=item_svi.uuid;
@@ -314,19 +325,30 @@ public class SafManager3 {
         return saf_list;
     }
 
-    static private String getAppSpecificDirectory(Context c, String uuid) {
-        String app_dir="";
-        File[] fl =c.getExternalFilesDirs(null);
-        if (uuid.equals(SAF_FILE_PRIMARY_UUID)) {
-            app_dir=fl[0].getPath();
-        } else {
-            for(File item_fl:fl) {
-                if (item_fl!=null && item_fl.getPath().contains(uuid)) {
-                    app_dir=item_fl.getPath();
-                    break;
+    public static String getAppSpecificDirectory(Context c, String uuid) {
+        String app_dir = null;
+        if (uuid == null) {
+            log.debug("getAppSpecificDirectory Error: null uuid specified");
+            return app_dir;
+        }
+
+        File[] fl = c.getExternalFilesDirs(null); // null for no subdirectory
+        if (fl != null) {
+            if (uuid.equals(SAF_FILE_PRIMARY_UUID) && fl[0] != null) {
+                app_dir=fl[0].getPath(); // -> /storage/emulated/0/Android/data/com.sentaroh.android.SMBSync3/files
+            } else {
+                for(File item_fl:fl) {
+                    if (item_fl != null && item_fl.getPath().contains(uuid)) {
+                        app_dir=item_fl.getPath(); // exp for SDCARD: /storage/1B14-0701/Android/data/com.sentaroh.android.SMBSync3/files
+                        break;
+                    }
                 }
             }
+        } else {
+            log.debug("getAppSpecificDirectory Error: getExternalFilesDirs(null) could not get app specific directory for uuid="+uuid);
         }
+
+        if (log.isDebugEnabled()) log.debug("getAppSpecificDirectory: app_dir="+app_dir + " uuid="+uuid);
         return app_dir;
     }
 
@@ -341,7 +363,7 @@ public class SafManager3 {
         return result;
     }
 
-    static public ArrayList<StorageVolumeInfo> getStorageVolumeInfo(Context c) {
+    public static ArrayList<StorageVolumeInfo> getStorageVolumeInfo(Context c) {
         ArrayList<StorageVolumeInfo> svl=new ArrayList<StorageVolumeInfo>();
         try {
             StorageManager sm = (StorageManager) c.getSystemService(Context.STORAGE_SERVICE);
@@ -350,7 +372,7 @@ public class SafManager3 {
                 for(StorageVolume item:svs) {
                     StorageVolumeInfo svi=new StorageVolumeInfo();
                     svi.description=item.getDescription(c);
-                    svi.uuid=item.getUuid()==null?SAF_FILE_PRIMARY_UUID:item.getUuid();
+                    svi.uuid=item.getUuid()==null?SAF_FILE_PRIMARY_UUID:item.getUuid(); //primary internal storage getUuid() returns null
                     svi.isPrimary=item.isPrimary();
                     svi.isRemovable=item.isRemovable();
                     svi.volume=item;
@@ -434,7 +456,7 @@ public class SafManager3 {
         return getRootSafFile(mSafFileList, uuid);
     }
 
-    static public SafFile3 getRootSafFile(ArrayList<SafStorage3> sl, String uuid) {
+    public static SafFile3 getRootSafFile(ArrayList<SafStorage3> sl, String uuid) {
         for(SafStorage3 sli:sl) {
             if (sli.uuid.equals(uuid)) {
                 return sli.saf_file;
@@ -661,7 +683,7 @@ public class SafManager3 {
 //        return document;
 //    };
 
-    static public class StorageVolumeInfo {
+    public static class StorageVolumeInfo {
         public String path="";
         public String uuid="";
         public String description="";

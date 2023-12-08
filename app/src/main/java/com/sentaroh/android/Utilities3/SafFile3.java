@@ -73,8 +73,10 @@ public class SafFile3 {
     public final static String SAF_FILE_PRIMARY_UUID="primary";
     public final static String SAF_FILE_UNKNOWN_UUID="unknown";
 
-    private String mSafPrimaryStoragePrefix="/storage/emulated/0";
+    //private String mSafPrimaryStoragePrefix="/storage/emulated/0";
+    private String mSafPrimaryStoragePrefix=null;
     public String getSafPrimaryStoragePrefix() {return mSafPrimaryStoragePrefix;}
+
 //    public final static String SAF_FILE_PRIMARY_STORAGE_PREFIX="/storage/emulated/0";
     public final static String SAF_FILE_EXTERNAL_STORAGE_PREFIX="/storage/";
 //    public final static String SAF_FILE_PRIMARY_STORAGE_ANDROID_APP_DIRECTORY="/storage/emulated/0/Android/data/%s";
@@ -82,7 +84,7 @@ public class SafFile3 {
 //    public final static String SAF_FILE_EXTERNAL_STORAGE_ANDROID_APP_DIRECTORY="/storage/%1$s/Android/data/%2$s";
     public final static String SAF_FILE_DOCUMENT_TREE_URI_PREFIX="content://com.android.externalstorage.documents/tree/";
 
-    static public boolean isAllFileAccessAvailable() {
+    public static boolean isAllFileAccessAvailable() {
         if (Build.VERSION.SDK_INT>=30) return true;
         else return false;
     }
@@ -99,7 +101,7 @@ public class SafFile3 {
             return;
         }
 //        long b_time=System.currentTimeMillis();
-        mSafPrimaryStoragePrefix=Environment.getExternalStorageDirectory().getPath();
+        mSafPrimaryStoragePrefix=Environment.getExternalStorageDirectory().getPath(); // /storage/emulated/0
         boolean all_file_access=isAllFileAccessAvailable();
         mContext = context;
         String remove_redundant_separator=fpath;
@@ -398,7 +400,7 @@ public class SafFile3 {
             else mDocName=queryForString(mContext, mUri, DocumentsContract.Document.COLUMN_DISPLAY_NAME, null);
 
             if (uri.toString().startsWith(SAF_FILE_DOCUMENT_TREE_URI_PREFIX)) {
-                if (mUuid.equals(SAF_FILE_PRIMARY_UUID)) mPath="/storage/emulated/0/"+uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
+                if (mUuid.equals(SAF_FILE_PRIMARY_UUID)) mPath=mSafPrimaryStoragePrefix+"/"+uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
                 else if (mUuid.equals(SAF_FILE_UNKNOWN_UUID)) mPath=uri.getPath();
                 else mPath=SAF_FILE_EXTERNAL_STORAGE_PREFIX+mUuid+"/"+uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
             } else {
@@ -461,7 +463,7 @@ public class SafFile3 {
                 else mDocName=queryForString(mContext, mUri, DocumentsContract.Document.COLUMN_DISPLAY_NAME, null);
 
                 if (uri.toString().startsWith(SAF_FILE_DOCUMENT_TREE_URI_PREFIX)) {
-                    if (mUuid.equals(SAF_FILE_PRIMARY_UUID)) mPath="/storage/emulated/0/"+uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
+                    if (mUuid.equals(SAF_FILE_PRIMARY_UUID)) mPath=mSafPrimaryStoragePrefix+"/"+uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
                     else mPath=SAF_FILE_EXTERNAL_STORAGE_PREFIX+mUuid+"/"+uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
                     mFile=new File(mPath);
                 } else {
@@ -483,7 +485,7 @@ public class SafFile3 {
                 else mDocName=queryForString(mContext, mUri, DocumentsContract.Document.COLUMN_DISPLAY_NAME, null);
 
                 if (uri.toString().startsWith(SAF_FILE_DOCUMENT_TREE_URI_PREFIX)) {
-                    if (mUuid.equals(SAF_FILE_PRIMARY_UUID)) mPath="/storage/emulated/0/"+uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
+                    if (mUuid.equals(SAF_FILE_PRIMARY_UUID)) mPath=mSafPrimaryStoragePrefix+"/"+uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
                     else if (mUuid.equals(SAF_FILE_UNKNOWN_UUID)) mPath=uri.getPath();
                     else mPath=SAF_FILE_EXTERNAL_STORAGE_PREFIX+mUuid+"/"+uri.getPath().substring(uri.getPath().lastIndexOf(":")+1);
                 } else {
@@ -501,7 +503,6 @@ public class SafFile3 {
                 }
             }
         }
-
     }
 
     public static Uri buildSafUri(String uuid, String file_path) {
@@ -509,7 +510,7 @@ public class SafFile3 {
     }
 
     public static String getUuidFromFilePath(String fp) {
-        if (fp.startsWith(SafManager3.SAF_FILE_PRIMARY_STORAGE_PREFIX)) return SafFile3.SAF_FILE_PRIMARY_UUID;
+        if (fp.startsWith(SafManager3.getPrimaryStoragePath())) return SafFile3.SAF_FILE_PRIMARY_UUID;
         else {
             String[] fp_parts=fp.split("/");
             if (fp_parts[1].equals("storage")) {
@@ -572,13 +573,17 @@ public class SafFile3 {
     }
 
     private File getAppDirectoryFile(String uuid) {
-        File result=null;
+        File result = null;
+/*
         if (uuid.equals(SafManager3.SAF_FILE_PRIMARY_UUID)) {
             result=new File(mSafPrimaryStoragePrefix+"/Android/data/"+mContext.getApplicationInfo().packageName+"/files");
         } else {
             result=new File("/storage/"+uuid+"/Android/data/"+mContext.getApplicationInfo().packageName+"/files");
         }
-        return result.canRead()?result:null;
+*/
+        String path = SafManager3.getAppSpecificDirectory(mContext, uuid);
+        if (path != null) result = new File(path);
+        return result != null && result.canRead() ? result:null;
     }
 
     private void putDebugMessage(String msg) {

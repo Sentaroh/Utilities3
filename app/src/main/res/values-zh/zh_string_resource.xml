@@ -57,6 +57,7 @@
         <string name="msgs_list_edit_preference_list_edit_list_specify_new_value">指定新值</string>
         <string name="msgs_list_edit_preference_list_edit_list_value_was_already_registerd">已注册的值</string>
         <string name="msgs_list_edit_preference_list_edit_list_specify_list_value">指定列表值</string>
+        <string name="msgs_list_edit_preference_item_edit_file_type_dialog_title">Edit file type</string>
     <!-- msgs_log_management -->
         <string name="msgs_log_file_list_title">日志管理</string>
         <string name="msgs_log_file_list_label_delete">删除日志</string>

@@ -57,6 +57,7 @@
         <string name="msgs_list_edit_preference_list_edit_list_specify_new_value">Geben Sie einen neuen Wert an</string>
         <string name="msgs_list_edit_preference_list_edit_list_value_was_already_registerd">Wert wurde bereits registriert</string>
         <string name="msgs_list_edit_preference_list_edit_list_specify_list_value">Geben Sie den Listenwert an</string>
+        <string name="msgs_list_edit_preference_item_edit_file_type_dialog_title">Edit file type</string>
     <!-- msgs_log_management -->
         <string name="msgs_log_file_list_title">Log-Verwaltung</string>
         <string name="msgs_log_file_list_label_delete">Log-Eintrag löschen</string>
